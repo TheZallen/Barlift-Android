@@ -1,6 +1,6 @@
 [Barlift] Android App
 ======
 
-Drink Spontaneously
+Drink Spontaneously.
 
 [Barlift]: http://www.barliftapp.com/
