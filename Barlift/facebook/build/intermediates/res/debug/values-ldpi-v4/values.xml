@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- From: file:/Users/Zak/Documents/Barlift/Barlift/Barlift-Android/Barlift/facebook/res/values-ldpi/dimens.xml -->
+    <eat-comment/>
+    <dimen name="com_facebook_picker_divider_width">1px</dimen>
+</resources>
