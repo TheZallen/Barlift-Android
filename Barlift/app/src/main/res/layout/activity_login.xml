@@ -18,7 +18,8 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="141dp"
         android:src="@drawable/barlift"
-        android:layout_alignParentEnd="false" />
+        android:layout_alignParentEnd="false"
+        android:layout_alignParentRight="false"/>
 
     <com.facebook.widget.LoginButton
         android:id="@+id/authButton"
@@ -27,4 +28,14 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="70dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="About Barlift"
+        android:id="@+id/aboutButton"
+        android:background="#ffffa217"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:textColor="#FFFFFF" />
 </RelativeLayout>

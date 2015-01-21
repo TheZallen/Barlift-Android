@@ -10,6 +10,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.VideoView;
 
 import com.facebook.Request;
@@ -71,6 +73,14 @@ public class LoginActivity extends Activity {
 
         LoginButton button = (LoginButton) findViewById(R.id.authButton);
 //        button.setReadPermissions(Arrays.asList("basic_info","email"));
+
+        final Button aboutButton = (Button) findViewById(R.id.aboutButton);
+        aboutButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent about = new Intent(LoginActivity.this, AboutActivity.class);
+                startActivity(about);
+            }
+        });
     }
 
     private void onSessionStateChange(Session session, SessionState state, Exception exception) {
