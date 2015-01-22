@@ -16,81 +16,57 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
 
+import com.viewpagerindicator.CirclePageIndicator;
+import com.viewpagerindicator.TitlePageIndicator;
+import com.viewpagerindicator.UnderlinePageIndicator;
+
 
 public class AboutActivity extends FragmentActivity {
 
-    /**
-     * The number of pages (wizard steps) to show in this demo.
-     */
-    private static final int NUM_PAGES = 5;
-
-    /**
-     * The pager widget, which handles animation and allows swiping horizontally to access previous
-     * and next wizard steps.
-     */
-    private ViewPager mPager;
-
-    /**
-     * The pager adapter, which provides the pages to the view pager widget.
-     */
-    private PagerAdapter mPagerAdapter;
+    // Declare Variables
+    ViewPager viewPager;
+    PagerAdapter adapter;
+    String[] about;
+    int[] pic;
+    UnderlinePageIndicator mIndicator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
 
-        // Instantiate a ViewPager and a PagerAdapter.
-        mPager = (ViewPager) findViewById(R.id.pager);
-        mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
-        mPager.setAdapter(mPagerAdapter);
+        // Generate sample data
+        about = new String[] { "Sample Text 1", "Sample Text 2", "Sample Text 3", "Sample Text 4", "Sample Text 5", "Sample Text 6", "Sample Text 7", "Sample Text 8", "Sample Text 9", "Sample Text 10" };
+
+        pic = new int[] { R.drawable.phone, R.drawable.phone,
+                R.drawable.phone, R.drawable.phone,
+                R.drawable.phone, R.drawable.phone, R.drawable.phone,
+                R.drawable.phone, R.drawable.phone, R.drawable.phone };
+
+        // Locate the ViewPager in viewpager_main.xml
+        viewPager = (ViewPager) findViewById(R.id.pager);
+        // Pass results to ViewPagerAdapter Class
+        adapter = new ViewPagerAdapter(AboutActivity.this, about, pic);
+        // Binds the Adapter to the ViewPager
+        viewPager.setAdapter(adapter);
+
+        // ViewPager Indicator
+        mIndicator = (UnderlinePageIndicator) findViewById(R.id.indicator);
+        mIndicator.setFades(false);
+        mIndicator.setViewPager(viewPager);
     }
 
     @Override
     public void onBackPressed() {
-        if (mPager.getCurrentItem() == 0) {
-            // If the user is currently looking at the first step, allow the system to handle the
-            // Back button. This calls finish() on this activity and pops the back stack.
-            super.onBackPressed();
-        } else {
-            // Otherwise, select the previous step.
-            mPager.setCurrentItem(mPager.getCurrentItem() - 1);
-        }
+//        if (viewPager.getCurrentItem() == 0) {
+//            // If the user is currently looking at the first step, allow the system to handle the
+//            // Back button. This calls finish() on this activity and pops the back stack.
+//            super.onBackPressed();
+//        } else {
+//            // Otherwise, select the previous step.
+//            viewPager.setCurrentItem(viewPager.getCurrentItem() - 1);
+//        }
+          super.onBackPressed();
     }
 
-    /**
-     * A simple pager adapter that represents 5 ScreenSlidePageFragment objects, in
-     * sequence.
-     */
-    private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
-        public ScreenSlidePagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return new PlaceholderFragment();
-        }
-
-        @Override
-        public int getCount() {
-            return NUM_PAGES;
-        }
-    }
-
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-
-        public PlaceholderFragment() {
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_about, container, false);
-            return rootView;
-        }
-    }
 }

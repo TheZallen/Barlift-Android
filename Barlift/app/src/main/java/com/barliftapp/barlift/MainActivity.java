@@ -6,8 +6,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
+import com.facebook.FacebookRequestError;
 import com.facebook.Request;
 import com.facebook.Response;
 import com.facebook.Session;
@@ -15,89 +17,154 @@ import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.LoginButton;
+import com.facebook.widget.ProfilePictureView;
+import com.parse.ParseFacebookUtils;
+import com.parse.ParseUser;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 
 public class MainActivity extends ActionBarActivity {
-    TextView name;
 
-    private UiLifecycleHelper uiHelper;
-    private Session.StatusCallback callback = new Session.StatusCallback() {
-        @Override
-        public void call(Session session, SessionState state, Exception exception) {
-            onSessionStateChange(session, state, exception);
-        }
-    };
+    private ProfilePictureView userProfilePictureView;
+    private TextView userNameView;
+    private TextView userGenderView;
+    private TextView userEmailView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        name = (TextView)findViewById(R.id.name);
 
-        uiHelper = new UiLifecycleHelper(this, callback);
-        uiHelper.onCreate(savedInstanceState);
+        userProfilePictureView = (ProfilePictureView) findViewById(R.id.userProfilePicture);
+        userNameView = (TextView) findViewById(R.id.userName);
+        userGenderView = (TextView) findViewById(R.id.userGender);
+        userEmailView = (TextView) findViewById(R.id.userEmail);
 
-        Session session = Session.getActiveSession();
-        if (session != null &&
-                (session.isOpened() || session.isClosed()) ) {
-	        onSessionStateChange(session, session.getState(), null);
-        }else{
-            Intent main = new Intent(MainActivity.this, LoginActivity.class);
-            startActivity(main);
-            MainActivity.this.finish();
+        // Fetch Facebook user info if the session is active
+        Session session = ParseFacebookUtils.getSession();
+        if (session != null && session.isOpened()) {
+            makeMeRequest();
         }
-
-        LoginButton button = (LoginButton) findViewById(R.id.logout);
     }
 
-    private void onSessionStateChange(Session session, SessionState state, Exception exception) {
-        if (session != null && session.isOpened()) {
-            Log.d("DEBUG", "facebook session is open ");
-            // make request to the /me API
-            Request.newMeRequest(session, new Request.GraphUserCallback() {
-                // callback after Graph API response with user object
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        if (currentUser != null) {
+            // Check if the user is currently logged
+            // and show any cached content
+            updateViewsWithProfileInfo();
+        } else {
+            // If the user is not logged in, go to the
+            // activity showing the login view.
+            startLoginActivity();
+        }
+    }
+
+    private void makeMeRequest() {
+        Request request = Request.newMeRequest(ParseFacebookUtils.getSession(),
+            new Request.GraphUserCallback() {
                 @Override
                 public void onCompleted(GraphUser user, Response response) {
                     if (user != null) {
-                        name.setText("Hello " + user.getFirstName());
+                        // Create a JSON object to hold the profile info
+                        JSONObject userProfile = new JSONObject();
+                        try {
+                            // Populate the JSON object
+                            userProfile.put("facebookId", user.getId());
+                            userProfile.put("name", user.getName());
+                            if (user.getProperty("gender") != null) {
+                                userProfile.put("gender", user.getProperty("gender"));
+                            }
+                            if (user.getProperty("email") != null) {
+                                userProfile.put("email", user.getProperty("email"));
+                            }
+
+                            // Save the user profile info in a user property
+                            ParseUser currentUser = ParseUser.getCurrentUser();
+                            currentUser.put("profile", userProfile);
+                            currentUser.saveInBackground();
+
+                            // Show the user info
+                            updateViewsWithProfileInfo();
+                        } catch (JSONException e) {
+                            Log.d(BarliftApplication.TAG, "Error parsing returned user data. " + e);
+                        }
+
+                    } else if (response.getError() != null) {
+                        if ((response.getError().getCategory() == FacebookRequestError.Category.AUTHENTICATION_RETRY) ||
+                                (response.getError().getCategory() == FacebookRequestError.Category.AUTHENTICATION_REOPEN_SESSION)) {
+                            Log.d(BarliftApplication.TAG, "The facebook session was invalidated." + response.getError());
+                            logout();
+                        } else {
+                            Log.d(BarliftApplication.TAG,
+                                    "Some other error: " + response.getError());
+                        }
                     }
                 }
-            }).executeAsync();
-        }else{
-            Intent login = new Intent(MainActivity.this, LoginActivity.class);
-            startActivity(login);
-            MainActivity.this.finish();
+            }
+        );
+        request.executeAsync();
+    }
+
+    private void updateViewsWithProfileInfo() {
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        if (currentUser.has("profile")) {
+            JSONObject userProfile = currentUser.getJSONObject("profile");
+            try {
+
+                if (userProfile.has("facebookId")) {
+                    userProfilePictureView.setProfileId(userProfile.getString("facebookId"));
+                } else {
+                    // Show the default, blank user profile picture
+                    userProfilePictureView.setProfileId(null);
+                }
+
+                if (userProfile.has("name")) {
+                    userNameView.setText(userProfile.getString("name"));
+                } else {
+                    userNameView.setText("");
+                }
+
+                if (userProfile.has("gender")) {
+                    userGenderView.setText(userProfile.getString("gender"));
+                } else {
+                    userGenderView.setText("");
+                }
+
+                if (userProfile.has("email")) {
+                    userEmailView.setText(userProfile.getString("email"));
+                } else {
+                    userEmailView.setText("");
+                }
+
+            } catch (JSONException e) {
+                Log.d(BarliftApplication.TAG, "Error parsing saved user data.");
+            }
         }
     }
 
-
-    @Override
-    public void onResume(){
-        super.onResume();
-        uiHelper.onResume();
+    public void onLogoutClick(View v) {
+        logout();
     }
 
-    @Override
-    public void onPause(){
-        super.onPause();
-        uiHelper.onPause();
+    private void logout() {
+        // Log the user out
+        ParseUser.logOut();
+
+        // Go to the login view
+        startLoginActivity();
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        uiHelper.onActivityResult(requestCode, resultCode, data);
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        uiHelper.onDestroy();
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        uiHelper.onSaveInstanceState(outState);
+    private void startLoginActivity() {
+        Intent intent = new Intent(this, LoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        this.finish();
     }
 }

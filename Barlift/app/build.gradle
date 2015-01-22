@@ -23,4 +23,6 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:21.0.3'
     compile project(':facebook')
+    compile files('libs/Parse-1.8.1.jar')
+    compile project(':viewpageindicator')
 }

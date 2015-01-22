@@ -1,41 +1,31 @@
 package com.barliftapp.barlift;
 
 import android.app.Activity;
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.Signature;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.VideoView;
 
-import com.facebook.Request;
-import com.facebook.Response;
-import com.facebook.Session;
-import com.facebook.SessionState;
-import com.facebook.UiLifecycleHelper;
-import com.facebook.model.GraphUser;
-import com.facebook.widget.LoginButton;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
+import com.facebook.widget.LoginButton;
+import com.parse.LogInCallback;
+import com.parse.ParseException;
+import com.parse.ParseFacebookUtils;
+import com.parse.ParseUser;
+
+import java.util.Arrays;
+import java.util.List;
 
 
 public class LoginActivity extends Activity {
     VideoView videoHolder;
-
-    private UiLifecycleHelper uiHelper;
-    private Session.StatusCallback callback = new Session.StatusCallback() {
-        @Override
-        public void call(Session session, SessionState state, Exception exception) {
-            onSessionStateChange(session, state, exception);
-        }
-    };
+    private Dialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,10 +58,15 @@ public class LoginActivity extends Activity {
 
         }*/
 
-        uiHelper = new UiLifecycleHelper(this, callback);
-        uiHelper.onCreate(savedInstanceState);
+        // Check if there is a currently logged in user
+        // and it's linked to a Facebook account.
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        if ((currentUser != null) && ParseFacebookUtils.isLinked(currentUser)) {
+            // Go to the main activity
+            showMainActivity();
+        }
 
-        LoginButton button = (LoginButton) findViewById(R.id.authButton);
+        //LoginButton button = (LoginButton) findViewById(R.id.authButton);
 //        button.setReadPermissions(Arrays.asList("basic_info","email"));
 
         final Button aboutButton = (Button) findViewById(R.id.aboutButton);
@@ -83,53 +78,51 @@ public class LoginActivity extends Activity {
         });
     }
 
-    private void onSessionStateChange(Session session, SessionState state, Exception exception) {
-        if (session != null && session.isOpened()) {
-            Log.d("DEBUG", "facebook session is open ");
-            // make request to the /me API
-            Request.newMeRequest(session, new Request.GraphUserCallback() {
-                // callback after Graph API response with user object
-                @Override
-                public void onCompleted(GraphUser user, Response response) {
-                    if (user != null) {
-                        Intent main = new Intent(LoginActivity.this, MainActivity.class);
-                        startActivity(main);
-                        LoginActivity.this.finish();
-                    }
+    public void onLoginClick(View v) {
+        progressDialog = ProgressDialog.show(LoginActivity.this, "", "Logging in...", true);
+
+        List<String> permissions = Arrays.asList("public_profile", "email", "user_friends", "user_relationships", "user_location");
+        // NOTE: for extended permissions, like "user_about_me", your app must be reviewed by the Facebook team
+        // (https://developers.facebook.com/docs/facebook-login/permissions/)
+
+        ParseFacebookUtils.logIn(permissions, this, new LogInCallback() {
+            @Override
+            public void done(ParseUser user, ParseException err) {
+                progressDialog.dismiss();
+                if (user == null) {
+                    Log.d(BarliftApplication.TAG, "Uh oh. The user cancelled the Facebook login.");
+                } else if (user.isNew()) {
+                    Log.d(BarliftApplication.TAG, "User signed up and logged in through Facebook!");
+                    showMainActivity();
+                } else {
+                    Log.d(BarliftApplication.TAG, "User logged in through Facebook!");
+                    showMainActivity();
                 }
-            }).executeAsync();
-        }
+            }
+        });
     }
 
     @Override
     public void onResume(){
         super.onResume();
         videoHolder.resume();
-        uiHelper.onResume();
     }
 
     @Override
     public void onPause(){
         super.onPause();
         videoHolder.suspend();
-        uiHelper.onPause();
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        uiHelper.onActivityResult(requestCode, resultCode, data);
+        ParseFacebookUtils.finishAuthentication(requestCode, resultCode, data);
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        uiHelper.onDestroy();
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        uiHelper.onSaveInstanceState(outState);
+    private void showMainActivity(){
+        Intent main = new Intent(LoginActivity.this, MainActivity.class);
+        startActivity(main);
+        LoginActivity.this.finish();
     }
 }
