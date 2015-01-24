@@ -10,10 +10,12 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 import android.widget.VideoView;
 
-
-import com.facebook.widget.LoginButton;
+import com.facebook.Request;
+import com.facebook.Response;
+import com.facebook.model.GraphUser;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
@@ -43,21 +45,6 @@ public class LoginActivity extends Activity {
         });
         videoHolder.start();
 
-        /*try {
-            PackageInfo info = getPackageManager().getPackageInfo(
-                    "com.barliftapp.barlift",
-                    PackageManager.GET_SIGNATURES);
-            for (Signature signature : info.signatures) {
-                MessageDigest md = MessageDigest.getInstance("SHA");
-                md.update(signature.toByteArray());
-                Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
-            }
-        } catch (PackageManager.NameNotFoundException e) {
-
-        } catch (NoSuchAlgorithmException e) {
-
-        }*/
-
         // Check if there is a currently logged in user
         // and it's linked to a Facebook account.
         ParseUser currentUser = ParseUser.getCurrentUser();
@@ -79,6 +66,20 @@ public class LoginActivity extends Activity {
     }
 
     public void onLoginClick(View v) {
+        new ReachabilityTest(this, "google.com", 80, new ReachabilityTest.Callback() {
+            @Override
+            public void onReachabilityTestPassed() {
+                logUserIn();
+            }
+
+            @Override
+            public void onReachabilityTestFailed() {
+                Toast.makeText(LoginActivity.this, "No Internet Connection.", Toast.LENGTH_SHORT).show();
+            }
+        }).execute();
+    }
+
+    private void logUserIn(){
         progressDialog = ProgressDialog.show(LoginActivity.this, "", "Logging in...", true);
 
         List<String> permissions = Arrays.asList("public_profile", "email", "user_friends", "user_relationships", "user_location");

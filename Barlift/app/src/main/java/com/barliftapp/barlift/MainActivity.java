@@ -21,8 +21,11 @@ import com.facebook.widget.ProfilePictureView;
 import com.parse.ParseFacebookUtils;
 import com.parse.ParseUser;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.List;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -46,6 +49,7 @@ public class MainActivity extends ActionBarActivity {
         Session session = ParseFacebookUtils.getSession();
         if (session != null && session.isOpened()) {
             makeMeRequest();
+            getFriends();
         }
     }
 
@@ -73,10 +77,19 @@ public class MainActivity extends ActionBarActivity {
                     if (user != null) {
                         // Create a JSON object to hold the profile info
                         JSONObject userProfile = new JSONObject();
+
+                        // Save user info in appropriate columns
+                        ParseUser currentUser = ParseUser.getCurrentUser();
                         try {
-                            // Populate the JSON object
+                            // Populate the JSON object - facebook id
                             userProfile.put("facebookId", user.getId());
+                            currentUser.put("fb_id", user.getId());
+                            // fb name, birthday, first_name, location, and prof pic
                             userProfile.put("name", user.getName());
+                            userProfile.put("birthday", user.getBirthday());
+                            userProfile.put("first_name", user.getFirstName());
+                            userProfile.put("location", user.getLocation().getName());
+                            userProfile.put("pictureURL", "https://graph.facebook.com/" + user.getId() + "/picture?type=normal&return_ssl_resources=1");
                             if (user.getProperty("gender") != null) {
                                 userProfile.put("gender", user.getProperty("gender"));
                             }
@@ -85,7 +98,6 @@ public class MainActivity extends ActionBarActivity {
                             }
 
                             // Save the user profile info in a user property
-                            ParseUser currentUser = ParseUser.getCurrentUser();
                             currentUser.put("profile", userProfile);
                             currentUser.saveInBackground();
 
@@ -109,6 +121,55 @@ public class MainActivity extends ActionBarActivity {
             }
         );
         request.executeAsync();
+    }
+
+    private void getFriends(){
+        Session activeSession = Session.getActiveSession();
+        if(activeSession.getState().isOpened()){
+            Request friendRequest = Request.newMyFriendsRequest(activeSession,
+                new Request.GraphUserListCallback(){
+                    @Override
+                    public void onCompleted(List<GraphUser> users, Response response) {
+                        if (users != null) {
+                            // Create a JSON array to hold the friends
+                            JSONArray userFriends = new JSONArray();
+
+                            // Save friend info in appropriate columns
+                            ParseUser currentUser = ParseUser.getCurrentUser();
+                            try {
+                                for (GraphUser user : users){
+                                    JSONObject userJSON = new JSONObject();
+                                    userJSON.put("name", user.getName());
+                                    userJSON.put("fb_id", user.getId());
+                                    userFriends.put(userJSON);
+                                }
+
+                                currentUser.put("friends", userFriends);
+                                currentUser.saveInBackground();
+
+                                // Show the user info
+//                                updateViewsWithProfileInfo();
+                            } catch (JSONException e) {
+                                Log.d(BarliftApplication.TAG, "Error parsing returned user data. " + e);
+                            }
+
+                        } else if (response.getError() != null) {
+                            if ((response.getError().getCategory() == FacebookRequestError.Category.AUTHENTICATION_RETRY) ||
+                                    (response.getError().getCategory() == FacebookRequestError.Category.AUTHENTICATION_REOPEN_SESSION)) {
+                                Log.d(BarliftApplication.TAG, "The facebook session was invalidated." + response.getError());
+                                logout();
+                            } else {
+                                Log.d(BarliftApplication.TAG,
+                                        "Some other error: " + response.getError());
+                            }
+                        }
+                    }
+                });
+            Bundle params = new Bundle();
+            params.putString("fields", "id, name");
+            friendRequest.setParameters(params);
+            friendRequest.executeAsync();
+        }
     }
 
     private void updateViewsWithProfileInfo() {
