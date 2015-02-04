@@ -25,4 +25,5 @@ dependencies {
     compile project(':facebook')
     compile files('libs/Parse-1.8.1.jar')
     compile project(':viewpageindicator')
+    compile project(':SlidingMenu')
 }

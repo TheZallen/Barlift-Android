@@ -5,9 +5,11 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.FacebookRequestError;
 import com.facebook.Request;
@@ -18,6 +20,7 @@ import com.facebook.UiLifecycleHelper;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.LoginButton;
 import com.facebook.widget.ProfilePictureView;
+import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.parse.ParseFacebookUtils;
 import com.parse.ParseUser;
 
@@ -34,11 +37,22 @@ public class MainActivity extends ActionBarActivity {
     private TextView userNameView;
     private TextView userGenderView;
     private TextView userEmailView;
+    private SlidingMenu menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        menu = new SlidingMenu(this);
+        menu.setMode(SlidingMenu.RIGHT);
+        menu.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
+        menu.setShadowWidthRes(R.dimen.shadow_width);
+        menu.setShadowDrawable(R.drawable.shadow);
+        menu.setBehindOffsetRes(R.dimen.slidingmenu_offset);
+        menu.setFadeDegree(0.35f);
+        menu.attachToActivity(this, SlidingMenu.SLIDING_WINDOW);
+        menu.setMenu(R.layout.menu);
 
         userProfilePictureView = (ProfilePictureView) findViewById(R.id.userProfilePicture);
         userNameView = (TextView) findViewById(R.id.userName);
@@ -219,6 +233,26 @@ public class MainActivity extends ActionBarActivity {
 
         // Go to the login view
         startLoginActivity();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu items for use in the action bar
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle presses on the action bar items
+        switch (item.getItemId()) {
+            case R.id.action_menu:
+                menu.showMenu();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private void startLoginActivity() {
