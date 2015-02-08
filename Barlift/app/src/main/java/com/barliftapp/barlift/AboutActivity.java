@@ -4,6 +4,8 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+
+import com.viewpagerindicator.CirclePageIndicator;
 import com.viewpagerindicator.UnderlinePageIndicator;
 
 
@@ -14,7 +16,7 @@ public class AboutActivity extends FragmentActivity {
     PagerAdapter adapter;
     String[] about;
     int[] pic;
-    UnderlinePageIndicator mIndicator;
+    CirclePageIndicator mIndicator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,8 +39,8 @@ public class AboutActivity extends FragmentActivity {
         viewPager.setAdapter(adapter);
 
         // ViewPager Indicator
-        mIndicator = (UnderlinePageIndicator) findViewById(R.id.indicator);
-        mIndicator.setFades(false);
+        mIndicator = (CirclePageIndicator) findViewById(R.id.indicator);
+        mIndicator.setSnap(true);
         mIndicator.setViewPager(viewPager);
     }
 

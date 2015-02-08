@@ -1,33 +1,46 @@
 package com.barliftapp.barlift;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.TransitionDrawable;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.GridView;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.facebook.FacebookRequestError;
 import com.facebook.Request;
 import com.facebook.Response;
 import com.facebook.Session;
-import com.facebook.SessionState;
-import com.facebook.UiLifecycleHelper;
 import com.facebook.model.GraphUser;
-import com.facebook.widget.LoginButton;
 import com.facebook.widget.ProfilePictureView;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
+import com.parse.FunctionCallback;
+import com.parse.ParseCloud;
+import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
+import com.parse.ParseObject;
 import com.parse.ParseUser;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -35,14 +48,22 @@ public class MainActivity extends ActionBarActivity {
 
     private ProfilePictureView userProfilePictureView;
     private TextView userNameView;
-    private TextView userGenderView;
-    private TextView userEmailView;
+    private TextView dealView;
+    private TextView barNameView;
+    private TextView barAddressView;
     private SlidingMenu menu;
+    private String dealId = "";
+    private String userId = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ActionBar ab = getSupportActionBar();
+        ab.setHomeButtonEnabled(true);
+        ab.setDisplayShowHomeEnabled(true);
+        ab.setDisplayUseLogoEnabled(true);
+        ab.setLogo(R.drawable.ic_launcher);
 
         menu = new SlidingMenu(this);
         menu.setMode(SlidingMenu.RIGHT);
@@ -55,9 +76,10 @@ public class MainActivity extends ActionBarActivity {
         menu.setMenu(R.layout.menu);
 
         userProfilePictureView = (ProfilePictureView) findViewById(R.id.userProfilePicture);
-        userNameView = (TextView) findViewById(R.id.userName);
-        userGenderView = (TextView) findViewById(R.id.userGender);
-        userEmailView = (TextView) findViewById(R.id.userEmail);
+        userNameView = (TextView) findViewById(R.id.tv_userName);
+        dealView = (TextView) findViewById(R.id.tv_deal);
+        barNameView = (TextView) findViewById(R.id.tv_barname);
+        barAddressView = (TextView) findViewById(R.id.tv_baraddress);
 
         // Fetch Facebook user info if the session is active
         Session session = ParseFacebookUtils.getSession();
@@ -65,6 +87,75 @@ public class MainActivity extends ActionBarActivity {
             makeMeRequest();
             getFriends();
         }
+
+        final Button rsvpButton = (Button) findViewById(R.id.btn_rsvp);
+        rsvpButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                rsvpClicked();
+            }
+        });
+
+        final Button shareButton = (Button) findViewById(R.id.btn_share);
+        shareButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+                sharingIntent.setType("text/plain");
+                String shareBody = dealView.getText() + " at " + barNameView.getText() + "! Go to http://www.barliftapp.com to get the app.";
+                sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, dealView.getText());
+                sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+                startActivity(Intent.createChooser(sharingIntent, "Share deal via"));
+            }
+        });
+
+        refreshDeal();
+    }
+
+    private void rsvpClicked() {
+        HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("deal_objectId", dealId);
+        params.put("user_objectId", userId);
+        ParseCloud.callFunctionInBackground("imGoing", params, new FunctionCallback<Integer>() {
+            public void done(Integer result, ParseException e) {
+                if (e == null){
+                    RelativeLayout rl = (RelativeLayout) findViewById(R.id.rl_bar);
+                    TransitionDrawable transition = (TransitionDrawable) rl.getBackground();
+                    transition.startTransition(1000);
+                }
+            }
+        });
+    }
+
+    private void refreshDeal() {
+        HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("location", "Northwestern");
+        ParseCloud.callFunctionInBackground("getCurrentDeal", params, new FunctionCallback<ArrayList<Object>>() {
+            public void done(ArrayList<Object> result, ParseException e) {
+                if (e == null){
+                    ParseObject deal = (ParseObject)result.get(0);
+                    dealView.setText(deal.getString("name"));
+                    barNameView.setText(deal.getParseObject("user").getString("bar_name"));
+                    barAddressView.setText(deal.getParseObject("user").getString("address"));
+                    dealId = deal.getObjectId();
+                    if (userId != "")
+                        getWhosGoing();
+                }
+            }
+        });
+    }
+
+    private void getWhosGoing(){
+        HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("deal_objectId", dealId);
+        params.put("user_objectId", userId);
+        ParseCloud.callFunctionInBackground("getFriends", params, new FunctionCallback<ArrayList<Object>>() {
+            public void done(ArrayList<Object> result, ParseException e) {
+                if (e == null){
+                    FriendGridView gridview = (FriendGridView) findViewById(R.id.gv_friends);
+                    gridview.setAdapter(new FriendAdapter(MainActivity.this, result));
+                }else
+                    Log.d("HYE", e.getMessage());
+            }
+        });
     }
 
     @Override
@@ -94,6 +185,7 @@ public class MainActivity extends ActionBarActivity {
 
                         // Save user info in appropriate columns
                         ParseUser currentUser = ParseUser.getCurrentUser();
+                        userId = currentUser.getObjectId();
                         try {
                             // Populate the JSON object - facebook id
                             userProfile.put("facebookId", user.getId());
@@ -113,10 +205,15 @@ public class MainActivity extends ActionBarActivity {
 
                             // Save the user profile info in a user property
                             currentUser.put("profile", userProfile);
+                            currentUser.put("university_name", "Northwestern"); // HARD CODED - CHANGE LATER
+                            currentUser.put("deals_redeemed", currentUser.get("deals_redeemed") != null ? currentUser.get("deals_redeemed") : 0);
                             currentUser.saveInBackground();
 
                             // Show the user info
                             updateViewsWithProfileInfo();
+
+                            if (dealId != "")
+                                getWhosGoing();
                         } catch (JSONException e) {
                             Log.d(BarliftApplication.TAG, "Error parsing returned user data. " + e);
                         }
@@ -205,18 +302,6 @@ public class MainActivity extends ActionBarActivity {
                     userNameView.setText("");
                 }
 
-                if (userProfile.has("gender")) {
-                    userGenderView.setText(userProfile.getString("gender"));
-                } else {
-                    userGenderView.setText("");
-                }
-
-                if (userProfile.has("email")) {
-                    userEmailView.setText(userProfile.getString("email"));
-                } else {
-                    userEmailView.setText("");
-                }
-
             } catch (JSONException e) {
                 Log.d(BarliftApplication.TAG, "Error parsing saved user data.");
             }
@@ -249,6 +334,9 @@ public class MainActivity extends ActionBarActivity {
         switch (item.getItemId()) {
             case R.id.action_menu:
                 menu.showMenu();
+                return true;
+            case R.id.action_refresh:
+                refreshDeal();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

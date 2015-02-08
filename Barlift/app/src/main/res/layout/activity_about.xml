@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
     <android.support.v4.view.ViewPager
         android:id="@+id/pager"
@@ -10,9 +11,15 @@
         android:layout_height="0dp"
         android:layout_weight="1" />
 
-    <com.viewpagerindicator.UnderlinePageIndicator
+    <com.viewpagerindicator.CirclePageIndicator
         android:id="@+id/indicator"
+        android:padding="10dip"
+        android:layout_height="wrap_content"
         android:layout_width="fill_parent"
-        android:layout_height="5dp" />
+        app:radius="6dp"
+        app:fillColor="#ff585858"
+        app:pageColor="#88b5aeba"
+        app:strokeWidth="0dp"
+        />
 
 </LinearLayout>

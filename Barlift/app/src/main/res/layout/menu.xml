@@ -1,34 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:facebook="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#CA6542"
+    android:paddingTop="20dp"
+    android:paddingLeft="40dp">
     <com.facebook.widget.ProfilePictureView
         android:id="@+id/userProfilePicture"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:layout_gravity="center"
-        android:gravity="center_horizontal"
-        facebook:preset_size="small" />
+        facebook:preset_size="normal" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Sample Name"
+        android:id="@+id/tv_userName"
+        android:textColor="#FFF"
+        android:textSize="30dp" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="40dp"
+        android:paddingLeft="0dp"
+        android:background="@null"
+        android:text="PROFILE"
+        android:id="@+id/btn_prof"
+        style="?android:attr/borderlessButtonStyle"
+        android:textColor="#FFF"
+        android:textSize="25dp"
+        android:gravity="left" />
 
-        android:text="@string/com_facebook_loginview_log_out_button"
-        android:textColor="@color/com_facebook_loginview_text_color"
-        android:textSize="@dimen/com_facebook_loginview_text_size"
-        android:textStyle="bold"
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="2dp"
+        android:background="#ffffff"/>
 
-        android:background="@drawable/com_facebook_button_blue"
-        android:drawableLeft="@drawable/com_facebook_inverse_icon"
-        android:drawablePadding="@dimen/com_facebook_likebutton_compound_drawable_padding"
-        android:paddingLeft="@dimen/com_facebook_loginview_padding_left"
-        android:paddingTop="@dimen/com_facebook_loginview_padding_top"
-        android:paddingRight="@dimen/com_facebook_loginview_padding_right"
-        android:paddingBottom="@dimen/com_facebook_loginview_padding_bottom"
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:paddingLeft="0dp"
+        android:background="@null"
+        android:text="ABOUT"
+        android:id="@+id/btn_about"
+        style="?android:attr/borderlessButtonStyle"
+        android:textColor="#FFF"
+        android:textSize="25dp"
+        android:gravity="left"/>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="2dp"
+        android:background="#ffffff"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:paddingLeft="0dp"
+        android:background="@null"
+        android:text="INVITE"
+        android:id="@+id/btn_invite"
+        style="?android:attr/borderlessButtonStyle"
+        android:textColor="#FFF"
+        android:textSize="25dp"
+        android:gravity="left"/>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="2dp"
+        android:background="#ffffff"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:paddingLeft="0dp"
+        android:background="@null"
+        style="?android:attr/borderlessButtonStyle"
+        android:text="LOG OUT"
+        android:textColor="#FFF"
+        android:textSize="25dp"
+        android:gravity="left"
         android:onClick="onLogoutClick"/>
 
 </LinearLayout>

@@ -1,77 +1,166 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:facebook="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
-
-    <LinearLayout
+    android:orientation="vertical"
+    android:background="#333">
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:gravity="center_horizontal"
-        android:orientation="horizontal" >
-        <TextView
-            android:id="@+id/userName"
-            android:layout_width="wrap_content"
+        android:id="@+id/scrollView">
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_gravity="center"
-            android:textColor="#333"
-            android:textSize="18sp" />
-    </LinearLayout>
+            android:orientation="vertical">
 
-    <TableLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:gravity="center_horizontal">
-        <TableRow>
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:paddingTop="20dp"
+                android:paddingBottom="20dp">
+
+                <TextView
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="Sample Deal goes here"
+                    android:gravity="center"
+                    android:id="@+id/tv_deal"
+                    android:textColor="#FFF"
+                    android:textIsSelectable="false"
+                    android:textSize="35dp"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/cocktail"
+                    android:id="@+id/iv_deal"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/tv_deal"
+                    android:layout_toEndOf="@+id/tv_deal" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_bar"
+                android:animateLayoutChanges="true"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bar_trans"
+                android:paddingTop="15dp"
+                android:paddingBottom="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="Sample Bar"
+                    android:id="@+id/tv_barname"
+                    android:layout_gravity="center_horizontal"
+                    android:textColor="#EEE"
+                    android:textSize="35dp"
+                    android:gravity="center"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Sample Address goes here"
+                    android:id="@+id/tv_baraddress"
+                    android:textColor="#DDD"
+
+                    android:layout_alignTop="@+id/iv_location"
+                    android:layout_toRightOf="@+id/iv_location"
+                    android:layout_centerHorizontal="true" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/iv_location"
+                    android:src="@drawable/location"
+                    android:layout_below="@+id/tv_barname"
+                    android:layout_marginLeft="20dp"
+                    />
+            </RelativeLayout>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="I&apos;M GOING"
+                android:id="@+id/btn_rsvp"
+                android:layout_gravity="center_horizontal"
+                android:textColor="#CA6542"
+                android:background="@drawable/button"
+                android:textSize="30dp"
+                android:padding="12dp"
+                style="?android:attr/borderlessButtonStyle"/>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_gravity="right"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:text="@string/gender" />
-            <TextView
-                android:id="@+id/userGender"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_gravity="left"
-                android:textSize="16sp" />
-        </TableRow>
-        <TableRow>
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="* Must be 21 years old"
+                android:id="@+id/tv_21"
+                android:layout_gravity="center_horizontal"
+                android:textColor="#FFF"
+                android:textSize="8dp" />
+
             <View
-                android:layout_span="2"
-                android:layout_width="wrap_content"
-                android:layout_height="0.5dp"
-                android:layout_weight="1"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
-                android:background="#999" />
-        </TableRow>
-        <TableRow>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_gravity="right"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:text="@string/email" />
-            <TextView
-                android:id="@+id/userEmail"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_gravity="left"
-                android:textSize="16sp" />
-        </TableRow>
-    </TableLayout>
+                android:layout_width="fill_parent"
+                android:layout_height="2dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:background="#ffffff"
+                android:layout_marginTop="10dp"/>
 
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Share"
+                android:id="@+id/btn_share"
+                android:layout_gravity="center_horizontal"
+                android:textColor="#FFF"
+                android:background="@drawable/share_btn"
+                android:textSize="20dp"
+                android:padding="10dp"
+                style="?android:attr/borderlessButtonStyle"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Who&apos;s Going:"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:id="@+id/textView"
+                android:textColor="#FFF" />
+
+            <com.barliftapp.barlift.FriendGridView
+                android:id="@+id/gv_friends"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:columnWidth="90dp"
+                android:numColumns="auto_fit"
+                android:verticalSpacing="10dp"
+                android:horizontalSpacing="10dp"
+                android:stretchMode="columnWidth"
+                android:gravity="center" />
+
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

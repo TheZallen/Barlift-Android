@@ -53,9 +53,6 @@ public class LoginActivity extends Activity {
             showMainActivity();
         }
 
-        //LoginButton button = (LoginButton) findViewById(R.id.authButton);
-//        button.setReadPermissions(Arrays.asList("basic_info","email"));
-
         final Button aboutButton = (Button) findViewById(R.id.aboutButton);
         aboutButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
