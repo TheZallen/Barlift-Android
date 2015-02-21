@@ -47,7 +47,8 @@
         android:layout_height="wrap_content"
         android:text="About Barlift"
         android:id="@+id/aboutButton"
-        android:background="#ffffa217"
+        android:background="#CA6542"
+        android:padding="5dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:textColor="#FFFFFF" />

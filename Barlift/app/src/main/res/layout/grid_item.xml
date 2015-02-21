@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Sample User"
-        android:textColor="#FFF"
+        android:textColor="#000"
         android:id="@+id/tv_friend"
         android:gravity="center"
         android:layout_below="@+id/ppv_friend"

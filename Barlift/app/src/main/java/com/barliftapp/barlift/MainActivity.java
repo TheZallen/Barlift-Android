@@ -1,13 +1,18 @@
 package com.barliftapp.barlift;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Path;
+import android.graphics.Point;
 import android.graphics.drawable.TransitionDrawable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -34,6 +39,7 @@ import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -44,13 +50,14 @@ import java.util.HashMap;
 import java.util.List;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends Activity {
 
     private ProfilePictureView userProfilePictureView;
     private TextView userNameView;
     private TextView dealView;
     private TextView barNameView;
     private TextView barAddressView;
+    private TextView barDescView;
     private SlidingMenu menu;
     private String dealId = "";
     private String userId = "";
@@ -59,11 +66,11 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ActionBar ab = getSupportActionBar();
-        ab.setHomeButtonEnabled(true);
-        ab.setDisplayShowHomeEnabled(true);
-        ab.setDisplayUseLogoEnabled(true);
-        ab.setLogo(R.drawable.ic_launcher);
+//        ActionBar ab = getSupportActionBar();
+//        ab.setHomeButtonEnabled(true);
+//        ab.setDisplayShowHomeEnabled(true);
+//        ab.setDisplayUseLogoEnabled(true);
+//        ab.setLogo(R.drawable.ic_launcher);
 
         menu = new SlidingMenu(this);
         menu.setMode(SlidingMenu.RIGHT);
@@ -75,8 +82,20 @@ public class MainActivity extends ActionBarActivity {
         menu.attachToActivity(this, SlidingMenu.SLIDING_WINDOW);
         menu.setMenu(R.layout.menu);
 
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        int width = size.x;
+        int height = size.y;
+
+//        SlidingUpPanelLayout slidingLayout = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
+//        RelativeLayout slidePanel = (RelativeLayout) findViewById(R.id.dragView);
+//        TriangleView tv = (TriangleView) findViewById(R.id.navTri);
+//        slidePanel.getLayoutParams().height = height - tv.getHeight();
+
         userProfilePictureView = (ProfilePictureView) findViewById(R.id.userProfilePicture);
         userNameView = (TextView) findViewById(R.id.tv_userName);
+//        barDescView = (TextView) findViewById(R.id.tv_desc);
         dealView = (TextView) findViewById(R.id.tv_deal);
         barNameView = (TextView) findViewById(R.id.tv_barname);
         barAddressView = (TextView) findViewById(R.id.tv_baraddress);
@@ -88,24 +107,24 @@ public class MainActivity extends ActionBarActivity {
             getFriends();
         }
 
-        final Button rsvpButton = (Button) findViewById(R.id.btn_rsvp);
-        rsvpButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                rsvpClicked();
-            }
-        });
+//        final Button rsvpButton = (Button) findViewById(R.id.btn_rsvp);
+//        rsvpButton.setOnClickListener(new View.OnClickListener() {
+//            public void onClick(View v) {
+//                rsvpClicked();
+//            }
+//        });
 
-        final Button shareButton = (Button) findViewById(R.id.btn_share);
-        shareButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
-                sharingIntent.setType("text/plain");
-                String shareBody = dealView.getText() + " at " + barNameView.getText() + "! Go to http://www.barliftapp.com to get the app.";
-                sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, dealView.getText());
-                sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
-                startActivity(Intent.createChooser(sharingIntent, "Share deal via"));
-            }
-        });
+//        final Button shareButton = (Button) findViewById(R.id.btn_share);
+//        shareButton.setOnClickListener(new View.OnClickListener() {
+//            public void onClick(View v) {
+//                Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+//                sharingIntent.setType("text/plain");
+//                String shareBody = dealView.getText() + " at " + barNameView.getText() + "! Go to http://www.barliftapp.com to get the app.";
+//                sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, dealView.getText());
+//                sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+//                startActivity(Intent.createChooser(sharingIntent, "Share deal via"));
+//            }
+//        });
 
         refreshDeal();
     }
@@ -120,6 +139,9 @@ public class MainActivity extends ActionBarActivity {
                     RelativeLayout rl = (RelativeLayout) findViewById(R.id.rl_bar);
                     TransitionDrawable transition = (TransitionDrawable) rl.getBackground();
                     transition.startTransition(1000);
+//                    Button going = (Button) findViewById(R.id.btn_rsvp);
+//                    TransitionDrawable transition1 = (TransitionDrawable) going.getBackground();
+//                    transition1.startTransition(1000);
                 }
             }
         });
@@ -135,6 +157,7 @@ public class MainActivity extends ActionBarActivity {
                     dealView.setText(deal.getString("name"));
                     barNameView.setText(deal.getParseObject("user").getString("bar_name"));
                     barAddressView.setText(deal.getParseObject("user").getString("address"));
+//                    barDescView.setText(deal.getString("description"));
                     dealId = deal.getObjectId();
                     if (userId != "")
                         getWhosGoing();
@@ -335,8 +358,13 @@ public class MainActivity extends ActionBarActivity {
             case R.id.action_menu:
                 menu.showMenu();
                 return true;
-            case R.id.action_refresh:
-                refreshDeal();
+            case R.id.action_share:
+                Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+                sharingIntent.setType("text/plain");
+                String shareBody = dealView.getText() + " at " + barNameView.getText() + "! Go to http://www.barliftapp.com to get the app.";
+                sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, dealView.getText());
+                sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+                startActivity(Intent.createChooser(sharingIntent, "Share deal via"));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

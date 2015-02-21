@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    <declare-styleable name="TriangleView">
+        <attr name="diagBottom" format="boolean"/>
+        <attr name="widthCut" format="integer"/>
+        <attr name="backColor" format="string"/>
+    </declare-styleable>
+</resources>

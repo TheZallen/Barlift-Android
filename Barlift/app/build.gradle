@@ -26,4 +26,5 @@ dependencies {
     compile files('libs/Parse-1.8.1.jar')
     compile project(':viewpageindicator')
     compile project(':SlidingMenu')
+    compile project(':SlidingPanel')
 }

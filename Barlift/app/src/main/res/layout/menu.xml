@@ -4,7 +4,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#CA6542"
+    android:background="#2F383F"
     android:paddingTop="20dp"
     android:paddingLeft="40dp">
     <com.facebook.widget.ProfilePictureView
@@ -64,10 +64,10 @@
         android:layout_marginTop="10dp"
         android:paddingLeft="0dp"
         android:background="@null"
-        android:text="INVITE"
+        android:text="CALL UBER"
         android:id="@+id/btn_invite"
         style="?android:attr/borderlessButtonStyle"
-        android:textColor="#FFF"
+        android:textColor="#555"
         android:textSize="25dp"
         android:gravity="left"/>
 
