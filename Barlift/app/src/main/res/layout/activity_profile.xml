@@ -1,0 +1,136 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    xmlns:facebook="http://schemas.android.com/apk/res-auto"
+    android:layout_height="match_parent"
+    android:background="@color/orange"
+    tools:context="com.barliftapp.barlift.ProfileActivity">
+
+    <com.nirhart.parallaxscroll.views.ParallaxScrollView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:parallax_factor="1.9"
+        tools:context=".ProfileActivity" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:id="@+id/imageView3"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/cover"
+                android:scaleType="centerCrop" />
+
+            <View
+                android:layout_below="@+id/imageView3"
+                android:layout_width="fill_parent"
+                android:layout_height="90dp"
+                android:background="#ffffff"/>
+
+            <RelativeLayout
+                android:id="@+id/userProfileCont"
+                android:layout_height="144dp"
+                android:layout_width="144dp"
+                android:translationY="70dp"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/profile_back"
+                android:layout_alignBottom="@+id/imageView3"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true">
+
+                <com.facebook.widget.ProfilePictureView
+                    android:id="@+id/userProfileView"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginLeft="2dp"
+                    android:layout_height="140dp"
+                    android:layout_width="140dp" />
+
+            </RelativeLayout>
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sample Name"
+                android:id="@+id/tv_userNameProf"
+                android:textColor="#000"
+                android:textSize="25dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="50dp"
+                android:layout_below="@+id/imageView3"
+                android:layout_toRightOf="@+id/userProfileCont"
+                android:layout_toEndOf="@+id/userProfileCont" />
+
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_below="@+id/tv_userNameProf"
+                android:padding="10dp">
+
+                <Spinner
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/spinner"
+                    android:background="#FFF"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_below="@+id/textView"
+                    android:layout_centerHorizontal="true" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="Dance Marathon Team"
+                    android:id="@+id/textView"
+                    android:gravity="center"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:textColor="#FFF" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                    android:text="How many nights do you go out per week?"
+                    android:gravity="center"
+                    android:id="@+id/textView4"
+                    android:layout_marginTop="10dp"
+                    android:layout_below="@+id/spinner"
+                    android:layout_centerHorizontal="true"
+                    android:textColor="#FFF" />
+
+                <Spinner
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/spinner2"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_below="@+id/textView4"
+                    android:background="#FFF"
+                    android:layout_centerHorizontal="true" />
+
+                <Button
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:text="Save"
+                    android:textColor="#FFF"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/save"
+                    android:id="@+id/btn_save"
+                    android:layout_below="@+id/spinner2"
+                    android:layout_centerHorizontal="true" />
+            </RelativeLayout>
+
+        </RelativeLayout>
+    </com.nirhart.parallaxscroll.views.ParallaxScrollView>
+
+</RelativeLayout>

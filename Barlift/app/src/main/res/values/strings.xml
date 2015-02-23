@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Barlift</string>
+    <string name="app_name">BarLift</string>
     <string name="menu">Menu</string>
     <string name="share">Share</string>
     <string name="action_settings">Settings</string>
@@ -12,5 +12,67 @@
     <string name="email">Email:</string>
     <string name="menu_settings">Settings</string>
     <string name="aboutlabel">"Sample text goes here about how to use app."</string>
+    <string name="title_activity_profile">ProfileActivity</string>
+
+    <string-array name="teams_array">
+        <item>Choose a team...</item>
+        <item>3rd floor hinman</item>
+        <item>AAIV</item>
+        <item>All Cultural Effect</item>
+        <item>Allison Hall</item>
+        <item>Alpha Chi Omega/Alpha Epsilon Pi</item>
+        <item>Alpha Phi/Sigma Chi</item>
+        <item>Ayers CCI</item>
+        <item>Bobb</item>
+        <item>Chapin/ CCS</item>
+        <item>Sigma Phi Epsilon</item>
+        <item>CRC</item>
+        <item>Delta Delta Delta/Sigma Alpha Epsilon</item>
+        <item>Delta Gamma/Zeta Beta Tau/Alpha Iota Omicron</item>
+        <item>Delta Zeta/Delta Chi</item>
+        <item>Elder</item>
+        <item>Evans Scholars</item>
+        <item>Gamma Phi/Phi Delta Theta</item>
+        <item>Hinman Residential Hall</item>
+        <item>Hobart</item>
+        <item>ISA</item>
+        <item>ISRC</item>
+        <item>Jones</item>
+        <item>Kappa Delta/Sigma Nu</item>
+        <item>Kappa Kappa Gamma/Pi Kappa Alpha</item>
+        <item>Lamda Chi/Chi O</item>
+        <item>NU Marching Band</item>
+        <item>PARC</item>
+        <item>Phi Kappa Psi/ Kappa Alpha Theta</item>
+        <item>Pi Beta Phi/Beta Theta Pi</item>
+        <item>Project Wildcat</item>
+        <item>Rugby</item>
+        <item>Sargent</item>
+        <item>Shepard</item>
+        <item>Sherman Avenue</item>
+        <item>Slivka</item>
+        <item>Theatre/A Cappella</item>
+        <item>Willard</item>
+        <item>Zeta Tau Alpha/ Delt</item>
+        <item>ipd israel</item>
+        <item>substance free</item>
+        <item>The seagulls</item>
+        <item>may and O</item>
+        <item>Sigma Psi Zeta</item>
+        <item>Friends</item>
+        <item>Phi Sigma Pi</item>
+    </string-array>
+
+    <string-array name="nights_array">
+        <item>Choose a number...</item>
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+    </string-array>
 
 </resources>

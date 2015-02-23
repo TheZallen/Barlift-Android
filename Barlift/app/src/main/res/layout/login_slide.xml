@@ -1,0 +1,48 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+    <VideoView android:id="@+id/videoview"
+        android:layout_width="fill_parent"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:layout_height="fill_parent">
+    </VideoView>
+
+    <ImageView
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:id="@+id/imageView"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="141dp"
+        android:src="@drawable/barlift_login_logo"
+        android:layout_alignParentEnd="false"
+        android:layout_alignParentRight="false"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Welcome to BarLift"
+        android:id="@+id/textView2"
+        android:textColor="#FFF"
+        android:textSize="28dp"
+        android:layout_below="@+id/imageView"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:text="We're glad to have you on board, swipe right to learn more."
+        android:gravity="center"
+        android:padding="10dp"
+        android:id="@+id/textView3"
+        android:textColor="#FFF"
+        android:textSize="20dp"
+        android:layout_below="@+id/textView2"
+        android:layout_centerHorizontal="true" />
+
+</RelativeLayout>

@@ -1,29 +1,13 @@
 package com.barliftapp.barlift;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Path;
-import android.graphics.Point;
-import android.graphics.drawable.TransitionDrawable;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
+import android.content.pm.ActivityInfo;
+import android.os.Handler;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Display;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.Button;
-import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.facebook.FacebookRequestError;
@@ -39,7 +23,6 @@ import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
-import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -49,8 +32,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import me.drakeet.materialdialog.MaterialDialog;
 
 public class MainActivity extends Activity {
+
+    private static final String TAG = "MainActivity";
 
     private ProfilePictureView userProfilePictureView;
     private TextView userNameView;
@@ -61,16 +47,14 @@ public class MainActivity extends Activity {
     private SlidingMenu menu;
     private String dealId = "";
     private String userId = "";
+    private String fbId = "";
+    private boolean isGoing = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-//        ActionBar ab = getSupportActionBar();
-//        ab.setHomeButtonEnabled(true);
-//        ab.setDisplayShowHomeEnabled(true);
-//        ab.setDisplayUseLogoEnabled(true);
-//        ab.setLogo(R.drawable.ic_launcher);
+        setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         menu = new SlidingMenu(this);
         menu.setMode(SlidingMenu.RIGHT);
@@ -81,17 +65,6 @@ public class MainActivity extends Activity {
         menu.setFadeDegree(0.35f);
         menu.attachToActivity(this, SlidingMenu.SLIDING_WINDOW);
         menu.setMenu(R.layout.menu);
-
-        Display display = getWindowManager().getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-        int width = size.x;
-        int height = size.y;
-
-//        SlidingUpPanelLayout slidingLayout = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
-//        RelativeLayout slidePanel = (RelativeLayout) findViewById(R.id.dragView);
-//        TriangleView tv = (TriangleView) findViewById(R.id.navTri);
-//        slidePanel.getLayoutParams().height = height - tv.getHeight();
 
         userProfilePictureView = (ProfilePictureView) findViewById(R.id.userProfilePicture);
         userNameView = (TextView) findViewById(R.id.tv_userName);
@@ -107,12 +80,22 @@ public class MainActivity extends Activity {
             getFriends();
         }
 
-//        final Button rsvpButton = (Button) findViewById(R.id.btn_rsvp);
-//        rsvpButton.setOnClickListener(new View.OnClickListener() {
-//            public void onClick(View v) {
-//                rsvpClicked();
-//            }
-//        });
+        ImageView rsvpButton = (ImageView) findViewById(R.id.btn_going);
+        rsvpButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                if (isGoing)
+                    notGoing();
+                else
+                    rsvpClicked();
+            }
+        });
+
+        ImageView menuButton = (ImageView) findViewById(R.id.menuButton);
+        menuButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                menu.showMenu();
+            }
+        });
 
 //        final Button shareButton = (Button) findViewById(R.id.btn_share);
 //        shareButton.setOnClickListener(new View.OnClickListener() {
@@ -126,6 +109,36 @@ public class MainActivity extends Activity {
 //            }
 //        });
 
+        final ImageView purchaseButton = (ImageView) findViewById(R.id.btn_purchase);
+        purchaseButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                final MaterialDialog mMaterialDialog = new MaterialDialog(MainActivity.this);
+                mMaterialDialog
+                        .setTitle("Purchase Drinks")
+                        .setMessage("Hey there, we haven't added this feature yet but would you be interested in purchasing drinks through the app in the future?")
+                        .setPositiveButton("Yes", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                mMaterialDialog.dismiss();
+                                ParseUser currentUser = ParseUser.getCurrentUser();
+                                currentUser.put("pay_interest", true);
+                                currentUser.saveInBackground();
+                            }
+                        })
+                        .setNegativeButton("No", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                mMaterialDialog.dismiss();
+                                ParseUser currentUser = ParseUser.getCurrentUser();
+                                currentUser.put("pay_interest", false);
+                                currentUser.saveInBackground();
+                            }
+                        });
+
+                mMaterialDialog.show();
+            }
+        });
+
         refreshDeal();
     }
 
@@ -136,12 +149,31 @@ public class MainActivity extends Activity {
         ParseCloud.callFunctionInBackground("imGoing", params, new FunctionCallback<Integer>() {
             public void done(Integer result, ParseException e) {
                 if (e == null){
-                    RelativeLayout rl = (RelativeLayout) findViewById(R.id.rl_bar);
-                    TransitionDrawable transition = (TransitionDrawable) rl.getBackground();
-                    transition.startTransition(1000);
-//                    Button going = (Button) findViewById(R.id.btn_rsvp);
-//                    TransitionDrawable transition1 = (TransitionDrawable) going.getBackground();
-//                    transition1.startTransition(1000);
+                    ImageView menuButton = (ImageView) findViewById(R.id.btn_going);
+                    menuButton.setImageResource(R.drawable.interested2);
+                    isGoing = true;
+                }
+            }
+        });
+    }
+
+    private void notGoing() {
+        HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("deal_objectId", dealId);
+        params.put("user_objectId", userId);
+        ParseCloud.callFunctionInBackground("notGoing", params, new FunctionCallback<Integer>() {
+            public void done(Integer result, ParseException e) {
+                if (e == null){
+                    final ImageView menuButton = (ImageView) findViewById(R.id.btn_going);
+                    menuButton.setImageResource(R.drawable.interested3);
+                    isGoing = false;
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable(){
+                        @Override
+                        public void run(){
+                            menuButton.setImageResource(R.drawable.interested1);
+                        }
+                    }, 500);
                 }
             }
         });
@@ -157,7 +189,7 @@ public class MainActivity extends Activity {
                     dealView.setText(deal.getString("name"));
                     barNameView.setText(deal.getParseObject("user").getString("bar_name"));
                     barAddressView.setText(deal.getParseObject("user").getString("address"));
-//                    barDescView.setText(deal.getString("description"));
+                    //barDescView.setText(deal.getString("description"));
                     dealId = deal.getObjectId();
                     if (userId != "")
                         getWhosGoing();
@@ -173,10 +205,23 @@ public class MainActivity extends Activity {
         ParseCloud.callFunctionInBackground("getFriends", params, new FunctionCallback<ArrayList<Object>>() {
             public void done(ArrayList<Object> result, ParseException e) {
                 if (e == null){
-                    FriendGridView gridview = (FriendGridView) findViewById(R.id.gv_friends);
+                    for (int x = 0; x < result.size(); x++){
+                        ArrayList<String> friend_detail = (ArrayList<String>)result.get(x);
+                        if (friend_detail.get(1).equals(fbId)){
+                            result.remove(x);
+                            ImageView menuButton = (ImageView) findViewById(R.id.btn_going);
+                            menuButton.setImageResource(R.drawable.interested2);
+                            isGoing = true;
+                            break;
+                        }
+                    }
+                    result.addAll(result);
+                    result.addAll(result);
+                    result.addAll(result);
+                    FriendGridView gridview = (FriendGridView) findViewById(R.id.gridView);
                     gridview.setAdapter(new FriendAdapter(MainActivity.this, result));
                 }else
-                    Log.d("HYE", e.getMessage());
+                    Log.d(TAG, e.getMessage());
             }
         });
     }
@@ -211,6 +256,7 @@ public class MainActivity extends Activity {
                         userId = currentUser.getObjectId();
                         try {
                             // Populate the JSON object - facebook id
+                            fbId = user.getId();
                             userProfile.put("facebookId", user.getId());
                             currentUser.put("fb_id", user.getId());
                             // fb name, birthday, first_name, location, and prof pic
@@ -335,40 +381,17 @@ public class MainActivity extends Activity {
         logout();
     }
 
+    public void onProfileClick(View v) {
+        Intent intent = new Intent(this, ProfileActivity.class);
+        startActivity(intent);
+    }
+
     private void logout() {
         // Log the user out
         ParseUser.logOut();
 
         // Go to the login view
         startLoginActivity();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu items for use in the action bar
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_main, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle presses on the action bar items
-        switch (item.getItemId()) {
-            case R.id.action_menu:
-                menu.showMenu();
-                return true;
-            case R.id.action_share:
-                Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
-                sharingIntent.setType("text/plain");
-                String shareBody = dealView.getText() + " at " + barNameView.getText() + "! Go to http://www.barliftapp.com to get the app.";
-                sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, dealView.getText());
-                sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
-                startActivity(Intent.createChooser(sharingIntent, "Share deal via"));
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
 
     private void startLoginActivity() {

@@ -4,7 +4,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#2F383F"
+    android:background="@color/dblue"
     android:paddingTop="20dp"
     android:paddingLeft="40dp">
     <com.facebook.widget.ProfilePictureView
@@ -28,12 +28,13 @@
         android:layout_marginTop="40dp"
         android:paddingLeft="0dp"
         android:background="@null"
-        android:text="PROFILE"
+        android:text="Profile"
         android:id="@+id/btn_prof"
         style="?android:attr/borderlessButtonStyle"
         android:textColor="#FFF"
         android:textSize="25dp"
-        android:gravity="left" />
+        android:gravity="left"
+        android:onClick="onProfileClick"/>
 
     <View
         android:layout_width="fill_parent"
@@ -46,7 +47,7 @@
         android:layout_marginTop="10dp"
         android:paddingLeft="0dp"
         android:background="@null"
-        android:text="ABOUT"
+        android:text="About"
         android:id="@+id/btn_about"
         style="?android:attr/borderlessButtonStyle"
         android:textColor="#FFF"
@@ -64,10 +65,10 @@
         android:layout_marginTop="10dp"
         android:paddingLeft="0dp"
         android:background="@null"
-        android:text="CALL UBER"
+        android:text="Call Uber"
         android:id="@+id/btn_invite"
         style="?android:attr/borderlessButtonStyle"
-        android:textColor="#555"
+        android:textColor="#FFF"
         android:textSize="25dp"
         android:gravity="left"/>
 
@@ -83,7 +84,7 @@
         android:paddingLeft="0dp"
         android:background="@null"
         style="?android:attr/borderlessButtonStyle"
-        android:text="LOG OUT"
+        android:text="Log Out"
         android:textColor="#FFF"
         android:textSize="25dp"
         android:gravity="left"

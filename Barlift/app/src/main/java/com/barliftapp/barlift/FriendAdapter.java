@@ -1,6 +1,7 @@
 package com.barliftapp.barlift;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 
 public class FriendAdapter extends BaseAdapter {
     private Context mContext;
+    private String myId;
     private ArrayList<Object> friends;
 
     public FriendAdapter(Context c, ArrayList<Object> friends) {
@@ -44,7 +46,7 @@ public class FriendAdapter extends BaseAdapter {
             TextView textView = (TextView) grid.findViewById(R.id.tv_friend);
             ArrayList<String> friend_detail = (ArrayList<String>)friends.get(position);
             imageView.setProfileId(friend_detail.get(1));
-            textView.setText(friend_detail.get(0));
+            textView.setText(friend_detail.get(0).substring(0, friend_detail.get(0).indexOf(" ")));
         } else {
             grid = (View) convertView;
         }
