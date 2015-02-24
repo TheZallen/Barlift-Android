@@ -3,11 +3,19 @@ package com.barliftapp.barlift;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
+import android.graphics.Point;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
+import android.view.ViewTreeObserver;
+import android.view.animation.TranslateAnimation;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.facebook.FacebookRequestError;
@@ -17,6 +25,7 @@ import com.facebook.Session;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.ProfilePictureView;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
+import com.nirhart.parallaxscroll.views.ParallaxScrollView;
 import com.parse.FunctionCallback;
 import com.parse.ParseCloud;
 import com.parse.ParseException;
@@ -49,6 +58,7 @@ public class MainActivity extends Activity {
     private String userId = "";
     private String fbId = "";
     private boolean isGoing = false;
+    private boolean nudgeShown = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +100,39 @@ public class MainActivity extends Activity {
             }
         });
 
+        final ParallaxScrollView scrollView = (ParallaxScrollView) findViewById(R.id.parallaxView);
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        final int height = size.y;
+
+        scrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
+
+            @Override
+            public void onScrollChanged() {
+
+                int scrollY = scrollView.getScrollY(); //for verticalScrollView
+                //DO SOMETHING WITH THE SCROLL COORDINATES
+                if (scrollY > height / 2 && !nudgeShown){
+                    RelativeLayout nudge = (RelativeLayout)findViewById(R.id.rl_nudge);
+                    RelativeLayout staticNudge = (RelativeLayout)findViewById(R.id.staticNudge);
+                    staticNudge.setAlpha(0);
+                    TranslateAnimation anim = new TranslateAnimation(0, 0, 0, nudge.getHeight()*-1);
+                    anim.setDuration(1000);
+                    anim.setFillAfter( true );
+                    nudge.startAnimation(anim);
+                    nudgeShown = true;
+                }else if (scrollY < height / 2 && nudgeShown){
+                    RelativeLayout nudge = (RelativeLayout)findViewById(R.id.rl_nudge);
+                    TranslateAnimation anim = new TranslateAnimation(0, 0, nudge.getHeight()*-1, 0);
+                    anim.setDuration(1000);
+                    anim.setFillAfter( true );
+                    nudge.startAnimation(anim);
+                    nudgeShown = false;
+                }
+            }
+        });
+
         ImageView menuButton = (ImageView) findViewById(R.id.menuButton);
         menuButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -97,17 +140,35 @@ public class MainActivity extends Activity {
             }
         });
 
-//        final Button shareButton = (Button) findViewById(R.id.btn_share);
-//        shareButton.setOnClickListener(new View.OnClickListener() {
-//            public void onClick(View v) {
-//                Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
-//                sharingIntent.setType("text/plain");
-//                String shareBody = dealView.getText() + " at " + barNameView.getText() + "! Go to http://www.barliftapp.com to get the app.";
-//                sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, dealView.getText());
-//                sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
-//                startActivity(Intent.createChooser(sharingIntent, "Share deal via"));
-//            }
-//        });
+        final Button shareButton = (Button) findViewById(R.id.btn_share);
+        shareButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+                sharingIntent.setType("text/plain");
+                String shareBody = dealView.getText() + " at " + barNameView.getText() + "! Go to http://www.barliftapp.com to get the app.";
+                sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, dealView.getText());
+                sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+                startActivity(Intent.createChooser(sharingIntent, "Share deal via"));
+            }
+        });
+
+        final Button uberButton = (Button) findViewById(R.id.btn_uber);
+        uberButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                PackageManager pm = MainActivity.this.getPackageManager();
+                try
+                {
+                    pm.getPackageInfo("com.ubercab", PackageManager.GET_ACTIVITIES);
+                    Intent LaunchIntent = getPackageManager().getLaunchIntentForPackage("com.ubercab");
+                    startActivity(LaunchIntent);
+                }
+                catch (PackageManager.NameNotFoundException e)
+                {
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.ubercab"));
+                    startActivity(browserIntent);
+                }
+            }
+        });
 
         final ImageView purchaseButton = (ImageView) findViewById(R.id.btn_purchase);
         purchaseButton.setOnClickListener(new View.OnClickListener() {
