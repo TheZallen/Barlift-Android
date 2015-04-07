@@ -17,7 +17,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="141dp"
-        android:src="@drawable/barlift_login_logo"
+        android:alpha="0"
         android:layout_alignParentEnd="false"
         android:layout_alignParentRight="false"/>
 
@@ -28,6 +28,7 @@
         android:text="Welcome to BarLift"
         android:id="@+id/textView2"
         android:textColor="#FFF"
+        android:alpha="0"
         android:textSize="28dp"
         android:layout_below="@+id/imageView"
         android:layout_centerHorizontal="true" />
@@ -38,6 +39,7 @@
         android:layout_marginTop="25dp"
         android:text="We're glad to have you on board, swipe right to learn more."
         android:gravity="center"
+        android:alpha="0"
         android:padding="10dp"
         android:id="@+id/textView3"
         android:textColor="#FFF"

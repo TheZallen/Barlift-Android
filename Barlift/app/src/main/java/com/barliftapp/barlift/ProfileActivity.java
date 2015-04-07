@@ -9,12 +9,14 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import com.facebook.Session;
 import com.facebook.widget.ProfilePictureView;
 import com.parse.ParseFacebookUtils;
 import com.parse.ParseUser;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -22,7 +24,8 @@ import org.json.JSONObject;
 
 public class ProfileActivity extends Activity implements AdapterView.OnItemSelectedListener {
 
-    private ProfilePictureView userProfilePictureView;
+    private ImageView userProfilePictureImageView;
+    private ImageView profileImageView;
     private TextView userNameView;
     private String teamSelection = "";
     private String nightSelection = "";
@@ -33,8 +36,13 @@ public class ProfileActivity extends Activity implements AdapterView.OnItemSelec
         setContentView(R.layout.activity_profile);
         setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        userProfilePictureView = (ProfilePictureView) findViewById(R.id.userProfileView);
+        userProfilePictureImageView = (ImageView) findViewById(R.id.userProfileImageView);
+        profileImageView = (ImageView) findViewById(R.id.iv_profileback);
         userNameView = (TextView) findViewById(R.id.tv_userNameProf);
+
+        Picasso.with(this)
+                .load(R.drawable.cover)
+                .into(profileImageView);
 
         // Fetch Facebook user info if the session is active
         Session session = ParseFacebookUtils.getSession();
@@ -100,11 +108,11 @@ public class ProfileActivity extends Activity implements AdapterView.OnItemSelec
             JSONObject userProfile = currentUser.getJSONObject("profile");
             try {
 
-                if (userProfile.has("facebookId")) {
-                    userProfilePictureView.setProfileId(userProfile.getString("facebookId"));
-                } else {
-                    // Show the default, blank user profile picture
-                    userProfilePictureView.setProfileId(null);
+                if (userProfile.has("fb_id")) {
+                    Picasso.with(this)
+                            .load("https://graph.facebook.com/" + userProfile.getString("fb_id") + "/picture?type=normal&height=200&width=200")
+                            .transform(new CircleTransform())
+                            .into(userProfilePictureImageView);
                 }
 
                 if (userProfile.has("name")) {

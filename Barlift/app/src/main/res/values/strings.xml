@@ -74,5 +74,8 @@
         <item>6</item>
         <item>7</item>
     </string-array>
+    <string name="title_activity_nudge">NudgeActivity</string>
+
+    <string name="hello_world">Hello world!</string>
 
 </resources>

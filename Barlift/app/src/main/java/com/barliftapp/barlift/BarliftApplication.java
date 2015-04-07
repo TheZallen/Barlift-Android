@@ -23,7 +23,7 @@ public class BarliftApplication extends Application{
         );
         ParseFacebookUtils.initialize("1549337231980066");
 
-        ParsePush.subscribeInBackground("", new SaveCallback() {
+        ParsePush.subscribeInBackground("global", new SaveCallback() {
             @Override
             public void done(ParseException e) {
                 if (e == null) {

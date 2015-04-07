@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 public class SecondFragment extends Fragment {
 
     @Override
@@ -20,7 +22,8 @@ public class SecondFragment extends Fragment {
         tvTitle.setText(getArguments().getString("title"));
 
         ImageView iv = (ImageView) v.findViewById(R.id.pic);
-        iv.setImageResource(getArguments().getInt("image"));
+        Picasso.with(getActivity()).load(getArguments().getInt("image")).into(iv);
+//        iv.setImageResource(getArguments().getInt("image"));
 
         return v;
     }

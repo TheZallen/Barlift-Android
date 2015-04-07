@@ -4,7 +4,7 @@
     xmlns:triangle="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFF"
+    android:background="@color/dblue"
     tools:context=".MainActivity" >
 
     <com.nirhart.parallaxscroll.views.ParallaxScrollView
@@ -12,144 +12,192 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/parallaxView"
+        android:background="#FFF"
         android:scrollbars="none"
         app:parallax_factor="1.9"
         tools:context=".MainActivity" >
 
-        <LinearLayout
+        <RelativeLayout
+            android:id="@+id/rl_parawrapper"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:layout_alignParentTop="true"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:layout_height="wrap_content" >
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="500dp"
-                android:orientation="vertical"
-                android:background="@drawable/bg">
+                android:id="@+id/rl_wrapper"
+                android:layout_alignParentTop="true"
+                android:layout_height="wrap_content"
+                >
 
-                <RelativeLayout
-                    android:layout_width="fill_parent"
+                <ImageView
+                    android:id="@+id/bg_view"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:paddingBottom="0dp"
-                    android:layout_above="@+id/rl_bar"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true">
+                    android:scaleType="centerCrop"
+                    android:layout_alignTop="@+id/actual_content"
+                    android:layout_alignBottom="@+id/actual_content"
+                    android:layout_alignLeft="@+id/actual_content"
+                    android:layout_alignRight="@+id/actual_content"
+                    />
 
-                    <ImageView
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
-                        android:src="@drawable/martini"
-                        android:id="@+id/iv_deal"
-                        android:layout_centerVertical="true"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentStart="true"
-                        android:layout_marginLeft="20dp"
-                        />
+                <ProgressBar
+                    android:id="@+id/spinnerProgress"
+                    android:layout_centerVertical="true"
+                    android:layout_centerHorizontal="true"
+                    style="?android:attr/progressBarStyleLarge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" >
+                </ProgressBar>
 
-                    <TextView
-                        android:layout_width="250dp"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:text="Sample Deal goes here"
-
-                        android:id="@+id/tv_deal"
-                        android:textColor="#FFF"
-                        android:textIsSelectable="false"
-                        android:textSize="30dp"
-                        android:layout_centerVertical="true"
-                        android:paddingLeft="20dp"
-                        android:paddingRight="20dp"
-                        android:layout_toRightOf="@+id/iv_deal"
-                        android:layout_toEndOf="@+id/iv_deal"/>
-
-
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:id="@+id/rl_bar"
-                    android:layout_width="fill_parent"
-                    android:layout_marginTop="20dp"
+                <LinearLayout
+                    android:id="@+id/actual_content"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true">
+                    android:layout_alignParentTop="true"
+                    >
 
-                    <com.barliftapp.barlift.TriangleView
-                        android:id="@+id/bar_tri"
+                    <RelativeLayout
                         android:layout_width="fill_parent"
-                        android:layout_height="280dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:paddingBottom="0dp"
+                        android:id="@+id/rl_deal"
+                        android:onClick="onDealClick"
+                        android:layout_marginTop="100dp"
+                        android:layout_alignParentLeft="true"
                         android:layout_alignParentTop="true"
-                        triangle:diagBottom="false"
-                        triangle:widthCut="20"
-                        triangle:backColor="gray"/>
+                        android:layout_alignParentStart="true"
+                        android:alpha="0">
 
-                    <TextView
-                        android:layout_width="wrap_content"
+                        <ImageView
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            android:id="@+id/iv_deal"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="20dp"
+                            android:layout_toRightOf="@+id/tv_deal"
+                            android:layout_toEndOf="@+id/tv_deal"  />
+
+                        <TextView
+                            android:layout_width="250dp"
+                            android:layout_height="wrap_content"
+                            android:text="Sample Deal goes here"
+                            android:gravity="center"
+                            android:id="@+id/tv_deal"
+                            android:textColor="#FFF"
+                            android:textIsSelectable="false"
+                            android:textSize="25dp"
+                            android:paddingLeft="10dp"
+                            android:paddingRight="10dp"
+                            android:layout_centerVertical="true"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true" />
+
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/rl_bar"
+                        android:layout_width="fill_parent"
+                        android:layout_marginTop="20dp"
                         android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:text="Sample Bar"
-                        android:id="@+id/tv_barname"
-                        android:layout_gravity="center_horizontal"
-                        android:textColor="@color/dblue"
-                        android:textSize="35dp"
-                        android:layout_marginTop="30dp"
-                        android:gravity="center"
-                        android:layout_alignParentTop="true"
-                        android:layout_centerHorizontal="true" />
+                        android:layout_below="@+id/rl_deal"
+                        android:alpha="0">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingLeft="80dp"
-                        android:paddingRight="80dp"
-                        android:gravity="center"
-                        android:textSize="12dp"
-                        android:text="Sample Address goes here"
-                        android:id="@+id/tv_baraddress"
-                        android:textColor="@color/dblue"
-                        android:layout_below="@+id/tv_barname"
-                        android:layout_centerHorizontal="true" />
+                        <com.barliftapp.barlift.TriangleView
+                            android:id="@+id/bar_tri"
+                            android:layout_width="fill_parent"
+                            android:layout_height="280dp"
+                            android:layout_alignParentTop="true"
+                            triangle:diagBottom="false"
+                            triangle:widthCut="20"
+                            triangle:backColor="gray"/>
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="60dp"
-                        android:id="@+id/btn_going"
-                        android:src="@drawable/interested1"
-                        android:layout_below="@+id/tv_baraddress"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginRight="20dp"
-                        android:layout_marginTop="15dp" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceLarge"
+                            android:text="Sample Bar"
+                            android:id="@+id/tv_barname"
+                            android:layout_gravity="center_horizontal"
+                            android:textColor="@color/dblue"
+                            android:textSize="35dp"
+                            android:layout_marginTop="30dp"
+                            android:onClick="onBarClick"
+                            android:clickable="true"
+                            android:gravity="center"
+                            android:layout_alignParentTop="true"
+                            android:layout_centerHorizontal="true" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingLeft="40dp"
-                        android:paddingRight="40dp"
-                        android:gravity="center"
-                        android:textSize="12dp"
-                        android:text="Click I'm interested and show this app to your server/bartender to redeem the deal"
-                        android:id="@+id/tv_disclaimer"
-                        android:textColor="@color/dblue"
-                        android:layout_marginTop="5dp"
-                        android:layout_below="@+id/btn_going"
-                        android:layout_centerHorizontal="true" />
+                        <TextView
+                            android:layout_width="220dp"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:textSize="12dp"
+                            android:text="Sample Address goes here"
+                            android:onClick="onBarClick"
+                            android:clickable="true"
+                            android:id="@+id/tv_baraddress"
+                            android:textColor="@color/dblue"
+                            android:layout_below="@+id/tv_barname"
+                            android:layout_centerHorizontal="true" />
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:onClick="onBarClick"
+                            android:id="@+id/location"
+                            android:src="@drawable/location"
+                            android:layout_toLeftOf="@+id/tv_baraddress"
+                            android:layout_below="@+id/tv_barname"
+                             />
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="30dp"
-                        android:id="@+id/btn_purchase"
-                        android:src="@drawable/purchase"
-                        android:layout_below="@+id/tv_disclaimer"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginRight="20dp"
-                        android:layout_marginTop="15dp" />
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="60dp"
+                            android:id="@+id/btn_going"
+                            android:onClick="onRSVPClick"
+                            android:src="@drawable/interested1"
+                            android:layout_below="@+id/tv_baraddress"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginRight="20dp"
+                            android:layout_marginTop="15dp" />
 
-                </RelativeLayout>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="40dp"
+                            android:paddingRight="40dp"
+                            android:gravity="center"
+                            android:textSize="12dp"
+                            android:text="Click I'm interested and show this app to your server/bartender to redeem the deal"
+                            android:id="@+id/tv_disclaimer"
+                            android:textColor="@color/dblue"
+                            android:layout_marginTop="5dp"
+                            android:layout_below="@+id/btn_going"
+                            android:layout_centerHorizontal="true" />
 
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="30dp"
+                            android:id="@+id/btn_purchase"
+                            android:onClick="onPurchaseClick"
+                            android:layout_below="@+id/tv_disclaimer"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginRight="20dp"
+                            android:layout_marginTop="15dp" />
+
+                    </RelativeLayout>
+                </LinearLayout>
             </RelativeLayout>
 
             <RelativeLayout
                 android:id="@+id/rl_slider"
                 android:background="#FFF"
+                android:layout_below="@+id/rl_wrapper"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -165,11 +213,13 @@
                     android:layout_alignParentTop="true"
                     android:id="@+id/tv_going" />
 
+
                 <com.barliftapp.barlift.FriendGridView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
                     android:layout_below="@+id/tv_going"
+                    android:listSelector="#00000000"
                     android:id="@+id/gridView"
                     android:padding="10dp"
                     android:numColumns="4"
@@ -179,28 +229,8 @@
                     android:background="#FFF"
                     android:gravity="center"/>
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="100dp"
-                    android:layout_below="@+id/gridView"
-                    android:id="@+id/staticNudge"
-                    android:background="@color/grayback">
-
-                    <Button
-                        android:layout_width="200dp"
-                        android:layout_height="60dp"
-                        android:layout_marginTop="20dp"
-                        android:layout_centerHorizontal="true"
-                        android:text="Nudge a Friend"
-                        android:textColor="#FFF"
-                        android:textSize="20dp"
-                        android:padding="5dp"
-                        android:gravity="center"
-                        android:background="@drawable/share_btn"
-                        android:id="@+id/btn_nudge" />
-                </RelativeLayout>
             </RelativeLayout>
-        </LinearLayout>
+        </RelativeLayout>
 
     </com.nirhart.parallaxscroll.views.ParallaxScrollView>
     <com.barliftapp.barlift.TriangleView
@@ -217,54 +247,29 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="BarLift"
+        android:layout_centerHorizontal="true"
         android:layout_gravity="center_horizontal"
         android:gravity="center"
         android:id="@+id/appTitle"
         android:textColor="#FFF"
         android:textSize="23dp"
-        android:layout_toRightOf="@+id/imageView2"
-        android:layout_marginLeft="5dp"
         android:layout_marginTop="20dp" />
     <ImageView
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginTop="15dp"
         android:layout_marginLeft="20dp"
-        android:id="@+id/imageView2"
-        android:src="@drawable/logo"
+        android:id="@+id/menuButton"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"/>
 
     <ImageView
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:id="@+id/menuButton"
-        android:src="@drawable/hamburger"
+        android:id="@+id/nudgeButton"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_marginRight="20dp"
         android:layout_marginTop="15dp" />
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:translationY="100dp"
-        android:id="@+id/rl_nudge"
-        android:layout_alignParentBottom="true"
-        android:background="@color/grayback">
-
-        <Button
-            android:layout_width="200dp"
-            android:layout_height="60dp"
-            android:layout_marginTop="20dp"
-            android:layout_centerHorizontal="true"
-            android:text="Nudge a Friend"
-            android:textColor="#FFF"
-            android:textSize="20dp"
-            android:padding="5dp"
-            android:gravity="center"
-            android:background="@drawable/share_btn"
-            android:id="@+id/button" />
-    </RelativeLayout>
 </RelativeLayout>

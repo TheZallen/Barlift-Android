@@ -7,8 +7,13 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.VideoView;
+
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
+import com.squareup.picasso.Picasso;
 
 public class FirstFragment extends Fragment {
 
@@ -28,6 +33,22 @@ public class FirstFragment extends Fragment {
             }
         });
         videoHolder.start();
+
+        Picasso.with(getActivity())
+                .load(R.drawable.barlift_login_logo)
+                .into((ImageView)v.findViewById(R.id.imageView));
+
+        YoYo.with(Techniques.FadeInDown)
+                .duration(1000)
+                .playOn(v.findViewById(R.id.imageView));
+
+        YoYo.with(Techniques.SlideInUp)
+                .duration(2000)
+                .playOn(v.findViewById(R.id.textView2));
+
+        YoYo.with(Techniques.SlideInUp)
+                .duration(3000)
+                .playOn(v.findViewById(R.id.textView3));
 
         return v;
     }

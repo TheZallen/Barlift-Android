@@ -12,12 +12,18 @@ import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
+import com.parse.ParseInstallation;
+import com.parse.ParsePush;
 import com.parse.ParseUser;
+import com.squareup.picasso.Picasso;
 import com.viewpagerindicator.CirclePageIndicator;
 
 import java.util.Arrays;
@@ -69,7 +75,7 @@ public class LoginActivity extends FragmentActivity {
     private void logUserIn(){
         progressDialog = ProgressDialog.show(LoginActivity.this, "", "Logging in...", true);
 
-        List<String> permissions = Arrays.asList("public_profile", "email", "user_friends", "user_relationships", "user_location");
+        List<String> permissions = Arrays.asList("public_profile", "email", "user_friends");
 
         ParseFacebookUtils.logIn(permissions, this, new LogInCallback() {
             @Override
@@ -79,6 +85,7 @@ public class LoginActivity extends FragmentActivity {
                     Log.d(BarliftApplication.TAG, "Uh oh. The user cancelled the Facebook login.");
                 } else if (user.isNew()) {
                     Log.d(BarliftApplication.TAG, "User signed up and logged in through Facebook!");
+
                     showProfileActivity();
                     //show second step for signing up
                 } else {

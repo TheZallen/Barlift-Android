@@ -19,17 +19,29 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                android:id="@+id/imageView3"
+                android:id="@+id/iv_profileback"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
-                android:src="@drawable/cover"
                 android:scaleType="centerCrop" />
 
-            <View
-                android:layout_below="@+id/imageView3"
+            <RelativeLayout
                 android:layout_width="fill_parent"
-                android:layout_height="90dp"
-                android:background="#ffffff"/>
+                android:layout_height="wrap_content"
+                android:minHeight="100dp"
+                android:layout_below="@+id/iv_profileback"
+                android:id="@+id/rl_userNameProf"
+                android:background="#FFF"
+                android:paddingBottom="20dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Sample Name"
+                    android:id="@+id/tv_userNameProf"
+                    android:textColor="#000"
+                    android:textSize="25dp"
+                    android:layout_marginLeft="170dp"
+                    android:layout_marginTop="10dp"/>
+            </RelativeLayout>
 
             <RelativeLayout
                 android:id="@+id/userProfileCont"
@@ -38,12 +50,12 @@
                 android:translationY="70dp"
                 android:layout_marginLeft="10dp"
                 android:background="@drawable/profile_back"
-                android:layout_alignBottom="@+id/imageView3"
+                android:layout_alignBottom="@+id/iv_profileback"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true">
 
-                <com.facebook.widget.ProfilePictureView
-                    android:id="@+id/userProfileView"
+                <ImageView
+                    android:id="@+id/userProfileImageView"
                     android:layout_marginTop="2dp"
                     android:layout_marginLeft="2dp"
                     android:layout_height="140dp"
@@ -52,25 +64,10 @@
             </RelativeLayout>
 
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Sample Name"
-                android:id="@+id/tv_userNameProf"
-                android:textColor="#000"
-                android:textSize="25dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="50dp"
-                android:layout_below="@+id/imageView3"
-                android:layout_toRightOf="@+id/userProfileCont"
-                android:layout_toEndOf="@+id/userProfileCont" />
-
-
             <RelativeLayout
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:layout_below="@+id/tv_userNameProf"
+                android:layout_below="@+id/rl_userNameProf"
                 android:padding="10dp">
 
                 <Spinner
