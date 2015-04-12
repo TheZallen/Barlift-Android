@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.barliftapp.barlift">
+    package="com.barliftapp.barlift" >
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -20,6 +20,7 @@
         android:name=".BarliftApplication"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
+        android:logo="@drawable/hamburger"
         android:label="@string/app_name"
         android:theme="@style/myTheme" >
         <activity
@@ -33,12 +34,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".DealActivity"
             android:icon="@drawable/ic_launcher"
-            android:largeHeap="true"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:largeHeap="true" >
             <intent-filter>
-                <action android:name="com.barliftapp.barlift.MainActivity" />
+                <action android:name="com.barliftapp.barlift.DealActivity" />
             </intent-filter>
         </activity>
         <activity
@@ -86,8 +87,12 @@
         </receiver>
 
         <activity
-            android:name=".NudgeActivity"
-            android:label="@string/title_activity_nudge" >
+            android:name=".ListActivity"
+            android:label="@string/title_activity_list" >
+        </activity>
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name" >
         </activity>
     </application>
 

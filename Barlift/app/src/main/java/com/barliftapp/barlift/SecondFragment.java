@@ -23,7 +23,6 @@ public class SecondFragment extends Fragment {
 
         ImageView iv = (ImageView) v.findViewById(R.id.pic);
         Picasso.with(getActivity()).load(getArguments().getInt("image")).into(iv);
-//        iv.setImageResource(getArguments().getInt("image"));
 
         return v;
     }

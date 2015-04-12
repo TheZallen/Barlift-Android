@@ -41,7 +41,7 @@ public class ProfileActivity extends Activity implements AdapterView.OnItemSelec
         userNameView = (TextView) findViewById(R.id.tv_userNameProf);
 
         Picasso.with(this)
-                .load(R.drawable.cover)
+                .load(R.drawable.coverphoto)
                 .into(profileImageView);
 
         // Fetch Facebook user info if the session is active

@@ -14,6 +14,9 @@
     <string name="aboutlabel">"Sample text goes here about how to use app."</string>
     <string name="title_activity_profile">ProfileActivity</string>
 
+    <string name="openDrawer">BarLift</string>
+    <string name="closeDrawer">Profile</string>
+
     <string-array name="teams_array">
         <item>Choose a team...</item>
         <item>3rd floor hinman</item>
@@ -77,5 +80,15 @@
     <string name="title_activity_nudge">NudgeActivity</string>
 
     <string name="hello_world">Hello world!</string>
+    <string name="title_activity_list">ListActivity</string>
+
+    <string name="title_section1">Section 1</string>
+    <string name="title_section2">Section 2</string>
+    <string name="title_section3">Section 3</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_example">Example action</string>
 
 </resources>

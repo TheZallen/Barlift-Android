@@ -8,4 +8,8 @@
     <dimen name="shadow_width">15dp</dimen>
     <dimen name="sliding_panel_padding">150dp</dimen>
     <dimen name="sliding_panel_height">68dp</dimen>
+
+    <!-- Per the design guidelines, navigation drawers should be between 240dp and 320dp:
+         https://developer.android.com/design/patterns/navigation-drawer.html -->
+    <dimen name="navigation_drawer_width">240dp</dimen>
 </resources>

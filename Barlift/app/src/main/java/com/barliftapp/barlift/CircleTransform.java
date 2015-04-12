@@ -3,6 +3,7 @@ package com.barliftapp.barlift;
 import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 
 import com.squareup.picasso.Transformation;
@@ -30,7 +31,13 @@ public class CircleTransform implements Transformation {
         paint.setAntiAlias(true);
 
         float r = size / 2f;
-        canvas.drawCircle(r, r, r, paint);
+
+        Paint border = new Paint();
+        border.setColor(Color.WHITE);
+        border.setAntiAlias(true);
+        canvas.drawCircle(r, r, r, border);
+
+        canvas.drawCircle(r, r, r-5, paint);
 
         squaredBitmap.recycle();
         return bitmap;

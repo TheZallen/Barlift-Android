@@ -1,21 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:facebook="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/dblue"
     android:paddingTop="20dp"
     android:paddingLeft="20dp">
-    <!--<com.facebook.widget.ProfilePictureView-->
-        <!--android:id="@+id/userProfilePicture"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--facebook:preset_size="normal" />-->
+
     <ImageView
         android:id="@+id/userProfilePicture"
-        android:layout_width="200px"
-        android:layout_height="200px"/>
+        android:layout_width="100dp"
+        android:layout_height="100dp"/>
 
     <TextView
         android:layout_width="300dp"
