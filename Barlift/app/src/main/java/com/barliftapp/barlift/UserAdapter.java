@@ -12,17 +12,25 @@ import android.widget.TextView;
 import com.facebook.widget.ProfilePictureView;
 import com.squareup.picasso.Picasso;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 
-public class NudgeAdapter extends BaseAdapter {
+import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
+
+public class UserAdapter extends BaseAdapter implements StickyListHeadersAdapter {
 
     private Context mContext;
     private ArrayList<Object> friends;
+    private LayoutInflater inflater;
 
-    public NudgeAdapter(Context c, ArrayList<Object> friends) {
+    public UserAdapter(Context c, ArrayList<Object> friends) {
         this.mContext = c;
         this.friends = friends;
+        inflater = (LayoutInflater) mContext
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
@@ -49,7 +57,7 @@ public class NudgeAdapter extends BaseAdapter {
         LayoutInflater inflater = (LayoutInflater) mContext
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         if (convertView == null) {
-            convertView = inflater.inflate(R.layout.list_item, null);
+            convertView = inflater.inflate(R.layout.item_user, null);
             mHolder = new ViewHolder();
 
             mHolder.textView=(TextView) convertView.findViewById(R.id.tv_item);
@@ -72,6 +80,35 @@ public class NudgeAdapter extends BaseAdapter {
         convertView.setTag(mHolder);
 
         return convertView;
+    }
+
+    @Override
+    public View getHeaderView(int position, View convertView, ViewGroup parent) {
+        HeaderViewHolder holder;
+        if (convertView == null) {
+            holder = new HeaderViewHolder();
+            convertView = inflater.inflate(R.layout.sticky_header, parent, false);
+            holder.text = (TextView) convertView.findViewById(R.id.tv_header);
+            convertView.setTag(holder);
+        } else {
+            holder = (HeaderViewHolder) convertView.getTag();
+        }
+
+        String headerText = "Friends";
+
+        holder.text.setText(headerText);
+//        convertView.setVisibility((false) ? View.GONE : View.VISIBLE);
+        return convertView;
+    }
+
+    @Override
+    public long getHeaderId(int position) {
+        //return the first character of the country as ID because this is what headers are based upon
+        return 0;
+    }
+
+    private class HeaderViewHolder {
+        TextView text;
     }
 
     private class ViewHolder {

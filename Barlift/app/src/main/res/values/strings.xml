@@ -12,7 +12,7 @@
     <string name="email">Email:</string>
     <string name="menu_settings">Settings</string>
     <string name="aboutlabel">"Sample text goes here about how to use app."</string>
-    <string name="title_activity_profile">ProfileActivity</string>
+    <string name="title_activity_profile"></string>
 
     <string name="openDrawer">BarLift</string>
     <string name="closeDrawer">Profile</string>
@@ -89,6 +89,8 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
-    <string name="action_example">Example action</string>
+    <string name="action_example">Northwestern</string>
+    <string name="action_edit">Edit</string>
+    <string name="title_activity_friend">Friends</string>
 
 </resources>

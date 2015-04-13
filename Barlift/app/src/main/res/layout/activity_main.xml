@@ -26,10 +26,17 @@
             android:layout_below="@+id/tool_bar"
             android:orientation="vertical">
 
-            <se.emilsjolander.stickylistheaders.StickyListHeadersListView
+            <com.yalantis.phoenix.PullToRefreshView
+                android:id="@+id/pull_to_refresh"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/lv_deal" />
+                android:layout_height="match_parent">
+
+                <se.emilsjolander.stickylistheaders.StickyListHeadersListView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/lv_deal" />
+
+            </com.yalantis.phoenix.PullToRefreshView>
 
         </LinearLayout>
 

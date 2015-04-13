@@ -3,6 +3,7 @@
     <style name="myTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:textColorPrimary">@color/white</item>
         <item name="drawerArrowStyle">@style/WhiteDrawerIconStyle</item>
+        <item name="colorControlNormal">@color/white</item>
         <!--<item name="android:windowBackground">@color/white</item>-->
         <!-- Support library compatibility -->
         <!--<item name="actionBarStyle">@style/MyActionBar</item>-->

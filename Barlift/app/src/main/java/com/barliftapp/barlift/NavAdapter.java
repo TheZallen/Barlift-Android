@@ -1,6 +1,9 @@
 package com.barliftapp.barlift;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,12 +12,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.squareup.picasso.Picasso;
+import com.parse.ParseUser;
 
-/**
- * Created by hp1 on 28-12-2014.
- */
-public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
+
+public class NavAdapter extends RecyclerView.Adapter<NavAdapter.ViewHolder> {
 
     private static final int TYPE_HEADER = 0;  // Declaring Variable to Understand which View is being worked on
     // IF the view under inflation and population is header or Item
@@ -24,6 +25,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     private int mIcons[];       // Int Array to store the passed icons resource value from MainActivity.java
 
     private String name;        //String Resource for header View Name
+    private static Context mContext;
 
 
     // Creating a ViewHolder which extends the RecyclerView View Holder
@@ -42,10 +44,10 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
 
             // Here we set the appropriate view in accordance with the the view type as passed when the holder object is created
-
+            itemView.setOnClickListener(this);
             if(ViewType == TYPE_ITEM) {
                 textView = (TextView) itemView.findViewById(R.id.rowText); // Creating TextView object with the id of textView from item_row.xml
-                itemView.setOnClickListener(this);
+
                 imageView = (ImageView) itemView.findViewById(R.id.rowIcon);// Creating ImageView object with the id of ImageView from item_row.xml
                 Holderid = 1;                                               // setting holder id as 1 as the object being populated are of type item row
             }
@@ -59,18 +61,67 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
         @Override
         public void onClick(View v) {
-            Toast.makeText(v.getContext(), "clicked item", Toast.LENGTH_SHORT).show();
+            switch(getPosition()) {
+                case 1:
+                    mContext.startActivity(new Intent(mContext, ProfileActivity.class));
+                    break;
+                case 2:
+                    mContext.startActivity(new Intent(mContext, FriendActivity.class));
+                    break;
+                case 3:
+                    Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+                    sharingIntent.setType("text/plain");
+                    String shareBody = "Download BarLift! Go to http://www.barliftapp.com to get the app.";
+                    sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "BarLift");
+                    sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+                    mContext.startActivity(Intent.createChooser(sharingIntent, "Share deal via"));
+                    break;
+                case 4:
+                    PackageManager pm = mContext.getPackageManager();
+                    try
+                    {
+                        pm.getPackageInfo("com.ubercab", PackageManager.GET_ACTIVITIES);
+                        Intent LaunchIntent = mContext.getPackageManager().getLaunchIntentForPackage("com.ubercab");
+                        mContext.startActivity(LaunchIntent);
+                    }
+                    catch (PackageManager.NameNotFoundException e)
+                    {
+                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.ubercab"));
+                        mContext.startActivity(browserIntent);
+                    }
+                    break;
+                case 5:
+                    logout();
+                    break;
+                default:
+                    break;
+            }
         }
 
+        public static void logout() {
+            // Log the user out
+            ParseUser.logOut();
+
+            // Go to the login view
+            startLoginActivity();
+        }
+
+        private static void startLoginActivity() {
+            Intent intent = new Intent(mContext, LoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            mContext.startActivity(intent);
+        }
     }
 
 
 
-    MyAdapter(String Titles[],int Icons[],String Name){ // MyAdapter Constructor with titles and icons parameter
+    NavAdapter(String Titles[],int Icons[],String Name, Context context){ // MyAdapter Constructor with titles and icons parameter
         // titles, icons, name, email, profile pic are passed from the main activity as we
         mNavTitles = Titles;                //have seen earlier
         mIcons = Icons;
         name = Name;
+        mContext = context;
         //in adapter
     }
 
@@ -82,7 +133,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     // and pass it to the view holder
 
     @Override
-    public MyAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public NavAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         if (viewType == TYPE_ITEM) {
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_row,parent,false); //Inflating the layout
@@ -111,7 +162,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     // Tells us item at which position is being constructed to be displayed and the holder id of the holder object tell us
     // which view type is being created 1 for item row
     @Override
-    public void onBindViewHolder(MyAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(NavAdapter.ViewHolder holder, int position) {
         if(holder.Holderid ==1) {                              // as the list view is going to be called after the header view so we decrement the
             // position by 1 and pass it to the holder while setting the text and image
             holder.textView.setText(mNavTitles[position - 1]); // Setting the Text with the array of our Titles

@@ -5,8 +5,14 @@
     android:background="@color/orange"
     tools:context="com.barliftapp.barlift.ProfileActivity">
 
+    <include
+        android:id="@+id/tool_bar"
+        layout="@layout/tool_bar">
+    </include>
+
     <com.nirhart.parallaxscroll.views.ParallaxScrollView
         xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_below="@+id/tool_bar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:parallax_factor="1.9"
@@ -16,50 +22,37 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <ImageView
+            <RelativeLayout
+                android:id="@+id/header_cont"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:id="@+id/iv_profileback"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:scaleType="centerCrop" />
+                android:layout_height="wrap_content">
 
-            <RelativeLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:minHeight="100dp"
-                android:layout_below="@+id/iv_profileback"
-                android:id="@+id/rl_userNameProf"
-                android:background="#FFF"
-                android:paddingBottom="20dp">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Sample Name"
-                    android:id="@+id/tv_userNameProf"
-                    android:textColor="#000"
-                    android:textSize="25dp"
-                    android:layout_marginLeft="170dp"
-                    android:layout_marginTop="10dp"/>
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/userProfileCont"
-                android:layout_height="144dp"
-                android:layout_width="144dp"
-                android:translationY="70dp"
-                android:layout_marginLeft="10dp"
-                android:background="@drawable/profile_back"
-                android:layout_alignBottom="@+id/iv_profileback"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true">
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="260dp"
+                    android:id="@+id/iv_profileback"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:scaleType="centerCrop" />
 
                 <ImageView
                     android:id="@+id/userProfileImageView"
-                    android:layout_marginTop="2dp"
-                    android:layout_marginLeft="2dp"
                     android:layout_height="140dp"
-                    android:layout_width="140dp" />
+                    android:layout_width="140dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="40dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tv_userNameProf"
+                    android:textColor="#FFF"
+                    android:textSize="25sp"
+                    android:layout_below="@+id/userProfileImageView"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="20dp" />
+
 
             </RelativeLayout>
 
@@ -67,8 +60,112 @@
             <RelativeLayout
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:layout_below="@+id/rl_userNameProf"
-                android:padding="10dp">
+                android:layout_below="@+id/header_cont"
+                android:background="@color/white">
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:id="@+id/threecol"
+                    android:layout_width="fill_parent"
+                    android:layout_height="80dp">
+
+
+                    <RelativeLayout
+                        android:layout_weight=".33"
+                        android:layout_width="0dp"
+                        android:layout_height="fill_parent">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="30sp"
+                            android:textColor="@color/black"
+                            android:id="@+id/tv_deals_redeemed"
+                            android:layout_alignParentTop="true"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginTop="10dp"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="10sp"
+                            android:text="DEALS REDEEMED"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginTop="5dp"
+                            android:layout_below="@+id/tv_deals_redeemed"/>
+                    </RelativeLayout>
+
+                    <View
+                        android:layout_height="80dp"
+                        android:background="#888"
+                        android:layout_width="2dp"/>
+
+                    <RelativeLayout
+                        android:layout_weight=".33"
+                        android:layout_width="0dp"
+                        android:layout_height="fill_parent">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="30sp"
+                            android:textColor="@color/black"
+                            android:id="@+id/tv_partyscore"
+                            android:layout_alignParentTop="true"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginTop="10dp"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="10sp"
+                            android:text="PARTY SCORE"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginTop="5dp"
+                            android:layout_below="@+id/tv_partyscore"/>
+
+                    </RelativeLayout>
+
+                    <View
+                        android:layout_height="80dp"
+                        android:background="#888"
+                        android:layout_width="2dp"/>
+
+                    <RelativeLayout
+                        android:layout_weight=".33"
+                        android:layout_width="0dp"
+                        android:layout_height="fill_parent">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="30sp"
+                            android:textColor="@color/black"
+                            android:id="@+id/tv_friends_on"
+                            android:layout_alignParentTop="true"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginTop="10dp"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="10sp"
+                            android:text="FRIENDS ON BARLIFT"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginTop="5dp"
+                            android:layout_below="@+id/tv_friends_on"/>
+
+                    </RelativeLayout>
+                </LinearLayout>
+
+                <View
+                    android:layout_height="2dp"
+                    android:layout_below="@id/threecol"
+                    android:background="#888"
+                    android:layout_width="fill_parent"/>
 
                 <Spinner
                     android:layout_width="fill_parent"
@@ -77,9 +174,9 @@
                     android:background="#FFF"
                     android:gravity="center"
                     android:padding="10dp"
-                    android:layout_marginTop="10dp"
                     android:layout_below="@+id/textView"
-                    android:layout_centerHorizontal="true" />
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -88,9 +185,9 @@
                     android:text="Dance Marathon Team"
                     android:id="@+id/textView"
                     android:gravity="center"
-                    android:layout_alignParentTop="true"
-                    android:layout_centerHorizontal="true"
-                    android:textColor="#FFF" />
+                    android:textColor="#FFF"
+                    android:layout_below="@+id/threecol"
+                    android:layout_centerHorizontal="true" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -99,7 +196,7 @@
                     android:text="How many nights do you go out per week?"
                     android:gravity="center"
                     android:id="@+id/textView4"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="500dp"
                     android:layout_below="@+id/spinner"
                     android:layout_centerHorizontal="true"
                     android:textColor="#FFF" />

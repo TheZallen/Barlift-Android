@@ -32,6 +32,7 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.squareup.picasso.Picasso;
+import com.yalantis.phoenix.PullToRefreshView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -54,8 +55,8 @@ public class MainActivity extends ActionBarActivity {
     //First We Declare Titles And Icons For Our Navigation Drawer List View
     //This Icons And Titles Are holded in an Array as you can see
 
-    String TITLES[] = {"Home","Profile","Share","Call Uber","Log out"};
-    int ICONS[] = {R.drawable.ic_action_next_item,R.drawable.ic_action_next_item,R.drawable.ic_action_next_item,R.drawable.ic_action_next_item,R.drawable.ic_action_next_item};
+    String TITLES[] = {"PROFILE","FRIENDS","SHARE","CALL UBER","LOG OUT"};
+    int ICONS[] = {R.drawable.ic_action_person,R.drawable.ic_action_group,R.drawable.ic_action_share,R.drawable.ic_action_place,R.drawable.ic_action_warning};
 
     //Similarly we Create a String Resource for the name and email in the header view
     //And we also create a int resource for profile picture in the header view
@@ -68,6 +69,7 @@ public class MainActivity extends ActionBarActivity {
     DrawerLayout Drawer;                                  // Declaring DrawerLayout
 
     ActionBarDrawerToggle mDrawerToggle;                  // Declaring Action Bar Drawer Toggle
+    private PullToRefreshView mPullToRefreshView;
 
 
 
@@ -86,6 +88,19 @@ public class MainActivity extends ActionBarActivity {
             makeMeRequest();
             getFriends();
         }
+
+        mPullToRefreshView = (PullToRefreshView) findViewById(R.id.pull_to_refresh);
+        mPullToRefreshView.setOnRefreshListener(new PullToRefreshView.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mPullToRefreshView.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mPullToRefreshView.setRefreshing(false);
+                    }
+                }, 1000);
+            }
+        });
 
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Deal");
         query.whereGreaterThanOrEqualTo("deal_end_date", new Date());
@@ -257,7 +272,7 @@ public class MainActivity extends ActionBarActivity {
 
         mRecyclerView.setHasFixedSize(true);                            // Letting the system know that the list objects are of fixed size
 
-        mAdapter = new MyAdapter(TITLES,ICONS,"");       // Creating the Adapter of MyAdapter class(which we are going to see in a bit)
+        mAdapter = new NavAdapter(TITLES,ICONS,"", this);       // Creating the Adapter of MyAdapter class(which we are going to see in a bit)
         // And passing the titles,icons,header view name, header view email,
         // and header view profile picture
 
@@ -291,7 +306,7 @@ public class MainActivity extends ActionBarActivity {
         mDrawerToggle.syncState();
     }
 
-    private void logout() {
+    public void logout() {
         // Log the user out
         ParseUser.logOut();
 

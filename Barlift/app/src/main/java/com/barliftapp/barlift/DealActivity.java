@@ -71,19 +71,19 @@ public class DealActivity extends Activity {
         setContentView(R.layout.activity_deal);
         setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        menu = new SlidingMenu(this);
-        menu.setMode(SlidingMenu.LEFT_RIGHT);
-        menu.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
-        menu.setShadowWidthRes(R.dimen.shadow_width);
-        menu.setShadowDrawable(R.drawable.shadow);
-        menu.setBehindOffsetRes(R.dimen.slidingmenu_offset);
-        menu.attachToActivity(this, SlidingMenu.SLIDING_WINDOW);
-        menu.setMenu(R.layout.menu);
-        menu.setSecondaryMenu(R.layout.activity_nudge);
+//        menu = new SlidingMenu(this);
+//        menu.setMode(SlidingMenu.LEFT_RIGHT);
+//        menu.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
+//        menu.setShadowWidthRes(R.dimen.shadow_width);
+//        menu.setShadowDrawable(R.drawable.shadow);
+//        menu.setBehindOffsetRes(R.dimen.slidingmenu_offset);
+//        menu.attachToActivity(this, SlidingMenu.SLIDING_WINDOW);
+//        menu.setMenu(R.layout.menu);
+//        menu.setSecondaryMenu(R.layout.activity_nudge);
 
 
-        userProfilePictureView = (ImageView) findViewById(R.id.userProfilePicture);
-        userNameView = (TextView) findViewById(R.id.tv_userName);
+//        userProfilePictureView = (ImageView) findViewById(R.id.userProfilePicture);
+//        userNameView = (TextView) findViewById(R.id.tv_userName);
         dealView = (TextView) findViewById(R.id.tv_deal);
         barNameView = (TextView) findViewById(R.id.tv_barname);
         barAddressView = (TextView) findViewById(R.id.tv_baraddress);
@@ -169,7 +169,7 @@ public class DealActivity extends Activity {
 
             });
             ListView listView = (ListView) findViewById(R.id.listView);
-            listView.setAdapter(new NudgeAdapter(DealActivity.this, arrayList));
+            listView.setAdapter(new UserAdapter(DealActivity.this, arrayList));
             YoYo.with(Techniques.Pulse)
                     .duration(1200)
                     .delay(1000)

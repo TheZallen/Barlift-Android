@@ -48,7 +48,7 @@ public class DealAdapter extends BaseAdapter implements StickyListHeadersAdapter
     public View getView(int position, View convertView, ViewGroup parent) {
         final ViewHolder mHolder;
         if (convertView == null) {  // if it's not recycled, initialize some attributes
-            convertView = inflater.inflate(R.layout.deal_item, null);
+            convertView = inflater.inflate(R.layout.item_deal, null);
 
             mHolder = new ViewHolder();
 

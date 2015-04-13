@@ -4,6 +4,7 @@
     android:layout_height="178dp"
     android:background="@drawable/coverphoto"
     android:orientation="vertical"
+    android:layout_marginBottom="10dp"
     android:weightSum="1">
 
 
@@ -22,7 +23,6 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:textColor="#ffffff"
-            android:text="Akash Bangad"
             android:textSize="24sp"
             android:textStyle="bold"
 
