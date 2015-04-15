@@ -21,7 +21,7 @@ public class FirstFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.login_slide, container, false);
+        View v = inflater.inflate(R.layout.pager_video, container, false);
 
         videoHolder = (VideoView)v.findViewById(R.id.videoview);
         videoHolder.setVideoURI(Uri.parse("android.resource://com.barliftapp.barlift/" + R.raw.wine));

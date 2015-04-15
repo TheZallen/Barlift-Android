@@ -14,7 +14,7 @@ public class SecondFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.viewpager_item, container, false);
+        View v = inflater.inflate(R.layout.pager_onboard, container, false);
 
         TextView tv = (TextView) v.findViewById(R.id.aboutlabel);
         tv.setText(getArguments().getString("msg"));

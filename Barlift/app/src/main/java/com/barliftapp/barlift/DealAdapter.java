@@ -53,7 +53,7 @@ public class DealAdapter extends BaseAdapter implements StickyListHeadersAdapter
             mHolder = new ViewHolder();
 
             mHolder.barNameView=(TextView) convertView.findViewById(R.id.di_barName);
-            mHolder.dealView=(TextView) convertView.findViewById(R.id.di_deal);
+            mHolder.dealView=(TextView) convertView.findViewById(R.id.di_barDeal);
 
 
         } else {
@@ -73,7 +73,7 @@ public class DealAdapter extends BaseAdapter implements StickyListHeadersAdapter
         HeaderViewHolder holder;
         if (convertView == null) {
             holder = new HeaderViewHolder();
-            convertView = inflater.inflate(R.layout.sticky_header, parent, false);
+            convertView = inflater.inflate(R.layout.item_sticky_header, parent, false);
             holder.text = (TextView) convertView.findViewById(R.id.tv_header);
             convertView.setTag(holder);
         } else {

@@ -25,10 +25,12 @@ public class UserAdapter extends BaseAdapter implements StickyListHeadersAdapter
     private Context mContext;
     private ArrayList<Object> friends;
     private LayoutInflater inflater;
+    private boolean hash;
 
-    public UserAdapter(Context c, ArrayList<Object> friends) {
+    public UserAdapter(Context c, ArrayList<Object> friends, boolean hash) {
         this.mContext = c;
         this.friends = friends;
+        this.hash = hash;
         inflater = (LayoutInflater) mContext
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
@@ -68,17 +70,27 @@ public class UserAdapter extends BaseAdapter implements StickyListHeadersAdapter
             mHolder = (ViewHolder) convertView.getTag();
         }
 
-        HashMap<String, String> deets = (HashMap<String, String>) friends.get(position);
+        if (hash) {
+            HashMap<String, String> deets = (HashMap<String, String>) friends.get(position);
 
-        mHolder.textView.setText(deets.get("name"));
-//            mHolder.imageView.setProfileId(deets.get("fb_id"));
-        Picasso.with(mContext)
-                .load("https://graph.facebook.com/" + deets.get("fb_id") + "/picture?type=normal&height=100&width=100")
-                .transform(new CircleTransform())
-                .into(mHolder.imageView);
+            mHolder.textView.setText(deets.get("name"));
+            //            mHolder.imageView.setProfileId(deets.get("fb_id"));
+            Picasso.with(mContext)
+                    .load("https://graph.facebook.com/" + deets.get("fb_id") + "/picture?type=normal&height=100&width=100")
+                    .transform(new CircleTransform())
+                    .into(mHolder.imageView);
 
+
+        }else{
+            ArrayList<String> deets = (ArrayList<String>)friends.get(position);
+            mHolder.textView.setText(deets.get(0));
+            //            mHolder.imageView.setProfileId(deets.get("fb_id"));
+            Picasso.with(mContext)
+                    .load("https://graph.facebook.com/" + deets.get(1) + "/picture?type=normal&height=100&width=100")
+                    .transform(new CircleTransform())
+                    .into(mHolder.imageView);
+        }
         convertView.setTag(mHolder);
-
         return convertView;
     }
 
@@ -87,7 +99,7 @@ public class UserAdapter extends BaseAdapter implements StickyListHeadersAdapter
         HeaderViewHolder holder;
         if (convertView == null) {
             holder = new HeaderViewHolder();
-            convertView = inflater.inflate(R.layout.sticky_header, parent, false);
+            convertView = inflater.inflate(R.layout.item_sticky_header, parent, false);
             holder.text = (TextView) convertView.findViewById(R.id.tv_header);
             convertView.setTag(holder);
         } else {

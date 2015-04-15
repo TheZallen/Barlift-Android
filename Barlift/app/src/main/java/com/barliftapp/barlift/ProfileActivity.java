@@ -18,6 +18,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.facebook.Session;
 import com.facebook.widget.ProfilePictureView;
 import com.parse.FindCallback;
@@ -38,7 +40,7 @@ import java.util.List;
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
 
-public class ProfileActivity extends ActionBarActivity implements AdapterView.OnItemSelectedListener {
+public class ProfileActivity extends ActionBarActivity {
 
     private ImageView userProfilePictureImageView;
     private ImageView profileImageView;
@@ -121,24 +123,25 @@ public class ProfileActivity extends ActionBarActivity implements AdapterView.On
 //            }
 //        });
     }
-
-    private void saveUserData(ParseUser currentUser){
-        Spinner mySpinner = (Spinner) findViewById(R.id.spinner);
-        Spinner mySpinner1 = (Spinner) findViewById(R.id.spinner2);
-        currentUser.put("dm_team", mySpinner.getSelectedItem().toString());
-        currentUser.put("num_nights", mySpinner1.getSelectedItem().toString());
-        currentUser.saveInBackground();
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
-        this.finish();
-    }
+//
+//    private void saveUserData(ParseUser currentUser){
+//        Spinner mySpinner = (Spinner) findViewById(R.id.spinner);
+//        Spinner mySpinner1 = (Spinner) findViewById(R.id.spinner2);
+//        currentUser.put("dm_team", mySpinner.getSelectedItem().toString());
+//        currentUser.put("num_nights", mySpinner1.getSelectedItem().toString());
+//        currentUser.saveInBackground();
+//        Intent intent = new Intent(this, MainActivity.class);
+//        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//        startActivity(intent);
+//        this.finish();
+//    }
 
     private void getProfileInfo(String fbId) {
         if (fbId == null) {
             ParseUser currentUser = ParseUser.getCurrentUser();
             updateViewsWithInfo(currentUser);
+
         }else{
             ParseQuery<ParseObject> query = ParseQuery.getQuery("_User");
             query.whereEqualTo("fb_id", fbId);
@@ -159,12 +162,17 @@ public class ProfileActivity extends ActionBarActivity implements AdapterView.On
         if (user.has("profile")) {
             JSONObject userProfile = user.getJSONObject("profile");
             try {
+                String tempurl = "";
                 if (userProfile.has("fb_id")) {
-                    Picasso.with(this)
-                            .load("https://graph.facebook.com/" + userProfile.getString("fb_id") + "/picture?type=normal&height=300&width=300")
-                            .transform(new CircleTransform())
-                            .into(userProfilePictureImageView);
+                    tempurl = userProfile.getString("fb_id");
+                }else if (userProfile.has("facebookId")){
+                    tempurl = userProfile.getString("facebookId");
                 }
+                Picasso.with(this)
+                        .load("https://graph.facebook.com/" + tempurl + "/picture?type=normal&height=250&width=250")
+                        .transform(new CircleTransform())
+                        .into(userProfilePictureImageView);
+
                 if (userProfile.has("name")) {
                     userNameView.setText(userProfile.getString("name"));
                     setTitle(userProfile.getString("name"));
@@ -187,7 +195,13 @@ public class ProfileActivity extends ActionBarActivity implements AdapterView.On
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu items for use in the action bar
         getMenuInflater().inflate(R.menu.profile_menu, menu);
-        mOptionsMenu = menu;
+        Intent intent = getIntent();
+        String fbId = intent.getStringExtra("userId");
+        if (fbId == null) {
+            menu.add(0, R.id.editbuttonId, Menu.NONE, "Edit")
+                    .setIcon(R.drawable.ic_action_edit)
+                    .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+        }
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -195,8 +209,9 @@ public class ProfileActivity extends ActionBarActivity implements AdapterView.On
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle presses on the action bar items
         switch (item.getItemId()) {
-            case R.id.action_edit:
+            case R.id.editbuttonId:
 //                openSearch();
+                Toast.makeText(this, "HEYY", Toast.LENGTH_SHORT).show();
                 return true;
             case android.R.id.home:
                 finish();
@@ -205,15 +220,4 @@ public class ProfileActivity extends ActionBarActivity implements AdapterView.On
                 return super.onOptionsItemSelected(item);
         }
     }
-
-    public void onItemSelected(AdapterView<?> parent, View view,
-                               int pos, long id) {
-        // An item was selected. You can retrieve the selected item using
-        // parent.getItemAtPosition(pos)
-    }
-
-    public void onNothingSelected(AdapterView<?> parent) {
-        // Another interface callback
-    }
-
 }

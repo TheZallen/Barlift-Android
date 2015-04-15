@@ -1,275 +1,178 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:triangle="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/dblue"
-    tools:context=".MainActivity" >
+    android:background="@color/orange"
+    tools:context="com.barliftapp.barlift.DealActivity">
+
+    <include
+        android:id="@+id/tool_bar"
+        layout="@layout/tool_bar">
+    </include>
 
     <com.nirhart.parallaxscroll.views.ParallaxScrollView
         xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_below="@+id/tool_bar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/parallaxView"
-        android:background="#FFF"
-        android:scrollbars="none"
         app:parallax_factor="1.9"
-        tools:context=".MainActivity" >
+        tools:context=".DealActivity" >
 
         <RelativeLayout
-            android:id="@+id/rl_parawrapper"
             android:layout_width="match_parent"
-            android:layout_alignParentTop="true"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content">
 
             <RelativeLayout
+                android:id="@+id/header_cont"
                 android:layout_width="match_parent"
-                android:id="@+id/rl_wrapper"
-                android:layout_alignParentTop="true"
-                android:layout_height="wrap_content"
-                >
+                android:background="#000"
+                android:layout_height="wrap_content">
 
-                <ImageView
-                    android:id="@+id/bg_view"
+                <!--<ImageView-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:id="@+id/iv_dealback"-->
+                    <!--android:layout_alignParentTop="true"-->
+                    <!--android:layout_centerHorizontal="true"-->
+                    <!--android:scaleType="centerCrop" />-->
+
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:scaleType="centerCrop"
-                    android:layout_alignTop="@+id/actual_content"
-                    android:layout_alignBottom="@+id/actual_content"
-                    android:layout_alignLeft="@+id/actual_content"
-                    android:layout_alignRight="@+id/actual_content"
-                    />
-
-                <ProgressBar
-                    android:id="@+id/spinnerProgress"
-                    android:layout_centerVertical="true"
+                    android:id="@+id/tv_deal_text"
+                    android:textColor="#FFF"
+                    android:textSize="25sp"
+                    android:gravity="center"
                     android:layout_centerHorizontal="true"
-                    style="?android:attr/progressBarStyleLarge"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" >
-                </ProgressBar>
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="20dp"/>
+
+
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_below="@+id/header_cont"
+                android:background="@color/white">
 
                 <LinearLayout
-                    android:id="@+id/actual_content"
-                    android:orientation="vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    >
+                    android:orientation="horizontal"
+                    android:id="@+id/threecol"
+                    android:layout_width="fill_parent"
+                    android:layout_height="80dp">
+
 
                     <RelativeLayout
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:paddingBottom="0dp"
-                        android:id="@+id/rl_deal"
-                        android:onClick="onDealClick"
-                        android:layout_marginTop="100dp"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentTop="true"
-                        android:layout_alignParentStart="true"
-                        android:alpha="0">
-
-                        <ImageView
-                            android:layout_width="80dp"
-                            android:layout_height="80dp"
-                            android:id="@+id/iv_deal"
-                            android:layout_centerVertical="true"
-                            android:layout_marginRight="20dp"
-                            android:layout_toRightOf="@+id/tv_deal"
-                            android:layout_toEndOf="@+id/tv_deal"  />
+                        android:layout_weight=".33"
+                        android:layout_width="0dp"
+                        android:layout_height="fill_parent">
 
                         <TextView
-                            android:layout_width="250dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Sample Deal goes here"
-                            android:gravity="center"
-                            android:id="@+id/tv_deal"
-                            android:textColor="#FFF"
-                            android:textIsSelectable="false"
-                            android:textSize="25dp"
-                            android:paddingLeft="10dp"
-                            android:paddingRight="10dp"
-                            android:layout_centerVertical="true"
+                            android:textSize="30sp"
+                            android:textColor="@color/black"
+                            android:id="@+id/tv_deals_redeemed"
+                            android:layout_alignParentTop="true"
                             android:layout_alignParentLeft="true"
-                            android:layout_alignParentStart="true" />
+                            android:layout_alignParentStart="true"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginTop="10dp"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="10sp"
+                            android:text="DEALS REDEEMED"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginTop="5dp"
+                            android:layout_below="@+id/tv_deals_redeemed"/>
+                    </RelativeLayout>
 
+                    <View
+                        android:layout_height="80dp"
+                        android:background="#888"
+                        android:layout_width="2dp"/>
+
+                    <RelativeLayout
+                        android:layout_weight=".33"
+                        android:layout_width="0dp"
+                        android:onClick="onGoingClick"
+                        android:layout_height="fill_parent">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="30sp"
+                            android:textColor="@color/black"
+                            android:id="@+id/tv_partyscore"
+                            android:layout_alignParentTop="true"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginTop="10dp"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="10sp"
+                            android:text="PARTY SCORE"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginTop="5dp"
+                            android:layout_below="@+id/tv_partyscore"/>
 
                     </RelativeLayout>
 
+                    <View
+                        android:layout_height="80dp"
+                        android:background="#888"
+                        android:layout_width="2dp"/>
+
                     <RelativeLayout
-                        android:id="@+id/rl_bar"
-                        android:layout_width="fill_parent"
-                        android:layout_marginTop="20dp"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/rl_deal"
-                        android:alpha="0">
+                        android:layout_weight=".33"
+                        android:layout_width="0dp"
+                        android:layout_height="fill_parent">
 
-                        <com.barliftapp.barlift.TriangleView
-                            android:id="@+id/bar_tri"
-                            android:layout_width="fill_parent"
-                            android:layout_height="280dp"
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="30sp"
+                            android:textColor="@color/black"
+                            android:id="@+id/tv_friends_on"
                             android:layout_alignParentTop="true"
-                            triangle:diagBottom="false"
-                            triangle:widthCut="20"
-                            triangle:backColor="gray"/>
-
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginTop="10dp"/>
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textAppearance="?android:attr/textAppearanceLarge"
-                            android:text="Sample Bar"
-                            android:id="@+id/tv_barname"
-                            android:layout_gravity="center_horizontal"
-                            android:textColor="@color/dblue"
-                            android:textSize="35dp"
-                            android:layout_marginTop="30dp"
-                            android:onClick="onBarClick"
-                            android:clickable="true"
-                            android:gravity="center"
-                            android:layout_alignParentTop="true"
-                            android:layout_centerHorizontal="true" />
-
-                        <TextView
-                            android:layout_width="220dp"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:textSize="12dp"
-                            android:text="Sample Address goes here"
-                            android:onClick="onBarClick"
-                            android:clickable="true"
-                            android:id="@+id/tv_baraddress"
-                            android:textColor="@color/dblue"
-                            android:layout_below="@+id/tv_barname"
-                            android:layout_centerHorizontal="true" />
-                        <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:onClick="onBarClick"
-                            android:id="@+id/location"
-                            android:src="@drawable/location"
-                            android:layout_toLeftOf="@+id/tv_baraddress"
-                            android:layout_below="@+id/tv_barname"
-                             />
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="60dp"
-                            android:id="@+id/btn_going"
-                            android:onClick="onRSVPClick"
-                            android:src="@drawable/interested1"
-                            android:layout_below="@+id/tv_baraddress"
-                            android:layout_centerHorizontal="true"
-                            android:layout_marginRight="20dp"
-                            android:layout_marginTop="15dp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:paddingLeft="40dp"
-                            android:paddingRight="40dp"
-                            android:gravity="center"
-                            android:textSize="12dp"
-                            android:text="Click I'm interested and show this app to your server/bartender to redeem the deal"
-                            android:id="@+id/tv_disclaimer"
-                            android:textColor="@color/dblue"
+                            android:textSize="10sp"
+                            android:text="FRIENDS ON BARLIFT"
+                            android:layout_marginLeft="10dp"
                             android:layout_marginTop="5dp"
-                            android:layout_below="@+id/btn_going"
-                            android:layout_centerHorizontal="true" />
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="30dp"
-                            android:id="@+id/btn_purchase"
-                            android:onClick="onPurchaseClick"
-                            android:layout_below="@+id/tv_disclaimer"
-                            android:layout_centerHorizontal="true"
-                            android:layout_marginRight="20dp"
-                            android:layout_marginTop="15dp" />
+                            android:layout_below="@+id/tv_friends_on"/>
 
                     </RelativeLayout>
                 </LinearLayout>
-            </RelativeLayout>
 
-            <RelativeLayout
-                android:id="@+id/rl_slider"
-                android:background="#FFF"
-                android:layout_below="@+id/rl_wrapper"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                <View
+                    android:layout_height="2dp"
+                    android:layout_below="@+id/threecol"
+                    android:background="#888"
+                    android:layout_marginBottom="800dp"
+                    android:layout_width="fill_parent"/>
 
                 <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:gravity="center"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="0dp"
-                    android:textColor="@color/dblue"
-                    android:text="Interested"
-                    android:layout_alignParentTop="true"
-                    android:id="@+id/tv_going" />
-
-
-                <com.barliftapp.barlift.FriendGridView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_below="@+id/tv_going"
-                    android:listSelector="#00000000"
-                    android:id="@+id/gridView"
-                    android:padding="10dp"
-                    android:numColumns="4"
-                    android:verticalSpacing="10dp"
-                    android:horizontalSpacing="10dp"
-                    android:stretchMode="columnWidth"
-                    android:background="#FFF"
-                    android:gravity="center"/>
+                    android:textSize="20sp"
+                    android:text="See friends going"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_below="@+id/threecol"/>
 
             </RelativeLayout>
         </RelativeLayout>
-
     </com.nirhart.parallaxscroll.views.ParallaxScrollView>
-    <com.barliftapp.barlift.TriangleView
-        android:id="@+id/navTri"
-        android:layout_width="fill_parent"
-        android:layout_height="80dp"
-        android:layout_alignParentTop="true"
-        triangle:diagBottom="true"
-        triangle:widthCut="0"
-        triangle:backColor="orange"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="BarLift"
-        android:layout_centerHorizontal="true"
-        android:layout_gravity="center_horizontal"
-        android:gravity="center"
-        android:id="@+id/appTitle"
-        android:textColor="#FFF"
-        android:textSize="23dp"
-        android:layout_marginTop="20dp" />
-    <ImageView
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginLeft="20dp"
-        android:id="@+id/menuButton"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"/>
-
-    <ImageView
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:id="@+id/nudgeButton"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="15dp" />
 </RelativeLayout>

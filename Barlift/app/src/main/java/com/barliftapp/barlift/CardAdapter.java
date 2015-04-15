@@ -10,12 +10,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.parse.ParseUser;
 
-
-public class NavAdapter extends RecyclerView.Adapter<NavAdapter.ViewHolder> {
+/**
+ * Created by Zak on 4/14/15.
+ */
+public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
 
     private static final int TYPE_HEADER = 0;  // Declaring Variable to Understand which View is being worked on
     // IF the view under inflation and population is header or Item
@@ -116,7 +117,7 @@ public class NavAdapter extends RecyclerView.Adapter<NavAdapter.ViewHolder> {
 
 
 
-    NavAdapter(String Titles[],int Icons[],String Name, Context context){ // MyAdapter Constructor with titles and icons parameter
+    public CardAdapter(String Titles[],int Icons[],String Name, Context context){ // MyAdapter Constructor with titles and icons parameter
         // titles, icons, name, email, profile pic are passed from the main activity as we
         mNavTitles = Titles;                //have seen earlier
         mIcons = Icons;
@@ -133,7 +134,7 @@ public class NavAdapter extends RecyclerView.Adapter<NavAdapter.ViewHolder> {
     // and pass it to the view holder
 
     @Override
-    public NavAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public CardAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         if (viewType == TYPE_ITEM) {
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_nav,parent,false); //Inflating the layout
@@ -162,7 +163,7 @@ public class NavAdapter extends RecyclerView.Adapter<NavAdapter.ViewHolder> {
     // Tells us item at which position is being constructed to be displayed and the holder id of the holder object tell us
     // which view type is being created 1 for item row
     @Override
-    public void onBindViewHolder(NavAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(CardAdapter.ViewHolder holder, int position) {
         if(holder.Holderid ==1) {                              // as the list view is going to be called after the header view so we decrement the
             // position by 1 and pass it to the holder while setting the text and image
             holder.textView.setText(mNavTitles[position - 1]); // Setting the Text with the array of our Titles
@@ -179,20 +180,5 @@ public class NavAdapter extends RecyclerView.Adapter<NavAdapter.ViewHolder> {
         return mNavTitles.length+1; // the number of items in the list will be +1 the titles including the header view.
     }
 
-
-    // Witht the following method we check what type of view is being passed
-    @Override
-    public int getItemViewType(int position) {
-        if (isPositionHeader(position))
-            return TYPE_HEADER;
-
-        return TYPE_ITEM;
-    }
-
-
-
-    private boolean isPositionHeader(int position) {
-        return position == 0;
-    }
 
 }

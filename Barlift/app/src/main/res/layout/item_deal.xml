@@ -1,33 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent"
-    android:background="@color/grayback"
-    android:paddingLeft="20dp"
-    android:paddingTop="10dp"
-    android:paddingRight="10dp"
-    android:paddingBottom="10dp">
+    android:padding="20dp"
+    android:background="@color/white">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="15dp"
+        android:textSize="24sp"
         android:text="Sample Deal"
         android:singleLine="true"
-        android:id="@+id/di_barName"
+        android:textColor="@color/black"
+        android:id="@+id/di_barDeal"
         android:gravity="center"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="15dp"
-        android:text="Sample User"
-        android:singleLine="true"
-        android:id="@+id/di_deal"
-        android:gravity="center"
-        android:layout_below="@+id/di_barName" />
+    <LinearLayout
+        android:orientation="horizontal"
+        android:id="@+id/threecol"
+        android:layout_below="@id/di_barDeal"
+        android:layout_width="fill_parent"
+        android:layout_marginTop="30dp"
+        android:layout_height="wrap_content">
+
+
+        <RelativeLayout
+            android:layout_weight=".33"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="10sp"
+                android:id="@+id/di_barName"
+                android:text="SAMPLE BAR"
+                android:layout_marginTop="5dp"
+                android:layout_below="@+id/tv_deals_redeemed"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_weight=".33"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="10sp"
+                android:text="234 PEOPLE"
+                android:gravity="center"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_below="@+id/tv_partyscore"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_weight=".33"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="10sp"
+                android:gravity="right"
+                android:text="FRIENDS"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_below="@+id/tv_friends_on"/>
+
+        </RelativeLayout>
+    </LinearLayout>
 
     <ImageView
         android:layout_width="wrap_content"

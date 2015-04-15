@@ -4,6 +4,7 @@
         <item name="android:textColorPrimary">@color/white</item>
         <item name="drawerArrowStyle">@style/WhiteDrawerIconStyle</item>
         <item name="colorControlNormal">@color/white</item>
+        <item name="colorPrimaryDark">@color/orange</item>
         <!--<item name="android:windowBackground">@color/white</item>-->
         <!-- Support library compatibility -->
         <!--<item name="actionBarStyle">@style/MyActionBar</item>-->
@@ -26,5 +27,7 @@
         <item name="spinBars">true</item>
         <item name="color">@android:color/white</item>
     </style>
+
+    <item name="editbuttonId" type="id"/>
 
 </resources>

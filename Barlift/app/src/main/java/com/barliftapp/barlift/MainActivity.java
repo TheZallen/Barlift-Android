@@ -13,6 +13,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -71,9 +74,6 @@ public class MainActivity extends ActionBarActivity {
     ActionBarDrawerToggle mDrawerToggle;                  // Declaring Action Bar Drawer Toggle
     private PullToRefreshView mPullToRefreshView;
 
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,6 +89,8 @@ public class MainActivity extends ActionBarActivity {
             getFriends();
         }
 
+        refreshDeals();
+
         mPullToRefreshView = (PullToRefreshView) findViewById(R.id.pull_to_refresh);
         mPullToRefreshView.setOnRefreshListener(new PullToRefreshView.OnRefreshListener() {
             @Override
@@ -97,18 +99,22 @@ public class MainActivity extends ActionBarActivity {
                     @Override
                     public void run() {
                         mPullToRefreshView.setRefreshing(false);
+                        refreshDeals();
                     }
                 }, 1000);
             }
         });
 
+    }
+
+    private void refreshDeals(){
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Deal");
         query.whereGreaterThanOrEqualTo("deal_end_date", new Date());
         query.whereEqualTo("community_name", ParseUser.getCurrentUser().getString("university_name"));
         query.orderByAscending("deal_start_date");
         query.include("user");
         query.findInBackground(new FindCallback<ParseObject>() {
-            public void done(List<ParseObject> dealList, ParseException e) {
+            public void done(final List<ParseObject> dealList, ParseException e) {
                 if (e == null) {
                     dealList.addAll(dealList);
                     dealList.addAll(dealList);
@@ -116,12 +122,19 @@ public class MainActivity extends ActionBarActivity {
                     StickyListHeadersListView listview = (StickyListHeadersListView) findViewById(R.id.lv_deal);
                     DealAdapter adapter = new DealAdapter(MainActivity.this, dealList);                      // use custom adapter
                     listview.setAdapter(adapter);
+                    listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        public void onItemClick(AdapterView<?> parent, View v, final int position, long id) {
+                            Intent dealIntent = new Intent(MainActivity.this, DealActivity.class);
+                            dealIntent.putExtra("dealId", dealList.get(position).getObjectId());
+                            startActivity(dealIntent);
+                        }
+                    });
+                    adapter.notifyDataSetChanged();
                 } else {
                     Log.d("score", "Error: " + e.getMessage());
                 }
             }
         });
-
     }
 
     private void makeMeRequest() {
@@ -162,7 +175,7 @@ public class MainActivity extends ActionBarActivity {
 
                                 // Save the user profile info in a user property
                                 currentUser.put("profile", userProfile);
-                                currentUser.put("university_name", "Northwestern"); // HARD CODED - CHANGE LATER
+                                currentUser.put("university_name", "NU"); // HARD CODED - CHANGE LATER
                                 currentUser.put("deals_redeemed", currentUser.get("deals_redeemed") != null ? currentUser.get("deals_redeemed") : 0);
                                 currentUser.saveInBackground();
 
@@ -245,9 +258,9 @@ public class MainActivity extends ActionBarActivity {
 
                 if (userProfile.has("fb_id")) {
                     Picasso.with(this)
-                        .load("https://graph.facebook.com/" + userProfile.getString("fb_id") + "/picture?type=normal&height=300&width=300")
+                        .load("https://graph.facebook.com/" + userProfile.getString("fb_id") + "/picture?type=normal&height=200&width=200")
                         .transform(new CircleTransform())
-                        .into((ImageView) findViewById(R.id.circleView));
+                        .into((ImageView) findViewById(R.id.navProfPic));
                 }
 
                 if (userProfile.has("name")) {

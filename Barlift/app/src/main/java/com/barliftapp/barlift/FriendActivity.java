@@ -47,39 +47,70 @@ public class FriendActivity extends ActionBarActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        Intent intent = getIntent();
+        String dealId = intent.getStringExtra("dealId");
+
         // Fetch Facebook user info if the session is active
         Session session = ParseFacebookUtils.getSession();
         if (session != null && session.isOpened()) {
-            getUsers();
+            getUsers(dealId);
         }
-
 
     }
 
-    private void getUsers() {
+    private void getUsers(String dealId) {
         ParseUser currentUser = ParseUser.getCurrentUser();
 
-        final ArrayList<Object> arrayList = (ArrayList<Object>) currentUser.getList("friends");
+        if (dealId == null) {
+            updateListView((ArrayList<Object>) currentUser.getList("friends"), true);
+        }else{
+            setTitle("People Interested");
+            HashMap<String, Object> params = new HashMap<>();
+            params.put("deal_objectId", dealId);
+            params.put("user_objectId", currentUser.getObjectId());
+            ParseCloud.callFunctionInBackground("getFriends", params, new FunctionCallback<ArrayList<Object>>() {
+                public void done(ArrayList<Object> result, ParseException e) {
+                    if (e == null){
+                        updateListView(result, false);
+                    }else
+                        Log.d("TAG", e.getMessage());
+                }
+            });
+        }
+    }
 
+    private void updateListView(final ArrayList<Object> arrayList, final boolean hash){
         if (arrayList != null) {
             Collections.sort(arrayList, new Comparator<Object>() {
                 @Override
                 public int compare(Object p1, Object p2) {
-                    HashMap<String, String> hash1 = (HashMap<String, String>) p1;
-                    HashMap<String, String> hash2 = (HashMap<String, String>) p2;
-                    return hash1.get("name").compareTo(hash2.get("name"));
+                    if (hash) {
+                        HashMap<String, String> hash1 = (HashMap<String, String>) p1;
+                        HashMap<String, String> hash2 = (HashMap<String, String>) p2;
+                        return hash1.get("name").compareTo(hash2.get("name"));
+                    }else {
+                        ArrayList<String> deet1 = (ArrayList<String>) p1;
+                        ArrayList<String> deet2 = (ArrayList<String>) p2;
+                        return deet1.get(0).compareTo(deet2.get(0));
+                    }
                 }
 
             });
             StickyListHeadersListView listView = (StickyListHeadersListView) findViewById(R.id.lv_friend);
-            listView.setAdapter(new UserAdapter(this, arrayList));
+            listView.setAdapter(new UserAdapter(this, arrayList, hash));
 
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 public void onItemClick(AdapterView<?> parent, View v, final int position, long id) {
                     Log.d("TAG", "item clicked: " + position);
                     Intent userIntent = new Intent(FriendActivity.this, ProfileActivity.class);
-                    HashMap<String, String> deets = (HashMap<String, String>) arrayList.get(position);
-                    userIntent.putExtra("userId", deets.get("fb_id"));
+                    if (hash){
+                        HashMap<String, String> deets = (HashMap<String, String>) arrayList.get(position);
+                        userIntent.putExtra("userId", deets.get("fb_id"));
+                    }else{
+                        ArrayList<String> friend_deets = (ArrayList<String>) arrayList.get(position);
+                        userIntent.putExtra("userId", friend_deets.get(1));
+                    }
+
                     startActivity(userIntent);
                 }
             });
