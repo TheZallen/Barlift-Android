@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:facebook="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+
+    android:paddingLeft="10dp"
+    android:paddingTop="10dp"
+    android:paddingRight="10dp"
+    android:paddingBottom="10dp">
+
+    <ImageView
+        android:id="@+id/iv_nudge_item"
+        android:layout_height="60dp"
+        android:layout_width="60dp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        android:paddingRight="20dp"
+        android:lines="2"
+        android:layout_marginLeft="10dp"
+        android:id="@+id/tv_nudge_item"
+        android:layout_alignTop="@+id/iv_nudge_item"
+        android:layout_toEndOf="@+id/iv_nudge_item" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:id="@+id/tv_nudge_date"
+        android:layout_marginLeft="10dp"
+        android:layout_toEndOf="@+id/iv_nudge_item"
+        android:layout_alignBottom="@+id/iv_nudge_item" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/iv_right"
+        android:src="@drawable/ic_action_next_item"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+</RelativeLayout>

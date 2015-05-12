@@ -1,9 +1,8 @@
-package com.barliftapp.barlift;
+package com.barliftapp.barlift.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,12 +10,17 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.afollestad.materialdialogs.Theme;
+import com.barliftapp.barlift.R;
+import com.barliftapp.barlift.activity.FriendActivity;
+import com.barliftapp.barlift.activity.LoginActivity;
+import com.barliftapp.barlift.activity.MainActivity;
+import com.barliftapp.barlift.activity.ProfileActivity;
 import com.parse.ParseUser;
 
-/**
- * Created by Zak on 4/14/15.
- */
-public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
+
+public class NavAdapter extends RecyclerView.Adapter<NavAdapter.ViewHolder> {
 
     private static final int TYPE_HEADER = 0;  // Declaring Variable to Understand which View is being worked on
     // IF the view under inflation and population is header or Item
@@ -78,18 +82,24 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
                     mContext.startActivity(Intent.createChooser(sharingIntent, "Share deal via"));
                     break;
                 case 4:
-                    PackageManager pm = mContext.getPackageManager();
-                    try
-                    {
-                        pm.getPackageInfo("com.ubercab", PackageManager.GET_ACTIVITIES);
-                        Intent LaunchIntent = mContext.getPackageManager().getLaunchIntentForPackage("com.ubercab");
-                        mContext.startActivity(LaunchIntent);
+                    int x;
+                    for (x = 0; x < MainActivity.mCommunities.length; x++){
+                        if (MainActivity.mCommunities[x].equals(ParseUser.getCurrentUser().getString("community_name"))){break;}
                     }
-                    catch (PackageManager.NameNotFoundException e)
-                    {
-                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.ubercab"));
-                        mContext.startActivity(browserIntent);
-                    }
+                    new MaterialDialog.Builder(mContext)
+                            .title("Choose Location")
+                            .items(MainActivity.mCommunities)
+                            .theme(Theme.LIGHT)
+                            .itemsCallbackSingleChoice(x, new MaterialDialog.ListCallbackSingleChoice() {
+                                @Override
+                                public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                                    ParseUser.getCurrentUser().put("community_name", MainActivity.mCommunities[which]);
+                                    ParseUser.getCurrentUser().saveInBackground();
+                                    return true;
+                                }
+                            })
+                            .positiveText("Select")
+                            .show();
                     break;
                 case 5:
                     logout();
@@ -112,12 +122,13 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             mContext.startActivity(intent);
+            ((Activity)mContext).finish();
         }
     }
 
 
 
-    public CardAdapter(String Titles[],int Icons[],String Name, Context context){ // MyAdapter Constructor with titles and icons parameter
+    public NavAdapter(String Titles[],int Icons[],String Name, Context context){ // MyAdapter Constructor with titles and icons parameter
         // titles, icons, name, email, profile pic are passed from the main activity as we
         mNavTitles = Titles;                //have seen earlier
         mIcons = Icons;
@@ -134,7 +145,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
     // and pass it to the view holder
 
     @Override
-    public CardAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public NavAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         if (viewType == TYPE_ITEM) {
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_nav,parent,false); //Inflating the layout
@@ -163,7 +174,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
     // Tells us item at which position is being constructed to be displayed and the holder id of the holder object tell us
     // which view type is being created 1 for item row
     @Override
-    public void onBindViewHolder(CardAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(NavAdapter.ViewHolder holder, int position) {
         if(holder.Holderid ==1) {                              // as the list view is going to be called after the header view so we decrement the
             // position by 1 and pass it to the holder while setting the text and image
             holder.textView.setText(mNavTitles[position - 1]); // Setting the Text with the array of our Titles
@@ -180,5 +191,20 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
         return mNavTitles.length+1; // the number of items in the list will be +1 the titles including the header view.
     }
 
+
+    // Witht the following method we check what type of view is being passed
+    @Override
+    public int getItemViewType(int position) {
+        if (isPositionHeader(position))
+            return TYPE_HEADER;
+
+        return TYPE_ITEM;
+    }
+
+
+
+    private boolean isPositionHeader(int position) {
+        return position == 0;
+    }
 
 }

@@ -1,8 +1,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/grayback"
-    tools:context="com.barliftapp.barlift.ProfileActivity">
+    android:background="@color/white"
+    tools:context="com.barliftapp.barlift.activity.ProfileActivity">
 
     <include
         android:id="@+id/tool_bar"
@@ -36,35 +36,42 @@
 
                 <ImageView
                     android:id="@+id/userProfileImageView"
-                    android:layout_height="140dp"
-                    android:layout_width="140dp"
+                    android:layout_height="180dp"
+                    android:layout_width="180dp"
                     android:layout_alignParentTop="true"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="40dp" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/tv_userNameProf"
-                    android:textColor="#FFF"
-                    android:textSize="25sp"
-                    android:layout_below="@+id/userProfileImageView"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="20dp" />
+                <!--<TextView-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:id="@+id/tv_userNameProf"-->
+                    <!--android:textColor="#FFF"-->
+                    <!--android:textSize="25sp"-->
+                    <!--android:layout_below="@+id/userProfileImageView"-->
+                    <!--android:layout_centerHorizontal="true"-->
+                    <!--android:layout_marginTop="20dp" />-->
 
 
             </RelativeLayout>
 
+            <View
+                android:layout_height="2dp"
+                android:layout_below="@+id/header_cont"
+                android:background="@color/white"
+                android:id="@+id/hr"
+                android:layout_width="fill_parent"/>
 
             <RelativeLayout
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:layout_below="@+id/header_cont"
+                android:layout_below="@+id/hr"
                 android:background="@color/white">
 
                 <LinearLayout
                     android:orientation="horizontal"
                     android:id="@+id/threecol"
+                    android:background="@color/grayback"
                     android:layout_width="fill_parent"
                     android:layout_height="80dp">
 
@@ -78,26 +85,25 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="30sp"
-                            android:textColor="@color/black"
+                            android:textColor="@color/green"
                             android:id="@+id/tv_deals_redeemed"
+                            android:layout_marginTop="10dp"
                             android:layout_alignParentTop="true"
-                            android:layout_alignParentLeft="true"
-                            android:layout_alignParentStart="true"
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginTop="10dp"/>
+                            android:layout_centerHorizontal="true" />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="10sp"
                             android:text="DEALS REDEEMED"
-                            android:layout_marginLeft="10dp"
+                            android:textColor="@color/dblue"
                             android:layout_marginTop="5dp"
-                            android:layout_below="@+id/tv_deals_redeemed"/>
+                            android:layout_below="@+id/tv_deals_redeemed"
+                            android:layout_centerHorizontal="true" />
                     </RelativeLayout>
 
                     <View
                         android:layout_height="80dp"
-                        android:background="#888"
+                        android:background="@color/white"
                         android:layout_width="2dp"/>
 
                     <RelativeLayout
@@ -109,27 +115,27 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="30sp"
-                            android:textColor="@color/black"
+                            android:textColor="@color/green"
                             android:id="@+id/tv_partyscore"
+                            android:layout_marginTop="10dp"
                             android:layout_alignParentTop="true"
-                            android:layout_alignParentLeft="true"
-                            android:layout_alignParentStart="true"
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginTop="10dp"/>
+                            android:layout_centerHorizontal="true" />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="10sp"
                             android:text="PARTY SCORE"
-                            android:layout_marginLeft="10dp"
                             android:layout_marginTop="5dp"
-                            android:layout_below="@+id/tv_partyscore"/>
+                            android:textColor="@color/dblue"
+                            android:id="@+id/textView"
+                            android:layout_below="@+id/tv_partyscore"
+                            android:layout_centerHorizontal="true" />
 
                     </RelativeLayout>
 
                     <View
                         android:layout_height="80dp"
-                        android:background="#888"
+                        android:background="@color/white"
                         android:layout_width="2dp"/>
 
                     <RelativeLayout
@@ -141,123 +147,230 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="30sp"
-                            android:textColor="@color/black"
+                            android:textColor="@color/green"
                             android:id="@+id/tv_friends_on"
+                            android:layout_marginTop="10dp"
                             android:layout_alignParentTop="true"
-                            android:layout_alignParentLeft="true"
-                            android:layout_alignParentStart="true"
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginTop="10dp"/>
+                            android:layout_centerHorizontal="true" />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="10sp"
                             android:text="FRIENDS ON BARLIFT"
-                            android:layout_marginLeft="10dp"
+                            android:textColor="@color/dblue"
                             android:layout_marginTop="5dp"
-                            android:layout_below="@+id/tv_friends_on"/>
+                            android:layout_below="@+id/tv_friends_on"
+                            android:layout_centerHorizontal="true" />
 
                     </RelativeLayout>
                 </LinearLayout>
 
-                <View
-                    android:layout_height="2dp"
-                    android:layout_below="@id/threecol"
-                    android:background="#888"
-                    android:layout_marginBottom="10dp"
-                    android:layout_width="fill_parent"/>
-
-                <android.support.v7.widget.CardView
-                    android:layout_below="@id/threecol"
-                    android:orientation="horizontal" android:layout_width="match_parent"
-                    xmlns:card_view="http://schemas.android.com/apk/res-auto"
-                    android:layout_margin="5dp"
-                    card_view:cardCornerRadius="5dp"
-                    android:layout_height="match_parent">
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:layout_below="@+id/threecol"
+                    android:orientation="vertical">
 
                     <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                        <ImageView
-                            android:id="@+id/countryImage"
-                            android:layout_width="match_parent"
-                            android:layout_height="100dp"
-                            android:scaleType="centerCrop"
-                            android:layout_centerInParent="true"
-                            />
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="20dp"
+                        android:paddingRight="20dp"
+                        android:paddingTop="20dp"
+                        android:paddingBottom="20dp">
 
                         <TextView
-                            android:id="@+id/countryName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
+                            android:text="COLLEGE"
+                            android:layout_centerVertical="true" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="14sp"
+                            android:textColor="@color/darkgray"
+                            android:text="Northwestern, 2015"
                             android:gravity="center"
-                            android:background="?android:selectableItemBackground"
-                            android:focusable="true"
-                            android:clickable="true"
-                            android:layout_width="match_parent"
-                            android:layout_height="100dp"
-                            android:textSize="24sp"
-                            android:layout_centerInParent="true"
-                            android:textColor="@android:color/white"
-                            />
-
+                            android:id="@+id/tv_college"
+                            android:layout_centerVertical="true"
+                            android:layout_alignParentEnd="true" />
                     </RelativeLayout>
-                </android.support.v7.widget.CardView>
 
-                <!--<Spinner-->
-                    <!--android:layout_width="fill_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:id="@+id/spinner"-->
-                    <!--android:background="#FFF"-->
-                    <!--android:gravity="center"-->
-                    <!--android:padding="10dp"-->
-                    <!--android:layout_below="@+id/textView"-->
-                    <!--android:layout_alignParentLeft="true"-->
-                    <!--android:layout_alignParentStart="true" />-->
+                    <View
+                        android:layout_width="fill_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/grayback"/>
 
-                <!--<TextView-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:textAppearance="?android:attr/textAppearanceLarge"-->
-                    <!--android:text="Dance Marathon Team"-->
-                    <!--android:id="@+id/textView"-->
-                    <!--android:gravity="center"-->
-                    <!--android:textColor="#FFF"-->
-                    <!--android:layout_below="@+id/threecol"-->
-                    <!--android:layout_centerHorizontal="true" />-->
+                    <RelativeLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="20dp"
+                        android:paddingRight="20dp"
+                        android:paddingTop="20dp"
+                        android:paddingBottom="20dp">
 
-                <!--<TextView-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"-->
-                    <!--android:text="How many nights do you go out per week?"-->
-                    <!--android:gravity="center"-->
-                    <!--android:id="@+id/textView4"-->
-                    <!--android:layout_marginTop="500dp"-->
-                    <!--android:layout_below="@+id/spinner"-->
-                    <!--android:layout_centerHorizontal="true"-->
-                    <!--android:textColor="#FFF" />-->
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
+                            android:text="SCHOOL"
+                            android:layout_centerVertical="true" />
 
-                <!--<Spinner-->
-                    <!--android:layout_width="fill_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:id="@+id/spinner2"-->
-                    <!--android:gravity="center"-->
-                    <!--android:padding="10dp"-->
-                    <!--android:layout_marginTop="10dp"-->
-                    <!--android:layout_below="@+id/textView4"-->
-                    <!--android:background="#FFF"-->
-                    <!--android:layout_centerHorizontal="true" />-->
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="14sp"
+                            android:textColor="@color/darkgray"
+                            android:text="Weinberg"
+                            android:gravity="center"
+                            android:id="@+id/tv_school"
+                            android:layout_centerVertical="true"
+                            android:layout_alignParentEnd="true" />
+                    </RelativeLayout>
 
-                <!--<Button-->
-                    <!--android:layout_width="200dp"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:text="Save"-->
-                    <!--android:textColor="#FFF"-->
-                    <!--android:layout_marginTop="20dp"-->
-                    <!--android:background="@drawable/save"-->
-                    <!--android:id="@+id/btn_save"-->
-                    <!--android:layout_below="@+id/spinner2"-->
-                    <!--android:layout_centerHorizontal="true" />-->
+                    <View
+                        android:layout_width="fill_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/grayback"/>
+
+                    <RelativeLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="20dp"
+                        android:paddingRight="20dp"
+                        android:paddingTop="20dp"
+                        android:paddingBottom="20dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
+                            android:text="AFFILIATION"
+                            android:layout_centerVertical="true" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="14sp"
+                            android:textColor="@color/darkgray"
+                            android:text="Phi Delta Theta"
+                            android:gravity="center"
+                            android:id="@+id/tv_affiliation"
+                            android:layout_centerVertical="true"
+                            android:layout_alignParentEnd="true" />
+                    </RelativeLayout>
+
+                    <View
+                        android:layout_width="fill_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/grayback"/>
+
+                    <RelativeLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="20dp"
+                        android:paddingRight="20dp"
+                        android:paddingTop="20dp"
+                        android:paddingBottom="20dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
+                            android:text="FAVORITE DRINK"
+                            android:layout_centerVertical="true" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="14sp"
+                            android:textColor="@color/darkgray"
+                            android:text="Whiskey Coke"
+                            android:gravity="center"
+                            android:id="@+id/tv_drink"
+                            android:layout_centerVertical="true"
+                            android:layout_alignParentEnd="true" />
+                    </RelativeLayout>
+
+                    <View
+                        android:layout_width="fill_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/grayback"/>
+
+                    <RelativeLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="20dp"
+                        android:paddingRight="20dp"
+                        android:paddingTop="20dp"
+                        android:paddingBottom="20dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
+                            android:text="MOST VISITED BAR"
+                            android:layout_centerVertical="true" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="14sp"
+                            android:textColor="@color/darkgray"
+                            android:text="Bar Louie"
+                            android:gravity="center"
+                            android:id="@+id/tv_visitedBar"
+                            android:layout_centerVertical="true"
+                            android:layout_alignParentEnd="true" />
+                    </RelativeLayout>
+
+                    <View
+                        android:layout_width="fill_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/grayback"/>
+
+                    <RelativeLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="20dp"
+                        android:paddingRight="20dp"
+                        android:paddingTop="20dp"
+                        android:paddingBottom="20dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
+                            android:text="DAY SEEN OUT MOST"
+                            android:layout_centerVertical="true" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="14sp"
+                            android:textColor="@color/darkgray"
+                            android:text="Wednesday"
+                            android:gravity="center"
+                            android:id="@+id/tv_favDay"
+                            android:layout_centerVertical="true"
+                            android:layout_alignParentEnd="true" />
+                    </RelativeLayout>
+
+                    <View
+                        android:layout_width="fill_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/grayback"/>
+
+                </LinearLayout>
             </RelativeLayout>
 
         </RelativeLayout>

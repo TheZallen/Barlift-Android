@@ -1,2 +1,2 @@
-include ':app', ':facebook', 'ParseFacebook', ':SlidingMenu'
+include ':app', ':facebook', 'ParseFacebook'
 include ':viewpageindicator'

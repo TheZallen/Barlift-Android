@@ -30,25 +30,31 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tool_bar"
+                android:id="@+id/nodealstext"
                 android:padding="10dp"
                 android:textSize="14sp"
                 android:gravity="center"
-                android:background="@color/white"
-                android:text="NORTHWESTERN"
+                android:visibility="gone"
+                android:textColor="@color/black"
+                android:text="No Deals Available"
                 android:layout_alignParentRight="true" />
 
-            <com.yalantis.phoenix.PullToRefreshView
+            <android.support.v4.widget.SwipeRefreshLayout
                 android:id="@+id/pull_to_refresh"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content">
 
                 <se.emilsjolander.stickylistheaders.StickyListHeadersListView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/grayback"
+                    android:divider="@null"
+                    android:dividerHeight="0dp"
                     android:id="@+id/lv_deal" />
 
-            </com.yalantis.phoenix.PullToRefreshView>
+            </android.support.v4.widget.SwipeRefreshLayout>
+
+
 
         </LinearLayout>
 

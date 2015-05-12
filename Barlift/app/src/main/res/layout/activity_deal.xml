@@ -2,8 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/orange"
-    tools:context="com.barliftapp.barlift.DealActivity">
+    android:background="@color/dblue"
+    tools:context="com.barliftapp.barlift.activity.DealActivity">
 
     <include
         android:id="@+id/tool_bar"
@@ -15,7 +15,7 @@
         android:layout_below="@+id/tool_bar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:parallax_factor="1.9"
+        app:parallax_factor="1"
         tools:context=".DealActivity" >
 
         <RelativeLayout
@@ -25,154 +25,401 @@
             <RelativeLayout
                 android:id="@+id/header_cont"
                 android:layout_width="match_parent"
-                android:background="#000"
                 android:layout_height="wrap_content">
 
-                <!--<ImageView-->
-                    <!--android:layout_width="match_parent"-->
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/iv_dealback"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_alignBottom="@+id/deal_pager"
+                    android:layout_alignTop="@+id/deal_pager"
+                    android:scaleType="centerCrop" />
+
+                <android.support.v4.view.ViewPager
+                    android:id="@+id/deal_pager"
+                    android:layout_width="fill_parent"
+                    android:layout_height="250dp"
+                    android:background="@drawable/linear_gradient"
+                    android:layout_alignParentTop="true"
+                    android:layout_weight="1" />
+
+                <com.viewpagerindicator.CirclePageIndicator
+                    android:id="@+id/deal_indicator"
+                    android:padding="10dip"
+                    android:layout_height="wrap_content"
+                    android:layout_width="fill_parent"
+                    android:layout_marginTop="185dp"
+                    app:radius="6dp"
+                    app:fillColor="@color/orange"
+                    app:pageColor="#88b5aeba"
+                    app:strokeWidth="0dp"
+                    android:layout_alignParentTop="true" />
+
+                <!--<TextView-->
+                    <!--android:layout_width="fill_parent"-->
                     <!--android:layout_height="wrap_content"-->
-                    <!--android:id="@+id/iv_dealback"-->
-                    <!--android:layout_alignParentTop="true"-->
+                    <!--android:id="@+id/tv_deal_text"-->
+                    <!--android:textColor="#FFF"-->
+                    <!--android:textSize="25sp"-->
+                    <!--android:background="@drawable/linear_gradient"-->
+                    <!--android:gravity="center"-->
                     <!--android:layout_centerHorizontal="true"-->
-                    <!--android:scaleType="centerCrop" />-->
+                    <!--android:paddingLeft="40dp"-->
+                    <!--android:paddingRight="40dp"-->
+                    <!--android:paddingBottom="60dp"-->
+                    <!--android:paddingTop="60dp"/>-->
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/tv_deal_text"
-                    android:textColor="#FFF"
-                    android:textSize="25sp"
-                    android:gravity="center"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginBottom="20dp"/>
+                    android:layout_marginTop="15dp"
+                    android:textSize="12sp"
+                    android:text="Today | 8:00PM - 1AM"
+                    android:textColor="@color/white"
+                    android:id="@+id/tv_hours"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true" />
 
 
             </RelativeLayout>
-
 
             <RelativeLayout
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
+                android:layout_height="190dp"
+                android:id="@+id/interested_div"
+                android:background="@color/grayback"
+                android:padding="15dp"
                 android:layout_below="@+id/header_cont"
-                android:background="@color/white">
-
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:id="@+id/threecol"
-                    android:layout_width="fill_parent"
-                    android:layout_height="80dp">
-
-
-                    <RelativeLayout
-                        android:layout_weight=".33"
-                        android:layout_width="0dp"
-                        android:layout_height="fill_parent">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textSize="30sp"
-                            android:textColor="@color/black"
-                            android:id="@+id/tv_deals_redeemed"
-                            android:layout_alignParentTop="true"
-                            android:layout_alignParentLeft="true"
-                            android:layout_alignParentStart="true"
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginTop="10dp"/>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textSize="10sp"
-                            android:text="DEALS REDEEMED"
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginTop="5dp"
-                            android:layout_below="@+id/tv_deals_redeemed"/>
-                    </RelativeLayout>
-
-                    <View
-                        android:layout_height="80dp"
-                        android:background="#888"
-                        android:layout_width="2dp"/>
-
-                    <RelativeLayout
-                        android:layout_weight=".33"
-                        android:layout_width="0dp"
-                        android:onClick="onGoingClick"
-                        android:layout_height="fill_parent">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textSize="30sp"
-                            android:textColor="@color/black"
-                            android:id="@+id/tv_partyscore"
-                            android:layout_alignParentTop="true"
-                            android:layout_alignParentLeft="true"
-                            android:layout_alignParentStart="true"
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginTop="10dp"/>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textSize="10sp"
-                            android:text="PARTY SCORE"
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginTop="5dp"
-                            android:layout_below="@+id/tv_partyscore"/>
-
-                    </RelativeLayout>
-
-                    <View
-                        android:layout_height="80dp"
-                        android:background="#888"
-                        android:layout_width="2dp"/>
-
-                    <RelativeLayout
-                        android:layout_weight=".33"
-                        android:layout_width="0dp"
-                        android:layout_height="fill_parent">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textSize="30sp"
-                            android:textColor="@color/black"
-                            android:id="@+id/tv_friends_on"
-                            android:layout_alignParentTop="true"
-                            android:layout_alignParentLeft="true"
-                            android:layout_alignParentStart="true"
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginTop="10dp"/>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textSize="10sp"
-                            android:text="FRIENDS ON BARLIFT"
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginTop="5dp"
-                            android:layout_below="@+id/tv_friends_on"/>
-
-                    </RelativeLayout>
-                </LinearLayout>
-
-                <View
-                    android:layout_height="2dp"
-                    android:layout_below="@+id/threecol"
-                    android:background="#888"
-                    android:layout_marginBottom="800dp"
-                    android:layout_width="fill_parent"/>
+                android:layout_centerHorizontal="true">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/dblue"
                     android:textSize="20sp"
-                    android:text="See friends going"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_below="@+id/threecol"/>
+                    android:text="Who's Interested:"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginTop="30dp"
+                    android:id="@+id/tv_interested" />
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:id="@+id/friends_interested"
+                    android:layout_width="fill_parent"
+                    android:onClick="onFriendsClick"
+                    android:layout_below="@+id/tv_interested"
+                    android:layout_marginTop="10dp"
+                    android:layout_alignStart="@+id/tv_interested"
+                    android:layout_height="40dp">
+
+
+                    <ImageView
+                        android:layout_weight=".10"
+                        android:layout_width="0dp"
+                        android:layout_height="fill_parent"
+                        android:id="@+id/iv_friend1"
+                        android:layout_marginRight="5dp"/>
+
+                    <ImageView
+                        android:layout_weight=".10"
+                        android:layout_width="0dp"
+                        android:layout_height="fill_parent"
+                        android:id="@+id/iv_friend2"
+                        android:layout_marginRight="5dp"
+                        android:layout_alignTop="@+id/iv_friend1"
+                        android:layout_toEndOf="@+id/iv_friend1" />
+
+                    <ImageView
+                        android:layout_weight=".10"
+                        android:layout_width="0dp"
+                        android:layout_height="fill_parent"
+                        android:id="@+id/iv_friend3"
+                        android:layout_marginRight="5dp"
+                        android:layout_alignTop="@+id/iv_friend2"
+                        android:layout_toEndOf="@+id/iv_friend2" />
+
+                    <ImageView
+                        android:layout_weight=".10"
+                        android:layout_width="0dp"
+                        android:layout_height="fill_parent"
+                        android:id="@+id/iv_friend4"
+                        android:layout_marginRight="5dp"
+                        android:layout_alignTop="@+id/iv_friend3"
+                        android:layout_toEndOf="@+id/iv_friend3" />
+
+                    <ImageView
+                        android:layout_weight=".10"
+                        android:layout_width="0dp"
+                        android:layout_height="fill_parent"
+                        android:id="@+id/iv_friend5"
+                        android:layout_marginRight="5dp"
+                        android:layout_alignTop="@+id/iv_friend4"
+                        android:layout_toEndOf="@+id/iv_friend4" />
+
+                    <ImageView
+                        android:layout_weight=".10"
+                        android:layout_width="0dp"
+                        android:layout_height="fill_parent"
+                        android:id="@+id/iv_friend6"
+                        android:layout_marginRight="5dp"
+                        android:layout_alignTop="@+id/iv_friend5"
+                        android:layout_toEndOf="@+id/iv_friend5" />
+
+                    <Button
+                        android:layout_weight=".10"
+                        android:layout_width="40dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginBottom="2dp"
+                        android:layout_height="fill_parent"
+                        android:textSize="12sp"
+                        android:textColor="@color/dblue"
+                        android:text="MORE >"
+                        android:onClick="onFriendsClick"
+                        android:id="@+id/btn_more"
+                        android:background="@drawable/white_btn"
+                        android:layout_below="@+id/header_cont"
+                        android:layout_centerHorizontal="true"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:id="@+id/social_buttons"
+                    android:layout_width="fill_parent"
+                    android:layout_below="@+id/friends_interested"
+                    android:layout_marginTop="10dp"
+                    android:layout_alignStart="@+id/tv_interested"
+                    android:layout_height="40dp">
+
+                    <Button
+                        android:layout_weight=".5"
+                        android:layout_width="0dp"
+                        android:layout_height="fill_parent"
+                        android:layout_marginRight="5dp"
+                        android:textSize="14sp"
+                        android:textColor="@color/white"
+                        android:text="NUDGE FRIENDS"
+                        android:onClick="onNudgeClick"
+                        android:id="@+id/nudgeFriends"
+                        android:background="@drawable/dblue_btn"
+                        android:layout_below="@+id/friends_interested"
+                        android:layout_alignParentStart="true" />
+
+                    <Button
+                        android:layout_weight=".5"
+                        android:layout_width="0dp"
+                        android:layout_height="fill_parent"
+                        android:layout_marginLeft="5dp"
+                        android:textSize="14sp"
+                        android:textColor="@color/white"
+                        android:text="SHARE DEAL"
+                        android:onClick="onDealShareClick"
+                        android:id="@+id/btn_morse"
+                        android:background="@drawable/dblue_btn"
+                        android:layout_below="@+id/header_cont"
+                        android:layout_centerHorizontal="true"/>
+                </LinearLayout>
 
             </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:layout_below="@+id/interested_div"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:onClick="onAddressClick"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingTop="20dp"
+                    android:paddingBottom="20dp">
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/icon_address"
+                        android:id="@+id/icon_location"
+                        android:layout_centerVertical="true" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        android:layout_marginLeft="10dp"
+                        android:text="2133 Sheridan Rd\nEvanston, IL"
+                        android:id="@+id/tv_address"
+                        android:layout_centerVertical="true"
+                        android:layout_toEndOf="@+id/icon_location" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:textColor="@color/darkgray"
+                        android:text="Open in\nMaps"
+                        android:gravity="center"
+                        android:id="@+id/tv_maps"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentEnd="true" />
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/grayback"/>
+
+                <RelativeLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:onClick="onDetailClick"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingTop="20dp"
+                    android:paddingBottom="20dp">
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/icon_dealdetails"
+                        android:id="@+id/icon_details"
+                        android:layout_centerVertical="true" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        android:layout_marginLeft="10dp"
+                        android:text="Deal Details"
+                        android:id="@+id/tv_details"
+                        android:layout_centerVertical="true"
+                        android:layout_toEndOf="@+id/icon_details" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:textColor="@color/darkgray"
+                        android:text="See more >"
+                        android:gravity="center"
+                        android:id="@+id/tv_more"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentEnd="true" />
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/grayback"/>
+
+                <RelativeLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="10dp"
+                    android:onClick="onViralityClick"
+                    android:paddingRight="10dp"
+                    android:paddingTop="20dp"
+                    android:paddingBottom="20dp">
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/icon_viral"
+                        android:id="@+id/icon_hours"
+                        android:layout_centerVertical="true" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        android:layout_marginLeft="10dp"
+                        android:text="Virality"
+                        android:id="@+id/tv_virality"
+                        android:layout_centerVertical="true"
+                        android:layout_toEndOf="@+id/icon_hours" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:textColor="@color/darkgray"
+                        android:text="Poppin"
+                        android:gravity="center"
+                        android:id="@+id/tv_viralityScore"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentEnd="true" />
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/grayback"/>
+
+                <RelativeLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:onClick="onUberClick"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingTop="20dp"
+                    android:paddingBottom="20dp">
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/icon_uber"
+                        android:id="@+id/icon_uber"
+                        android:layout_centerVertical="true" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        android:layout_marginLeft="10dp"
+                        android:text="Call Uber"
+                        android:id="@+id/tv_uber"
+                        android:layout_centerVertical="true"
+                        android:layout_toEndOf="@+id/icon_uber" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:text="Open App"
+                        android:textColor="@color/darkgray"
+                        android:gravity="center"
+                        android:id="@+id/tv_uberCost"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentEnd="true" />
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <ToggleButton
+                android:layout_width="250dp"
+                android:layout_height="50dp"
+                android:textSize="18sp"
+                android:textColor="@color/white"
+                android:onClick="onGoingClick"
+                android:text="INTERESTED?"
+                android:textOff="INTERESTED?"
+                android:textOn="I'M INTERESTED"
+                android:id="@+id/toggle_interested"
+                android:layout_marginTop="-25dp"
+                android:background="@drawable/dblue_toggle"
+                android:layout_below="@+id/header_cont"
+                android:layout_centerHorizontal="true"/>
+
         </RelativeLayout>
     </com.nirhart.parallaxscroll.views.ParallaxScrollView>
 </RelativeLayout>

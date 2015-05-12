@@ -1,14 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" >
-    <VideoView android:id="@+id/videoview"
-        android:layout_width="fill_parent"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentBottom="true"
-        android:layout_height="fill_parent">
-    </VideoView>
+
 
     <ImageView
         android:layout_width="120dp"
@@ -17,7 +10,6 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="141dp"
-        android:alpha="0"
         android:layout_alignParentEnd="false"
         android:layout_alignParentRight="false"/>
 
@@ -28,7 +20,6 @@
         android:text="Welcome to BarLift"
         android:id="@+id/textView2"
         android:textColor="#FFF"
-        android:alpha="0"
         android:textSize="28dp"
         android:layout_below="@+id/imageView"
         android:layout_centerHorizontal="true" />
@@ -39,7 +30,6 @@
         android:layout_marginTop="25dp"
         android:text="We're glad to have you on board, swipe right to learn more."
         android:gravity="center"
-        android:alpha="0"
         android:padding="10dp"
         android:id="@+id/textView3"
         android:textColor="#FFF"

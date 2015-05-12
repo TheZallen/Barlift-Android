@@ -1,4 +1,4 @@
-package com.barliftapp.barlift;
+package com.barliftapp.barlift.util;
 
 import android.app.Application;
 import android.util.Log;

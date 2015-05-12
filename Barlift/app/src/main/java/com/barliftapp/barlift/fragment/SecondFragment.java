@@ -1,4 +1,4 @@
-package com.barliftapp.barlift;
+package com.barliftapp.barlift.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.barliftapp.barlift.R;
 import com.squareup.picasso.Picasso;
 
 public class SecondFragment extends Fragment {

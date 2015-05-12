@@ -1,28 +1,22 @@
-package com.barliftapp.barlift;
+package com.barliftapp.barlift.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.barliftapp.barlift.util.BlurTransform;
+import com.barliftapp.barlift.util.CircleTransform;
+import com.barliftapp.barlift.R;
 import com.facebook.Session;
-import com.facebook.widget.ProfilePictureView;
-import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
@@ -34,13 +28,26 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Date;
-import java.util.List;
-
-import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
-
 
 public class ProfileActivity extends ActionBarActivity {
+
+    static final String TAG = "BarliftProfile";
+
+    private static final float MAX_TEXT_SCALE_DELTA = 0.3f;
+    private static final boolean TOOLBAR_IS_STICKY = false;
+
+    private View mToolbar;
+    private View mImageView;
+    private View mOverlayView;
+    private View mListBackgroundView;
+    private TextView mTitleView;
+    private View mFab;
+    private int mActionBarSize;
+    private int mFlexibleSpaceShowFabOffset;
+    private int mFlexibleSpaceImageHeight;
+    private int mFabMargin;
+    private int mToolbarColor;
+    private boolean mFabIsShown;
 
     private ImageView userProfilePictureImageView;
     private ImageView profileImageView;
@@ -67,7 +74,7 @@ public class ProfileActivity extends ActionBarActivity {
 
         userProfilePictureImageView = (ImageView) findViewById(R.id.userProfileImageView);
         profileImageView = (ImageView) findViewById(R.id.iv_profileback);
-        userNameView = (TextView) findViewById(R.id.tv_userNameProf);
+//        userNameView = (TextView) findViewById(R.id.tv_userNameProf);
         friendsOnView = (TextView) findViewById(R.id.tv_friends_on);
         dealsRedeemedView = (TextView) findViewById(R.id.tv_deals_redeemed);
         partyScoreView = (TextView) findViewById(R.id.tv_partyscore);
@@ -75,9 +82,7 @@ public class ProfileActivity extends ActionBarActivity {
         Intent intent = getIntent();
         String fbId = intent.getStringExtra("userId");
 
-        Picasso.with(this)
-                .load(R.drawable.coverphoto)
-                .into(profileImageView);
+
 
         // Fetch Facebook user info if the session is active
         Session session = ParseFacebookUtils.getSession();
@@ -123,6 +128,9 @@ public class ProfileActivity extends ActionBarActivity {
 //            }
 //        });
     }
+
+
+
 //
 //    private void saveUserData(ParseUser currentUser){
 //        Spinner mySpinner = (Spinner) findViewById(R.id.spinner);
@@ -173,16 +181,21 @@ public class ProfileActivity extends ActionBarActivity {
                         .transform(new CircleTransform())
                         .into(userProfilePictureImageView);
 
+                Picasso.with(this)
+                        .load("https://graph.facebook.com/" + tempurl + "/picture?type=normal&height=250&width=250")
+                        .transform(new BlurTransform(this))
+                        .into(profileImageView);
+
                 if (userProfile.has("name")) {
-                    userNameView.setText(userProfile.getString("name"));
+//                    userNameView.setText(userProfile.getString("name"));
                     setTitle(userProfile.getString("name"));
                 } else {
-                    userNameView.setText("");
+//                    userNameView.setText("");
                 }
 //                    mOptionsMenu.getItem(0).setIcon(getResources().getDrawable(R.drawable.ic_action_edit));
 //                    mOptionsMenu.findItem(R.id.action_edit).setIcon(R.drawable.ic_action_edit);
             } catch (JSONException e) {
-                Log.d(BarliftApplication.TAG, "Error parsing saved user data.");
+                Log.d(TAG, "Error parsing saved user data.");
             }
         }
 

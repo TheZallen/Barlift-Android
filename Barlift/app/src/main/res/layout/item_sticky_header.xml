@@ -2,17 +2,43 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:facebook="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent" android:layout_height="match_parent"
-    android:padding="10dp"
-    android:background="@color/grayback">
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp"
+    android:background="@color/white">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="15dp"
-        android:text="Sample User"
-        android:textColor="#000"
+        android:text="April 28"
+        android:textColor="@color/dblue"
+        android:singleLine="true"
+        android:id="@+id/tv_date"
+        android:layout_centerVertical="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="15dp"
+        android:text="TODAY"
+        android:textStyle="bold"
+        android:textColor="@color/dblue"
         android:singleLine="true"
         android:id="@+id/tv_header"
-        android:layout_centerVertical="true" />
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="15dp"
+        android:text="4"
+        android:textColor="@color/dblue"
+        android:singleLine="true"
+        android:id="@+id/tv_number"
+        android:layout_alignTop="@+id/tv_header"
+        android:layout_alignParentEnd="true" />
 
 </RelativeLayout>

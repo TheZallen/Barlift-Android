@@ -5,6 +5,24 @@
     android:background="@color/white"
     android:layout_height="fill_parent">
 
+    <VideoView android:id="@+id/videoview"
+        android:layout_width="fill_parent"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:layout_height="fill_parent">
+    </VideoView>
+
+    <View android:layout_width="fill_parent"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:background="@color/dblue"
+        android:alpha=".7"
+        android:layout_height="fill_parent"/>
+
     <android.support.v4.view.ViewPager
         android:id="@+id/pager"
         android:layout_width="fill_parent"

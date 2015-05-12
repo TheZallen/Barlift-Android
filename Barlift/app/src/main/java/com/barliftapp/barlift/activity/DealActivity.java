@@ -1,72 +1,78 @@
-package com.barliftapp.barlift;
+package com.barliftapp.barlift.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
-import com.daimajia.androidanimations.library.Techniques;
-import com.daimajia.androidanimations.library.YoYo;
-import com.facebook.FacebookRequestError;
-import com.facebook.Request;
-import com.facebook.Response;
+import com.afollestad.materialdialogs.Theme;
+import com.barliftapp.barlift.fragment.DealFragment;
+import com.barliftapp.barlift.fragment.FirstFragment;
+import com.barliftapp.barlift.fragment.SecondFragment;
+import com.barliftapp.barlift.util.CircleTransform;
+import com.barliftapp.barlift.R;
 import com.facebook.Session;
-import com.facebook.model.GraphUser;
-import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.parse.FunctionCallback;
 import com.parse.GetCallback;
 import com.parse.ParseCloud;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
-import com.parse.ParseInstallation;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.squareup.picasso.Picasso;
+import com.viewpagerindicator.CirclePageIndicator;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
-import me.drakeet.materialdialog.MaterialDialog;
 
 public class DealActivity extends ActionBarActivity {
 
     private static final String TAG = "MainActivity";
 
+    ViewPager viewPager;
+    CirclePageIndicator mIndicator;
+
     private ImageView userProfilePictureView;
     private ImageView dealImageView;
     private TextView userNameView;
-    private TextView dealView;
+    private TextView timeView;
     private TextView barNameView;
     private TextView barAddressView;
+    private TextView interestedView;
     private String barDesc;
+    private String dealTitle;
+    private String barName;
     private ProgressBar spinnerProg;
-    private SlidingMenu menu;
     private String dealId = "";
-    private String userId = "";
+    private String barAddress = "";
     private String fbId = "";
     private String barLat = "";
     private String barLng = "";
@@ -78,23 +84,20 @@ public class DealActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_deal);
-        setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        dealView = (TextView) findViewById(R.id.tv_deal_text);
-//        dealImageView = (ImageView) findViewById(R.id.iv_dealback);
+        timeView = (TextView) findViewById(R.id.tv_hours);
+        barAddressView = (TextView) findViewById(R.id.tv_address);
+        interestedView = (TextView) findViewById(R.id.tv_interested);
+        dealImageView = (ImageView) findViewById(R.id.iv_dealback);
 
         Intent intent = getIntent();
         String dealId = intent.getStringExtra("dealId");
-
-//        Picasso.with(this)
-//                .load(R.drawable.coverphoto)
-//                .into(dealImageView);
-
 
         // Fetch Facebook user info if the session is active
         Session session = ParseFacebookUtils.getSession();
@@ -115,21 +118,212 @@ public class DealActivity extends ActionBarActivity {
                 } else {
                     Log.d("score", "Retrieved the object.");
                     updateViewsWithInfo(object);
+                    getInterestedFriends(object);
+                    getNumberNudges(object);
+                    startDealPager(object);
+                    getHours(object);
                 }
             }
         });
     }
 
-    private void updateViewsWithInfo(ParseObject object) {
-        dealId = object.getObjectId();
-        dealView.setText(object.getString("name"));
-        setTitle(object.getParseObject("user").getString("bar_name"));
+    private void getHours(ParseObject deal){
+        if (deal != null && deal.getNumber("start_utc") != null && deal.getNumber("end_utc") != null) {
+            Calendar c = Calendar.getInstance();
+            Calendar current = Calendar.getInstance();
+            c.setTime(new Date((long) deal.getNumber("start_utc")));
+            Calendar end = Calendar.getInstance();
+            end.setTime(new Date((long) deal.getNumber("end_utc")));
+            String headerText = "";
+            if (c.get(Calendar.DAY_OF_MONTH) == current.get(Calendar.DAY_OF_MONTH)) {
+                headerText = "TODAY";
+            } else if (c.get(Calendar.DAY_OF_MONTH) == current.get(Calendar.DAY_OF_MONTH) + 1) {
+                headerText = "TOMORROW";
+            } else {
+                //            headerText = format.format(c.get(Calendar.DAY_OF_WEEK));
+                headerText = c.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.US).toUpperCase();
+            }
+            String timeText = headerText + " | " + (c.get(Calendar.HOUR_OF_DAY) % 12) + " " + c.getDisplayName(Calendar.AM_PM, Calendar.SHORT, Locale.US) + " - ";
+            timeText += (end.get(Calendar.HOUR_OF_DAY) % 12) + " " + end.getDisplayName(Calendar.AM_PM, Calendar.SHORT, Locale.US);
+            timeView.setText(timeText);
+        }else{
+            timeView.setText("");
+        }
+    }
+
+    private void startDealPager(ParseObject deal){
+        // Locate the ViewPager in viewpager_main.xml
+        viewPager = (ViewPager) findViewById(R.id.deal_pager);
+        ArrayList<Object> temp = new ArrayList<>();
+        temp.add(deal.getString("name").replace("\\n", "\n"));
+        temp.addAll(deal.getList("add_deals"));
+        viewPager.setAdapter(new MyPagerAdapter(getSupportFragmentManager(), temp));
+
+        // ViewPager Indicator
+        mIndicator = (CirclePageIndicator) findViewById(R.id.deal_indicator);
+        mIndicator.setSnap(true);
+        mIndicator.setViewPager(viewPager);
+    }
+
+    private void getNumberNudges(ParseObject deal) {
+        HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("dealID", dealId);
+        ParseCloud.callFunctionInBackground("getNumberNudges", params, new FunctionCallback<Integer>() {
+            public void done(Integer result, ParseException e) {
+                if (e == null){
+                    TextView numberNudges = (TextView) findViewById(R.id.tv_viralityScore);
+//                    int adjustedNudges = result +
+                    numberNudges.setText(result + " nudges sent");
+                }
+            }
+        });
+    }
+
+    private void getInterestedFriends(ParseObject object) {
+        ParseUser currentUser = ParseUser.getCurrentUser();
+
+        HashMap<String, Object> params = new HashMap<>();
+        params.put("deal_objectId", object.getObjectId());
+        params.put("user_objectId", currentUser.getObjectId());
+        ParseCloud.callFunctionInBackground("getWhosGoing", params, new FunctionCallback<ArrayList<Object>>() {
+            public void done(ArrayList<Object> result, ParseException e) {
+                if (e == null) {
+                    ArrayList<Object> detail = (ArrayList<Object>) result.get(0);
+                    ToggleButton interested = (ToggleButton) findViewById(R.id.toggle_interested);
+                    isGoing = (boolean) result.get(1);
+                    interested.setChecked(isGoing);
+                    int[] imageviews = {R.id.iv_friend1, R.id.iv_friend2, R.id.iv_friend3, R.id.iv_friend4, R.id.iv_friend5, R.id.iv_friend6};
+                    int limit = (detail.size() < 6) ? detail.size() : 6;
+                    for (int x = 0; x < limit; x++) {
+                        HashMap<String, String> friend = (HashMap<String, String>) detail.get(x);
+                        Picasso.with(DealActivity.this)
+                                .load("https://graph.facebook.com/" + friend.get("fb_id") + "/picture?type=normal&height=100&width=100")
+                                .transform(new CircleTransform())
+                                .into((ImageView) findViewById(imageviews[x]));
+                    }
+                } else
+                    Log.d("TAG", e.getMessage());
+            }
+        });
+    }
+
+    private void updateViewsWithInfo(ParseObject deal) {
+        dealId = deal.getObjectId();
+        if (deal.getParseObject("user") != null && deal.getParseObject("user").getString("address") != null) {
+            barAddress = deal.getParseObject("user").getString("address").replace("\\n", "\n");
+            barAddressView.setText(barAddress);
+        }
+        if (deal.getString("description") != null) {
+            barDesc = deal.getString("description");
+            interestedView.setText("Who's Interested (" + deal.getNumber("num_accepted") + " going):");
+        }
+        if (deal.getString("name") != null){
+            dealTitle = deal.getString("name").replace("\\n", "\n");
+//            dealView.setText(dealTitle);
+        }
+        if (deal.getParseObject("user") != null && deal.getParseObject("user").getString("bar_name") != null) {
+            barName = deal.getParseObject("user").getString("bar_name");
+            setTitle(barName);
+        }
+        Picasso.with(this)
+                .load(deal.getString("image_url"))
+                .into(dealImageView);
     }
 
     public void onGoingClick(View v){
+        ParseUser currentUser = ParseUser.getCurrentUser();
+
+        if (isGoing) {
+            HashMap<String, Object> params = new HashMap<String, Object>();
+            params.put("deal_objectId", dealId);
+            params.put("user_objectId", currentUser.getObjectId());
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable(){
+                @Override
+                public void run(){
+//                    menuButton.setImageResource(R.drawable.interested1);
+                }
+            }, 500);
+            ParseCloud.callFunctionInBackground("notGoing", params, new FunctionCallback<Integer>() {
+                public void done(Integer result, ParseException e) {
+                    if (e == null){
+                        isGoing = false;
+                    }
+                }
+            });
+        }else{
+            HashMap<String, Object> params = new HashMap<String, Object>();
+            params.put("deal_objectId", dealId);
+            params.put("user_objectId", currentUser.getObjectId());
+            ParseCloud.callFunctionInBackground("imGoing", params, new FunctionCallback<Integer>() {
+                public void done(Integer result, ParseException e) {
+                    if (e == null){
+                        isGoing = true;
+                    }
+                }
+            });
+        }
+    }
+
+    public void onFriendsClick(View v){
         Intent goingIntent = new Intent(this, FriendActivity.class);
         goingIntent.putExtra("dealId", dealId);
         startActivity(goingIntent);
+    }
+
+    public void onNudgeClick(View v){
+        Intent nudgeIntent = new Intent(this, FriendActivity.class);
+        nudgeIntent.putExtra("nudge", true);
+        nudgeIntent.putExtra("nudgeDeal", dealId);
+        startActivity(nudgeIntent);
+    }
+
+    public void onDealShareClick(View v){
+        Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+        sharingIntent.setType("text/plain");
+        String shareBody = dealTitle + " at " + barName + ". Let's go!";
+        sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, barName + " tonight?");
+        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+        startActivity(Intent.createChooser(sharingIntent, "Share deal via"));
+    }
+
+    public void onAddressClick(View v){
+        String map = "http://maps.google.co.in/maps?q=" + barAddress;
+        Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(map));
+        startActivity(i);
+    }
+
+    public void onDetailClick(View v){
+        new MaterialDialog.Builder(this)
+                .title("Deal Details")
+                .theme(Theme.LIGHT)
+                .content(barDesc)
+                .positiveText("Cool")
+                .show();
+    }
+
+    public void onViralityClick(View v){
+        new MaterialDialog.Builder(this)
+                .title("Virality")
+                .theme(Theme.LIGHT)
+                .content("This shows the number of nudges sent for this deal. Higher number means it's being shared more.")
+                .positiveText("Cool")
+                .show();
+    }
+
+    public void onUberClick(View v){
+        PackageManager pm = getPackageManager();
+        try
+        {
+            pm.getPackageInfo("com.ubercab", PackageManager.GET_ACTIVITIES);
+            Intent LaunchIntent = getPackageManager().getLaunchIntentForPackage("com.ubercab");
+            startActivity(LaunchIntent);
+        }
+        catch (PackageManager.NameNotFoundException e)
+        {
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.ubercab"));
+            startActivity(browserIntent);
+        }
     }
 
     @Override
@@ -150,6 +344,26 @@ public class DealActivity extends ActionBarActivity {
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private class MyPagerAdapter extends FragmentPagerAdapter {
+
+        private List<Object> deals;
+
+        public MyPagerAdapter(FragmentManager fm, List<Object> deals) {
+            super(fm);
+            this.deals = deals;
+        }
+
+        @Override
+        public Fragment getItem(int pos) {
+            return DealFragment.newInstance((String) deals.get(pos));
+        }
+
+        @Override
+        public int getCount() {
+            return deals.size();
         }
     }
 
@@ -236,43 +450,6 @@ public class DealActivity extends ActionBarActivity {
 //        }
 //    }
 //
-//    private void rsvpClicked() {
-//        HashMap<String, Object> params = new HashMap<String, Object>();
-//        params.put("deal_objectId", dealId);
-//        params.put("user_objectId", userId);
-//        ImageView menuButton = (ImageView) findViewById(R.id.btn_going);
-//        menuButton.setImageResource(R.drawable.interested2);
-//        ParseCloud.callFunctionInBackground("imGoing", params, new FunctionCallback<Integer>() {
-//            public void done(Integer result, ParseException e) {
-//                if (e == null){
-//                    isGoing = true;
-//                }
-//            }
-//        });
-//    }
-//
-//    private void notGoing() {
-//        HashMap<String, Object> params = new HashMap<String, Object>();
-//        params.put("deal_objectId", dealId);
-//        params.put("user_objectId", userId);
-//
-//        final ImageView menuButton = (ImageView) findViewById(R.id.btn_going);
-//        menuButton.setImageResource(R.drawable.interested3);
-//        Handler handler = new Handler();
-//        handler.postDelayed(new Runnable(){
-//            @Override
-//            public void run(){
-//                menuButton.setImageResource(R.drawable.interested1);
-//            }
-//        }, 500);
-//        ParseCloud.callFunctionInBackground("notGoing", params, new FunctionCallback<Integer>() {
-//            public void done(Integer result, ParseException e) {
-//                if (e == null){
-//                    isGoing = false;
-//                }
-//            }
-//        });
-//    }
 //
 //    private void animateYoYo(Techniques tech, int duration, int delay, int id){
 //        YoYo.with(tech)

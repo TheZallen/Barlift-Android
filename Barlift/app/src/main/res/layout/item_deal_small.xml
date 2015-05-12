@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:padding="10dp">
+
+    <RelativeLayout
+        android:orientation="horizontal"
+        android:id="@+id/di_bottombar"
+        android:background="@color/white"
+        android:layout_marginTop="78dp"
+        android:padding="10dp"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@color/dblue"
+            android:id="@+id/di_barNameSmall"
+            android:layout_below="@+id/tv_deals_redeemed"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/di_communitySmall"
+            android:textColor="@color/dblue"
+            android:textSize="10sp"
+            android:layout_below="@+id/di_barNameSmall"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/di_peopleicon"
+            android:src="@drawable/ic_action_group"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:gravity="right"
+            android:textColor="@color/dblue"
+            android:id="@+id/di_numberSmall"
+            android:layout_marginRight="5dp"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/di_peopleicon"/>
+
+    </RelativeLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/di_dealbackSmall"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_alignBottom="@+id/view_gradient"
+        android:layout_alignTop="@+id/view_gradient"
+        android:scaleType="centerCrop" />
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="80dp"
+        android:id="@+id/view_gradient"
+        android:background="@drawable/linear_gradient"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="80dp"
+        android:textSize="20sp"
+        android:singleLine="true"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:textColor="@color/white"
+        android:layout_alignBottom="@+id/view_gradient"
+        android:layout_alignTop="@+id/view_gradient"
+        android:id="@+id/di_barDealSmall"
+        android:gravity="center"
+        android:layout_below="@+id/orange_bar"
+        android:layout_centerHorizontal="true" />
+
+</RelativeLayout>

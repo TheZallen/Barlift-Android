@@ -1,4 +1,4 @@
-package com.barliftapp.barlift;
+package com.barliftapp.barlift.util;
 
 import android.content.Context;
 import android.net.ConnectivityManager;

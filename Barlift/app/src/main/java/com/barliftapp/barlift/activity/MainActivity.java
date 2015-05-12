@@ -1,8 +1,10 @@
-package com.barliftapp.barlift;
+package com.barliftapp.barlift.activity;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.os.Handler;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -13,21 +15,25 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.afollestad.materialdialogs.Theme;
+import com.barliftapp.barlift.util.BlurTransform;
+import com.barliftapp.barlift.util.CircleTransform;
+import com.barliftapp.barlift.adapter.DealAdapter;
+import com.barliftapp.barlift.adapter.NavAdapter;
+import com.barliftapp.barlift.R;
 import com.facebook.FacebookRequestError;
 import com.facebook.Request;
 import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.model.GraphUser;
+import com.parse.ConfigCallback;
 import com.parse.FindCallback;
-import com.parse.FunctionCallback;
-import com.parse.ParseCloud;
+import com.parse.ParseConfig;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
 import com.parse.ParseInstallation;
@@ -35,16 +41,13 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.squareup.picasso.Picasso;
-import com.yalantis.phoenix.PullToRefreshView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
@@ -52,14 +55,18 @@ import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
 public class MainActivity extends ActionBarActivity {
 
+    static final String TAG = "BarliftMain";
+
     private String userId = "";
     private String fbId = "";
 
     //First We Declare Titles And Icons For Our Navigation Drawer List View
     //This Icons And Titles Are holded in an Array as you can see
 
-    String TITLES[] = {"PROFILE","FRIENDS","SHARE","CALL UBER","LOG OUT"};
+    String TITLES[] = {"PROFILE","FRIENDS","SHARE","CHANGE LOCATION","LOG OUT"};
     int ICONS[] = {R.drawable.ic_action_person,R.drawable.ic_action_group,R.drawable.ic_action_share,R.drawable.ic_action_place,R.drawable.ic_action_warning};
+
+    public static String[] mCommunities = {"Northwestern","NU"};
 
     //Similarly we Create a String Resource for the name and email in the header view
     //And we also create a int resource for profile picture in the header view
@@ -72,7 +79,6 @@ public class MainActivity extends ActionBarActivity {
     DrawerLayout Drawer;                                  // Declaring DrawerLayout
 
     ActionBarDrawerToggle mDrawerToggle;                  // Declaring Action Bar Drawer Toggle
-    private PullToRefreshView mPullToRefreshView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,34 +97,48 @@ public class MainActivity extends ActionBarActivity {
 
         refreshDeals();
 
-        mPullToRefreshView = (PullToRefreshView) findViewById(R.id.pull_to_refresh);
-        mPullToRefreshView.setOnRefreshListener(new PullToRefreshView.OnRefreshListener() {
+        getLocations();
+
+        final SwipeRefreshLayout mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.pull_to_refresh);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mPullToRefreshView.postDelayed(new Runnable() {
+                new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        mPullToRefreshView.setRefreshing(false);
                         refreshDeals();
+                        mSwipeRefreshLayout.setRefreshing(false);
                     }
-                }, 1000);
+                }, 2000);
             }
         });
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.dblue, R.color.orange, R.color.green);
+    }
 
+    private void getLocations() {
+        ParseConfig.getInBackground(new ConfigCallback() {
+            @Override
+            public void done(ParseConfig config, ParseException e) {
+                if (e == null) {
+                    Log.d("TAG", "Yay! Config was fetched from the server.");
+                } else {
+                    Log.e("TAG", "Failed to fetch. Using Cached Config.");
+                    config = ParseConfig.getCurrentConfig();
+                }
+                mCommunities = config.getList("communities").toArray(new String[config.getList("communities").size()]);
+            }
+        });
     }
 
     private void refreshDeals(){
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Deal");
         query.whereGreaterThanOrEqualTo("deal_end_date", new Date());
-        query.whereEqualTo("community_name", ParseUser.getCurrentUser().getString("university_name"));
+        query.whereEqualTo("community_name", ParseUser.getCurrentUser().getString("community_name"));
         query.orderByAscending("deal_start_date");
         query.include("user");
         query.findInBackground(new FindCallback<ParseObject>() {
             public void done(final List<ParseObject> dealList, ParseException e) {
                 if (e == null) {
-                    dealList.addAll(dealList);
-                    dealList.addAll(dealList);
-                    dealList.addAll(dealList);
                     StickyListHeadersListView listview = (StickyListHeadersListView) findViewById(R.id.lv_deal);
                     DealAdapter adapter = new DealAdapter(MainActivity.this, dealList);                      // use custom adapter
                     listview.setAdapter(adapter);
@@ -130,6 +150,12 @@ public class MainActivity extends ActionBarActivity {
                         }
                     });
                     adapter.notifyDataSetChanged();
+                    TextView nodeals = (TextView) findViewById(R.id.nodealstext);
+                    if (dealList.isEmpty()){
+                        nodeals.setVisibility(View.VISIBLE);
+                    }else{
+                        nodeals.setVisibility(View.GONE);
+                    }
                 } else {
                     Log.d("score", "Error: " + e.getMessage());
                 }
@@ -183,16 +209,16 @@ public class MainActivity extends ActionBarActivity {
                                 updateViewsWithProfileInfo();
 
                             } catch (JSONException e) {
-                                Log.d(BarliftApplication.TAG, "Error parsing returned user data. " + e);
+                                Log.d(TAG, "Error parsing returned user data. " + e);
                             }
 
                         } else if (response.getError() != null) {
                             if ((response.getError().getCategory() == FacebookRequestError.Category.AUTHENTICATION_RETRY) ||
                                     (response.getError().getCategory() == FacebookRequestError.Category.AUTHENTICATION_REOPEN_SESSION)) {
-                                Log.d(BarliftApplication.TAG, "The facebook session was invalidated." + response.getError());
+                                Log.d(TAG, "The facebook session was invalidated." + response.getError());
                                 logout();
                             } else {
-                                Log.d(BarliftApplication.TAG,
+                                Log.d(TAG,
                                         "Some other error: " + response.getError());
                             }
                         }
@@ -227,16 +253,16 @@ public class MainActivity extends ActionBarActivity {
                                     currentUser.saveInBackground();
 
                                 } catch (JSONException e) {
-                                    Log.d(BarliftApplication.TAG, "Error parsing returned user data. " + e);
+                                    Log.d(TAG, "Error parsing returned user data. " + e);
                                 }
 
                             } else if (response.getError() != null) {
                                 if ((response.getError().getCategory() == FacebookRequestError.Category.AUTHENTICATION_RETRY) ||
                                         (response.getError().getCategory() == FacebookRequestError.Category.AUTHENTICATION_REOPEN_SESSION)) {
-                                    Log.d(BarliftApplication.TAG, "The facebook session was invalidated." + response.getError());
+                                    Log.d(TAG, "The facebook session was invalidated." + response.getError());
                                     logout();
                                 } else {
-                                    Log.d(BarliftApplication.TAG,
+                                    Log.d(TAG,
                                             "Some other error: " + response.getError());
                                 }
                             }
@@ -261,6 +287,10 @@ public class MainActivity extends ActionBarActivity {
                         .load("https://graph.facebook.com/" + userProfile.getString("fb_id") + "/picture?type=normal&height=200&width=200")
                         .transform(new CircleTransform())
                         .into((ImageView) findViewById(R.id.navProfPic));
+                    Picasso.with(this)
+                        .load("https://graph.facebook.com/" + userProfile.getString("fb_id") + "/picture?type=normal&height=200&width=200")
+                        .transform(new BlurTransform(this))
+                        .into((ImageView) findViewById(R.id.navCoverPhoto));
                 }
 
                 if (userProfile.has("name")) {
@@ -269,7 +299,7 @@ public class MainActivity extends ActionBarActivity {
                 }
 
             } catch (JSONException e) {
-                Log.d(BarliftApplication.TAG, "Error parsing saved user data.");
+                Log.d(TAG, "Error parsing saved user data.");
             }
         }
     }
@@ -351,7 +381,26 @@ public class MainActivity extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_location) {
+            int x;
+            for (x = 0; x < mCommunities.length; x++){
+                if (mCommunities[x].equals(ParseUser.getCurrentUser().getString("community_name"))){break;}
+            }
+            new MaterialDialog.Builder(this)
+                    .title("Choose Location")
+                    .items(mCommunities)
+                    .theme(Theme.LIGHT)
+                    .itemsCallbackSingleChoice(x, new MaterialDialog.ListCallbackSingleChoice() {
+                        @Override
+                        public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                            ParseUser.getCurrentUser().put("community_name", mCommunities[which]);
+                            ParseUser.getCurrentUser().saveInBackground();
+                            refreshDeals();
+                            return true;
+                        }
+                    })
+                    .positiveText("Select")
+                    .show();
             return true;
         }
 

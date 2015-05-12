@@ -3,28 +3,25 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:gravity="center"
-    android:background="#FFF"
     android:padding="10dp" >
 
     <TextView
         android:id="@+id/titlelabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Fragment Title"
         android:textSize="32dp"
-        android:textColor="#000"
+        android:textColor="@color/white"
         android:gravity="center"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp" />
+        android:layout_marginTop="0dp" />
 
     <TextView
         android:id="@+id/aboutlabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/aboutlabel"
         android:layout_below="@+id/titlelabel"
-        android:textColor="#000"
+        android:textColor="@color/white"
         android:gravity="center"
         android:textSize="18dp"
         android:layout_marginTop="12dp"

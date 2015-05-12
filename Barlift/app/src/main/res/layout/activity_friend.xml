@@ -1,17 +1,33 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.barliftapp.barlift.FriendActivity">
+    tools:context="com.barliftapp.barlift.activity.FriendActivity">
 
     <include
         android:id="@+id/tool_bar"
         layout="@layout/tool_bar">
     </include>
 
-    <se.emilsjolander.stickylistheaders.StickyListHeadersListView
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tool_bar"
+        android:id="@+id/numbernudges"
+        android:padding="10dp"
+        android:textSize="14sp"
+        android:gravity="center"
+        android:onClick="onWhatNudgeClick"
+        android:clickable="true"
+        android:visibility="gone"
+        android:background="@color/orange"
+        android:textColor="@color/white"
+        android:text="What is a nudge?"
+        android:layout_alignParentRight="true" />
+
+    <se.emilsjolander.stickylistheaders.StickyListHeadersListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/numbernudges"
         android:id="@+id/lv_friend" />
 
 </RelativeLayout>

@@ -91,6 +91,7 @@
 
     <string name="action_example">Northwestern</string>
     <string name="action_edit">Edit</string>
+    <string name="action_location">Location</string>
     <string name="title_activity_friend">Friends</string>
 
 </resources>

@@ -1,4 +1,4 @@
-package com.barliftapp.barlift;
+package com.barliftapp.barlift.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,21 +8,23 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.barliftapp.barlift.R;
+import com.barliftapp.barlift.util.CircleTransform;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-public class FriendAdapter extends BaseAdapter {
+public class NudgeAdapter extends BaseAdapter {
     private Context mContext;
-    private ArrayList<Object> friends;
+    private ArrayList<Object> nudges;
 
-    public FriendAdapter(Context c, ArrayList<Object> friends) {
-        this.friends = friends;
+    public NudgeAdapter(Context c, ArrayList<Object> friends) {
+        this.nudges = nudges;
         mContext = c;
     }
 
     public int getCount() {
-        return friends.size();
+        return nudges.size();
     }
 
     public Object getItem(int position) {
@@ -39,20 +41,21 @@ public class FriendAdapter extends BaseAdapter {
         LayoutInflater inflater = (LayoutInflater) mContext
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         if (convertView == null) {  // if it's not recycled, initialize some attributes
-            convertView = inflater.inflate(R.layout.grid_item, null);
+            convertView = inflater.inflate(R.layout.item_nudge, null);
 
             mHolder = new ViewHolder();
 
-            mHolder.textView=(TextView) convertView.findViewById(R.id.tv_friend);
-            mHolder.imageView=(ImageView) convertView.findViewById(R.id.iv_friend);
+            mHolder.textView=(TextView) convertView.findViewById(R.id.tv_nudge_item);
+            mHolder.dateView=(TextView) convertView.findViewById(R.id.tv_nudge_date);
+            mHolder.imageView=(ImageView) convertView.findViewById(R.id.iv_nudge_item);
 
 
         } else {
             mHolder = (ViewHolder) convertView.getTag();
         }
 
-        ArrayList<String> friend_detail = (ArrayList<String>)friends.get(position);
-        mHolder.textView.setText((friend_detail.get(0)).substring(0, (friend_detail.get(0)).indexOf(" ")));
+        ArrayList<String> friend_detail = (ArrayList<String>)nudges.get(position);
+        mHolder.textView.setText(friend_detail.get(0));
         Picasso.with(mContext)
                 .load("https://graph.facebook.com/" + friend_detail.get(1) + "/picture?type=normal&height=150&width=150")
                 .transform(new CircleTransform())
@@ -64,6 +67,7 @@ public class FriendAdapter extends BaseAdapter {
     }
     private class ViewHolder {
         private TextView textView;
+        private TextView dateView;
         private ImageView imageView;
     }
 }

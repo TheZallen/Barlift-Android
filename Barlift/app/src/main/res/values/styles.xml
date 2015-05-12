@@ -1,10 +1,15 @@
 <resources>
 
     <style name="myTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:textColorPrimary">@color/white</item>
-        <item name="drawerArrowStyle">@style/WhiteDrawerIconStyle</item>
-        <item name="colorControlNormal">@color/white</item>
-        <item name="colorPrimaryDark">@color/orange</item>
+        <!--<item name="android:textColorPrimary">@color/white</item>-->
+        <!--<item name="drawerArrowStyle">@style/WhiteDrawerIconStyle</item>-->
+        <!--<item name="colorControlNormal">@color/white</item>-->
+        <!--<item name="colorPrimaryDark">@color/orange</item>-->
+        <!--<item name="md_title_color">@color/dblue</item>-->
+        <!--<item name="md_content_color">@color/dblue</item>-->
+        <item name="md_positive_color">@color/orange</item>
+        <!--<item name="md_background_color">@color/white</item>-->
+        <item name="md_widget_color">@color/dblue</item>
         <!--<item name="android:windowBackground">@color/white</item>-->
         <!-- Support library compatibility -->
         <!--<item name="actionBarStyle">@style/MyActionBar</item>-->
@@ -29,5 +34,6 @@
     </style>
 
     <item name="editbuttonId" type="id"/>
+    <item name="sendbuttonId" type="id"/>
 
 </resources>

@@ -1,9 +1,11 @@
-package com.barliftapp.barlift;
+package com.barliftapp.barlift.activity;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -12,18 +14,17 @@ import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.Toast;
+import android.widget.VideoView;
 
-import com.daimajia.androidanimations.library.Techniques;
-import com.daimajia.androidanimations.library.YoYo;
+import com.barliftapp.barlift.fragment.FirstFragment;
+import com.barliftapp.barlift.R;
+import com.barliftapp.barlift.util.ReachabilityTest;
+import com.barliftapp.barlift.fragment.SecondFragment;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
-import com.parse.ParseInstallation;
-import com.parse.ParsePush;
 import com.parse.ParseUser;
-import com.squareup.picasso.Picasso;
 import com.viewpagerindicator.CirclePageIndicator;
 
 import java.util.Arrays;
@@ -32,10 +33,13 @@ import java.util.List;
 
 public class LoginActivity extends FragmentActivity {
 
+    static final String TAG = "BarliftLogin";
+
     // Declare Variables
     ViewPager viewPager;
     CirclePageIndicator mIndicator;
     private Dialog progressDialog;
+    VideoView videoHolder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +51,17 @@ public class LoginActivity extends FragmentActivity {
             // Go to the main activity
             showMainActivity();
         }
+
+        videoHolder = (VideoView) findViewById(R.id.videoview);
+        videoHolder.setVideoURI(Uri.parse("android.resource://com.barliftapp.barlift/" + R.raw.wine));
+        videoHolder.requestFocus();
+        videoHolder.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mp) {
+                mp.setLooping(true);
+            }
+        });
+        videoHolder.start();
 
         // Locate the ViewPager in viewpager_main.xml
         viewPager = (ViewPager) findViewById(R.id.pager);
@@ -82,14 +97,15 @@ public class LoginActivity extends FragmentActivity {
             public void done(ParseUser user, ParseException err) {
                 progressDialog.dismiss();
                 if (user == null) {
-                    Log.d(BarliftApplication.TAG, "Uh oh. The user cancelled the Facebook login.");
+                    Toast.makeText(LoginActivity.this, "Error logging in. Check Internet Connection.", Toast.LENGTH_LONG).show();
+                    Log.d(TAG, "Uh oh. The user cancelled the Facebook login.");
                 } else if (user.isNew()) {
-                    Log.d(BarliftApplication.TAG, "User signed up and logged in through Facebook!");
+                    Log.d(TAG, "User signed up and logged in through Facebook!");
 
                     showProfileActivity();
                     //show second step for signing up
                 } else {
-                    Log.d(BarliftApplication.TAG, "User logged in through Facebook!");
+                    Log.d(TAG, "User logged in through Facebook!");
                     showMainActivity();
                 }
             }
@@ -99,11 +115,13 @@ public class LoginActivity extends FragmentActivity {
     @Override
     public void onResume(){
         super.onResume();
+        videoHolder.resume();
     }
 
     @Override
     public void onPause(){
         super.onPause();
+        videoHolder.pause();
     }
 
     @Override
@@ -134,10 +152,10 @@ public class LoginActivity extends FragmentActivity {
             switch(pos) {
 
                 case 0: return FirstFragment.newInstance();
-                case 1: return SecondFragment.newInstance("Drink Spontaneously", "Stay in the know with daily local drink deals.", R.drawable.slide2);
-                case 2: return SecondFragment.newInstance("Never Drink Alone", "See friends that are interested in going with less hassle.", R.drawable.slide3);
-                case 3: return SecondFragment.newInstance("Nudge your Friends", "Invite your friends out with a simple gesture.", R.drawable.slide4);
-                default: return SecondFragment.newInstance("Drink Spontaneously", "Stay in the know with daily local drink deals.", R.drawable.slide2);
+                case 1: return SecondFragment.newInstance("Drink Spontaneously", "Stay in the know with daily local drink deals.", R.drawable.login1);
+                case 2: return SecondFragment.newInstance("Never Drink Alone", "See friends that are interested in going with less hassle.", R.drawable.login2);
+                case 3: return SecondFragment.newInstance("Nudge your Friends", "Invite your friends out with a simple gesture.", R.drawable.login3);
+                default: return SecondFragment.newInstance("Drink Spontaneously", "Stay in the know with daily local drink deals.", R.drawable.login1);
             }
         }
 
