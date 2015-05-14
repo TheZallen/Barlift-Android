@@ -93,5 +93,11 @@
     <string name="action_edit">Edit</string>
     <string name="action_location">Location</string>
     <string name="title_activity_friend">Friends</string>
+    <string name="title_activity_on_board">OnBoardActivity</string>
+    <string name="title_activity_on_board2">OnBoard2Activity</string>
+    <string name="title_activity_on_board3">OnBoard3Activity</string>
+    <string name="title_activity_edit">EditActivity</string>
+
+    <string name="onboard_btn">ProfileButton</string>
 
 </resources>

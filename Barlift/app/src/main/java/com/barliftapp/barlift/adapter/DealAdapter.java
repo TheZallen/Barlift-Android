@@ -76,12 +76,12 @@ public class DealAdapter extends BaseAdapter implements StickyListHeadersAdapter
             mHolder = (ViewHolder) convertView.getTag();
         }
 
-        mHolder.barNameView.setText(deals.get(position).getParseObject("user").getString("bar_name"));
+        mHolder.barNameView.setText(deals.get(position).getParseObject("venue").getString("bar_name"));
         mHolder.dealView.setText(deals.get(position).getString("name").replace("\\n", "\n"));
         mHolder.communityView.setText(deals.get(position).getString("community_name"));
         mHolder.numberView.setText(deals.get(position).getNumber("num_accepted").toString());
-        if (deals.get(position).getBoolean("main") && deals.get(position).getList("add_deals") != null && mHolder.extraView != null) {
-            mHolder.extraView.setText("+" + (deals.get(position).getList("add_deals").size() - 1) + " more " + ((deals.get(position).getList("add_deals").size() - 1 == 1) ? "deal" : "deals"));
+        if (deals.get(position).getBoolean("main") && deals.get(position).getList("add_deals") != null && mHolder.extraView != null && deals.get(position).getList("add_deals").size() > 0) {
+            mHolder.extraView.setText("+" + (deals.get(position).getList("add_deals").size()) + " more " + ((deals.get(position).getList("add_deals").size() - 1 == 1) ? "deal" : "deals"));
         }
         Picasso.with(mContext)
                 .load(deals.get(position).getString("image_url"))

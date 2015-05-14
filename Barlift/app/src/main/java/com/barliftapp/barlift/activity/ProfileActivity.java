@@ -28,6 +28,9 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 
 public class ProfileActivity extends ActionBarActivity {
 
@@ -55,6 +58,10 @@ public class ProfileActivity extends ActionBarActivity {
     private TextView friendsOnView;
     private TextView dealsRedeemedView;
     private TextView partyScoreView;
+    private TextView collegeView;
+    private TextView affiliationView;
+    private TextView lastSeenView;
+    private TextView goingOutDaysView;
     private String teamSelection = "";
     private String nightSelection = "";
     private Menu mOptionsMenu;
@@ -78,72 +85,20 @@ public class ProfileActivity extends ActionBarActivity {
         friendsOnView = (TextView) findViewById(R.id.tv_friends_on);
         dealsRedeemedView = (TextView) findViewById(R.id.tv_deals_redeemed);
         partyScoreView = (TextView) findViewById(R.id.tv_partyscore);
+        collegeView = (TextView) findViewById(R.id.tv_college);
+        affiliationView = (TextView) findViewById(R.id.tv_affiliation);
+        lastSeenView = (TextView) findViewById(R.id.tv_last);
+        goingOutDaysView = (TextView) findViewById(R.id.tv_goingDays);
 
         Intent intent = getIntent();
         String fbId = intent.getStringExtra("userId");
-
-
 
         // Fetch Facebook user info if the session is active
         Session session = ParseFacebookUtils.getSession();
         if (session != null && session.isOpened()) {
             getProfileInfo(fbId);
         }
-
-//        Spinner spinner = (Spinner) findViewById(R.id.spinner);
-//        // Create an ArrayAdapter using the string array and a default spinner layout
-//        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-//                R.array.teams_array, android.R.layout.simple_spinner_item);
-//        // Specify the layout to use when the list of choices appears
-//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        // Apply the adapter to the spinner
-//        spinner.setAdapter(adapter);
-//        spinner.setOnItemSelectedListener(this);
-//
-//        Spinner spinner1 = (Spinner) findViewById(R.id.spinner2);
-//        // Create an ArrayAdapter using the string array and a default spinner layout
-//        ArrayAdapter<CharSequence> adapter1 = ArrayAdapter.createFromResource(this,
-//                R.array.nights_array, android.R.layout.simple_spinner_item);
-//        // Specify the layout to use when the list of choices appears
-//        adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        // Apply the adapter to the spinner
-//        spinner1.setAdapter(adapter1);
-//        spinner1.setOnItemSelectedListener(this);
-//
-//        final ParseUser currentUser = ParseUser.getCurrentUser();
-//        if (currentUser.get("dm_team") != null){
-//
-//            int spinnerPosition = adapter.getPosition(currentUser.get("dm_team").toString());
-//            int spinnerPosition1 = adapter1.getPosition(currentUser.get("num_nights").toString());
-//
-//            //set the default according to value
-//            spinner.setSelection(spinnerPosition);
-//            spinner1.setSelection(spinnerPosition1);
-//        }
-//
-//        final Button shareButton = (Button) findViewById(R.id.btn_save);
-//        shareButton.setOnClickListener(new View.OnClickListener() {
-//            public void onClick(View v) {
-//                saveUserData(currentUser);
-//            }
-//        });
     }
-
-
-
-//
-//    private void saveUserData(ParseUser currentUser){
-//        Spinner mySpinner = (Spinner) findViewById(R.id.spinner);
-//        Spinner mySpinner1 = (Spinner) findViewById(R.id.spinner2);
-//        currentUser.put("dm_team", mySpinner.getSelectedItem().toString());
-//        currentUser.put("num_nights", mySpinner1.getSelectedItem().toString());
-//        currentUser.saveInBackground();
-//        Intent intent = new Intent(this, MainActivity.class);
-//        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//        startActivity(intent);
-//        this.finish();
-//    }
 
     private void getProfileInfo(String fbId) {
         if (fbId == null) {
@@ -199,6 +154,33 @@ public class ProfileActivity extends ActionBarActivity {
             }
         }
 
+        if (user.getString("university_name") != null){
+            collegeView.setText(user.getString("university_name"));
+        }else{
+            collegeView.setText("");
+        }
+        if (user.getString("affiliation") != null){
+            affiliationView.setText(user.getString("affiliation"));
+        }else{
+            affiliationView.setText("Tell them to add it!");
+        }
+        if (user.getString("bar_visited") != null){
+            lastSeenView.setText(user.getString("bar_visited"));
+        }else{
+            lastSeenView.setText("Tell them to redeem some deals");
+        }
+        if (user.getList("selected_days") != null){
+            ArrayList<Object> days = (ArrayList<Object>) user.getList("selected_days");
+            String dayText = "";
+            for (int x = 0; x < days.size(); x++){
+                dayText += days.get(x) + ", ";
+            }
+            goingOutDaysView.setText(dayText.substring(0, dayText.length() - 2));
+        }else{
+            goingOutDaysView.setText("Do they even go out?");
+        }
+
+
         friendsOnView.setText("" + user.getList("friends").size());
         dealsRedeemedView.setText("" + user.getNumber("deals_redeemed"));
         partyScoreView.setText("" + ((user.getList("friends").size() * (int)user.getNumber("deals_redeemed"))+132+user.getList("friends").size()));
@@ -224,7 +206,9 @@ public class ProfileActivity extends ActionBarActivity {
         switch (item.getItemId()) {
             case R.id.editbuttonId:
 //                openSearch();
-                Toast.makeText(this, "HEYY", Toast.LENGTH_SHORT).show();
+                Intent edit = new Intent(this, EditActivity.class);
+                startActivity(edit);
+                finish();
                 return true;
             case android.R.id.home:
                 finish();

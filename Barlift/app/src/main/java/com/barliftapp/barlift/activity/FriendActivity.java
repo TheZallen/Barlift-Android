@@ -278,6 +278,8 @@ public class FriendActivity extends ActionBarActivity {
         super.onDestroy();
         tempNudgeCount = pendingNudges.size();
         pendingNudges.clear();
-        mUserAdapter.notifyDataSetChanged();
+        if (mUserAdapter != null){
+            mUserAdapter.notifyDataSetChanged();
+        }
     }
 }

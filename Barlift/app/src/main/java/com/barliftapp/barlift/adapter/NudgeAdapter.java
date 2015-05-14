@@ -10,15 +10,17 @@ import android.widget.TextView;
 
 import com.barliftapp.barlift.R;
 import com.barliftapp.barlift.util.CircleTransform;
+import com.parse.ParseObject;
 import com.squareup.picasso.Picasso;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public class NudgeAdapter extends BaseAdapter {
     private Context mContext;
     private ArrayList<Object> nudges;
 
-    public NudgeAdapter(Context c, ArrayList<Object> friends) {
+    public NudgeAdapter(Context c, ArrayList<Object> nudges) {
         this.nudges = nudges;
         mContext = c;
     }
@@ -54,10 +56,13 @@ public class NudgeAdapter extends BaseAdapter {
             mHolder = (ViewHolder) convertView.getTag();
         }
 
-        ArrayList<String> friend_detail = (ArrayList<String>)nudges.get(position);
-        mHolder.textView.setText(friend_detail.get(0));
+        ParseObject nudge = (ParseObject) nudges.get(position);
+        mHolder.textView.setText(nudge.getString("text"));
+        String date = new SimpleDateFormat("MMMM d").format(nudge.getCreatedAt());
+        mHolder.dateView.setText(date);
+        ParseObject fromUser = nudge.getParseObject("from_user");
         Picasso.with(mContext)
-                .load("https://graph.facebook.com/" + friend_detail.get(1) + "/picture?type=normal&height=150&width=150")
+                .load("https://graph.facebook.com/" + fromUser.getString("fb_id") + "/picture?type=normal&height=150&width=150")
                 .transform(new CircleTransform())
                 .into(mHolder.imageView);
 

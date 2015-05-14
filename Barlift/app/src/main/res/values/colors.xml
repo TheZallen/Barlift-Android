@@ -7,6 +7,7 @@
     <color name="grayback">#E5E7EA</color>
     <color name="darkgray">#ff939598</color>
     <color name="white">#FFFFFF</color>
+    <color name="trans">#00000000</color>
     <color name="dblue">#3d4b63</color>
     <color name="darkerblue">#344051</color>
     <color name="backblue">#1b376d</color>

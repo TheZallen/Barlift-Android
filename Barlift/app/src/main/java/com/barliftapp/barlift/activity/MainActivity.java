@@ -46,9 +46,16 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.ParsePosition;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
@@ -63,8 +70,8 @@ public class MainActivity extends ActionBarActivity {
     //First We Declare Titles And Icons For Our Navigation Drawer List View
     //This Icons And Titles Are holded in an Array as you can see
 
-    String TITLES[] = {"PROFILE","FRIENDS","SHARE","CHANGE LOCATION","LOG OUT"};
-    int ICONS[] = {R.drawable.ic_action_person,R.drawable.ic_action_group,R.drawable.ic_action_share,R.drawable.ic_action_place,R.drawable.ic_action_warning};
+    String TITLES[] = {"PROFILE","FRIENDS","SHARE","NUDGES","LOCATION","LOG OUT"};
+    int ICONS[] = {R.drawable.ic_action_person,R.drawable.ic_action_group,R.drawable.ic_action_share,R.drawable.ic_action_storage,R.drawable.ic_action_place,R.drawable.ic_action_warning};
 
     public static String[] mCommunities = {"Northwestern","NU"};
 
@@ -130,15 +137,36 @@ public class MainActivity extends ActionBarActivity {
         });
     }
 
+    public class DealComparator implements Comparator<ParseObject> {
+        public int compare(ParseObject a, ParseObject b) {
+            Calendar c = Calendar.getInstance();
+            Calendar d = Calendar.getInstance();
+            c.setTime(a.getDate("deal_start_date"));
+            d.setTime(b.getDate("deal_start_date"));
+            if (c.get(Calendar.DAY_OF_YEAR) == d.get(Calendar.DAY_OF_YEAR)){
+                if (a.getBoolean("main")){
+                    return -1;
+                }else if (b.getBoolean("main")){
+                    return 1;
+                }else{
+                    return 0;
+                }
+            }
+            return 0;
+        }
+    }
+
     private void refreshDeals(){
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Deal");
         query.whereGreaterThanOrEqualTo("deal_end_date", new Date());
         query.whereEqualTo("community_name", ParseUser.getCurrentUser().getString("community_name"));
         query.orderByAscending("deal_start_date");
-        query.include("user");
+        query.include("venue");
         query.findInBackground(new FindCallback<ParseObject>() {
             public void done(final List<ParseObject> dealList, ParseException e) {
                 if (e == null) {
+                    Collections.sort(dealList, new DealComparator());
+
                     StickyListHeadersListView listview = (StickyListHeadersListView) findViewById(R.id.lv_deal);
                     DealAdapter adapter = new DealAdapter(MainActivity.this, dealList);                      // use custom adapter
                     listview.setAdapter(adapter);
@@ -180,7 +208,7 @@ public class MainActivity extends ActionBarActivity {
 
                             install.put("fb_id", user.getId());
                             install.put("user", currentUser);
-                            install.addAllUnique("channels", Arrays.asList("Northwestern"));
+                            install.addAllUnique("channels", Arrays.asList(currentUser.getString("university_name")));
                             install.saveInBackground();
                             try {
                                 // Populate the JSON object - facebook id
@@ -201,7 +229,7 @@ public class MainActivity extends ActionBarActivity {
 
                                 // Save the user profile info in a user property
                                 currentUser.put("profile", userProfile);
-                                currentUser.put("university_name", "NU"); // HARD CODED - CHANGE LATER
+                                currentUser.put("full_name", user.getName());
                                 currentUser.put("deals_redeemed", currentUser.get("deals_redeemed") != null ? currentUser.get("deals_redeemed") : 0);
                                 currentUser.saveInBackground();
 
@@ -384,7 +412,9 @@ public class MainActivity extends ActionBarActivity {
         if (id == R.id.action_location) {
             int x;
             for (x = 0; x < mCommunities.length; x++){
-                if (mCommunities[x].equals(ParseUser.getCurrentUser().getString("community_name"))){break;}
+                if (mCommunities[x].equals(ParseUser.getCurrentUser().getString("community_name"))) {
+                    break;
+                }
             }
             new MaterialDialog.Builder(this)
                     .title("Choose Location")
@@ -395,12 +425,12 @@ public class MainActivity extends ActionBarActivity {
                         public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                             ParseUser.getCurrentUser().put("community_name", mCommunities[which]);
                             ParseUser.getCurrentUser().saveInBackground();
-                            refreshDeals();
-                            return true;
-                        }
-                    })
-                    .positiveText("Select")
-                    .show();
+                                refreshDeals();
+                                return true;
+                            }
+                        })
+                        .positiveText("Select")
+                        .show();
             return true;
         }
 

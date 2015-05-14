@@ -21,11 +21,19 @@ import com.barliftapp.barlift.fragment.FirstFragment;
 import com.barliftapp.barlift.R;
 import com.barliftapp.barlift.util.ReachabilityTest;
 import com.barliftapp.barlift.fragment.SecondFragment;
+import com.facebook.FacebookRequestError;
+import com.facebook.Request;
+import com.facebook.Response;
+import com.facebook.model.GraphUser;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
+import com.parse.ParseInstallation;
 import com.parse.ParseUser;
 import com.viewpagerindicator.CirclePageIndicator;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.Arrays;
 import java.util.List;
@@ -49,7 +57,13 @@ public class LoginActivity extends FragmentActivity {
         ParseUser currentUser = ParseUser.getCurrentUser();
         if ((currentUser != null) && ParseFacebookUtils.isLinked(currentUser)) {
             // Go to the main activity
-            showMainActivity();
+            if (currentUser.getBoolean("newVersion")){
+                showMainActivity();
+            }else{
+                makeMeRequest();
+                currentUser.put("newVersion", true);
+                currentUser.saveInBackground();
+            }
         }
 
         videoHolder = (VideoView) findViewById(R.id.videoview);
@@ -102,14 +116,81 @@ public class LoginActivity extends FragmentActivity {
                 } else if (user.isNew()) {
                     Log.d(TAG, "User signed up and logged in through Facebook!");
 
-                    showProfileActivity();
+                    makeMeRequest();
                     //show second step for signing up
                 } else {
                     Log.d(TAG, "User logged in through Facebook!");
-                    showMainActivity();
+                    if (user.getBoolean("newVersion")) {
+                        showMainActivity();
+                    } else {
+                        makeMeRequest();
+                        user.put("newVersion", true);
+                        user.saveInBackground();
+                    }
                 }
             }
         });
+    }
+
+    private void makeMeRequest() {
+        Request request = Request.newMeRequest(ParseFacebookUtils.getSession(),
+                new Request.GraphUserCallback() {
+                    @Override
+                    public void onCompleted(GraphUser user, Response response) {
+                        if (user != null) {
+                            // Create a JSON object to hold the profile info
+                            JSONObject userProfile = new JSONObject();
+
+                            // Save user info in appropriate columns
+                            ParseUser currentUser = ParseUser.getCurrentUser();
+
+                            ParseInstallation install = ParseInstallation.getCurrentInstallation();
+
+                            install.put("fb_id", user.getId());
+                            install.put("user", currentUser);
+                            install.saveInBackground();
+                            try {
+                                // Populate the JSON object - facebook id
+                                userProfile.put("fb_id", user.getId());
+                                currentUser.put("fb_id", user.getId());
+                                // fb name, birthday, first_name, location, and prof pic
+                                userProfile.put("name", user.getName());
+                                userProfile.put("birthday", user.getBirthday());
+                                userProfile.put("first_name", user.getFirstName());
+                                userProfile.put("pictureURL", "https://graph.facebook.com/" + user.getId() + "/picture?type=normal&return_ssl_resources=1");
+                                if (user.getProperty("gender") != null) {
+                                    userProfile.put("gender", user.getProperty("gender"));
+                                }
+                                if (user.getProperty("email") != null) {
+                                    userProfile.put("email", user.getProperty("email"));
+                                }
+
+                                // Save the user profile info in a user property
+                                currentUser.put("profile", userProfile);
+                                currentUser.put("full_name", user.getName());
+                                currentUser.put("deals_redeemed", currentUser.get("deals_redeemed") != null ? currentUser.get("deals_redeemed") : 0);
+                                currentUser.saveInBackground();
+
+                                // Show the user info
+                                showOnBoardActivity();
+
+                            } catch (JSONException e) {
+                                Log.d(TAG, "Error parsing returned user data. " + e);
+                            }
+
+                        } else if (response.getError() != null) {
+                            if ((response.getError().getCategory() == FacebookRequestError.Category.AUTHENTICATION_RETRY) ||
+                                    (response.getError().getCategory() == FacebookRequestError.Category.AUTHENTICATION_REOPEN_SESSION)) {
+                                Log.d(TAG, "The facebook session was invalidated." + response.getError());
+                            } else {
+                                Log.d(TAG,
+                                        "Some other error: " + response.getError());
+                            }
+                        }
+                    }
+                }
+        );
+        request.executeAsync();
     }
 
     @Override
@@ -135,8 +216,8 @@ public class LoginActivity extends FragmentActivity {
         startActivity(main);
         LoginActivity.this.finish();
     }
-    private void showProfileActivity(){
-        Intent main = new Intent(LoginActivity.this, ProfileActivity.class);
+    private void showOnBoardActivity(){
+        Intent main = new Intent(LoginActivity.this, OnBoardActivity.class);
         startActivity(main);
         LoginActivity.this.finish();
     }

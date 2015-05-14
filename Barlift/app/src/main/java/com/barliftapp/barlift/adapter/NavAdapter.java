@@ -16,6 +16,7 @@ import com.barliftapp.barlift.R;
 import com.barliftapp.barlift.activity.FriendActivity;
 import com.barliftapp.barlift.activity.LoginActivity;
 import com.barliftapp.barlift.activity.MainActivity;
+import com.barliftapp.barlift.activity.NudgeActivity;
 import com.barliftapp.barlift.activity.ProfileActivity;
 import com.parse.ParseUser;
 
@@ -82,6 +83,9 @@ public class NavAdapter extends RecyclerView.Adapter<NavAdapter.ViewHolder> {
                     mContext.startActivity(Intent.createChooser(sharingIntent, "Share deal via"));
                     break;
                 case 4:
+                    mContext.startActivity(new Intent(mContext, NudgeActivity.class));
+                    break;
+                case 5:
                     int x;
                     for (x = 0; x < MainActivity.mCommunities.length; x++){
                         if (MainActivity.mCommunities[x].equals(ParseUser.getCurrentUser().getString("community_name"))){break;}
@@ -101,7 +105,7 @@ public class NavAdapter extends RecyclerView.Adapter<NavAdapter.ViewHolder> {
                             .positiveText("Select")
                             .show();
                     break;
-                case 5:
+                case 6:
                     logout();
                     break;
                 default:

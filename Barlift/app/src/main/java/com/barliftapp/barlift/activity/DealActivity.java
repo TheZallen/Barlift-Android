@@ -110,7 +110,7 @@ public class DealActivity extends ActionBarActivity {
     private void loadDeal(final String dealId) {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Deal");
         query.whereEqualTo("objectId", dealId);
-        query.include("user");
+        query.include("venue");
         query.getFirstInBackground(new GetCallback<ParseObject>() {
             public void done(ParseObject object, ParseException e) {
                 if (object == null) {
@@ -143,8 +143,8 @@ public class DealActivity extends ActionBarActivity {
                 //            headerText = format.format(c.get(Calendar.DAY_OF_WEEK));
                 headerText = c.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.US).toUpperCase();
             }
-            String timeText = headerText + " | " + (c.get(Calendar.HOUR_OF_DAY) % 12) + " " + c.getDisplayName(Calendar.AM_PM, Calendar.SHORT, Locale.US) + " - ";
-            timeText += (end.get(Calendar.HOUR_OF_DAY) % 12) + " " + end.getDisplayName(Calendar.AM_PM, Calendar.SHORT, Locale.US);
+            String timeText = headerText + " | " + c.get(Calendar.HOUR) + " " + c.getDisplayName(Calendar.AM_PM, Calendar.SHORT, Locale.US) + " - ";
+            timeText += end.get(Calendar.HOUR) + " " + end.getDisplayName(Calendar.AM_PM, Calendar.SHORT, Locale.US);
             timeView.setText(timeText);
         }else{
             timeView.setText("");
@@ -165,7 +165,7 @@ public class DealActivity extends ActionBarActivity {
         mIndicator.setViewPager(viewPager);
     }
 
-    private void getNumberNudges(ParseObject deal) {
+    private void getNumberNudges(final ParseObject deal) {
         HashMap<String, Object> params = new HashMap<String, Object>();
         params.put("dealID", dealId);
         ParseCloud.callFunctionInBackground("getNumberNudges", params, new FunctionCallback<Integer>() {
@@ -173,6 +173,11 @@ public class DealActivity extends ActionBarActivity {
                 if (e == null){
                     TextView numberNudges = (TextView) findViewById(R.id.tv_viralityScore);
 //                    int adjustedNudges = result +
+                    if (deal != null && deal.getNumber("start_utc") != null) {
+                        Calendar c = Calendar.getInstance();
+                        c.setTime(new Date((long) deal.getNumber("start_utc")));
+                        result += c.get(Calendar.HOUR_OF_DAY);
+                    }
                     numberNudges.setText(result + " nudges sent");
                 }
             }
@@ -209,8 +214,8 @@ public class DealActivity extends ActionBarActivity {
 
     private void updateViewsWithInfo(ParseObject deal) {
         dealId = deal.getObjectId();
-        if (deal.getParseObject("user") != null && deal.getParseObject("user").getString("address") != null) {
-            barAddress = deal.getParseObject("user").getString("address").replace("\\n", "\n");
+        if (deal.getParseObject("venue") != null && deal.getParseObject("venue").getString("address") != null) {
+            barAddress = deal.getParseObject("venue").getString("address").replace("\\n", "\n");
             barAddressView.setText(barAddress);
         }
         if (deal.getString("description") != null) {
@@ -221,8 +226,8 @@ public class DealActivity extends ActionBarActivity {
             dealTitle = deal.getString("name").replace("\\n", "\n");
 //            dealView.setText(dealTitle);
         }
-        if (deal.getParseObject("user") != null && deal.getParseObject("user").getString("bar_name") != null) {
-            barName = deal.getParseObject("user").getString("bar_name");
+        if (deal.getParseObject("venue") != null && deal.getParseObject("venue").getString("bar_name") != null) {
+            barName = deal.getParseObject("venue").getString("bar_name");
             setTitle(barName);
         }
         Picasso.with(this)

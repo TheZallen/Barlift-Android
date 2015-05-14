@@ -1,0 +1,77 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.barliftapp.barlift.activity.OnBoardActivity">
+
+    <VideoView android:id="@+id/iv_onboard"
+        android:layout_width="fill_parent"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:layout_height="fill_parent">
+    </VideoView>
+
+    <View android:layout_width="fill_parent"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:background="@color/dblue"
+        android:alpha=".7"
+        android:layout_height="fill_parent"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="26sp"
+        android:text="Welcome, "
+        android:textColor="@color/white"
+        android:id="@+id/tv_onboard_title"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+    <ImageView
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:id="@+id/iv_prof_onboard"
+        android:layout_marginBottom="30dp"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@+id/tv_onboard_title" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:layout_marginTop="10dp"
+        android:text="Let's set up your 'going-out' profile"
+        android:textColor="@color/white"
+        android:id="@+id/tv_onboard_sub"
+        android:layout_below="@+id/tv_onboard_title"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:text="I'M A STUDENT >"
+        android:background="@drawable/white_btn"
+        android:padding="10dp"
+        android:id="@+id/btn_student"
+        android:onClick="onStudentClick"
+        android:layout_below="@+id/tv_onboard_sub"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="43dp" />
+
+    <Button
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:text="I'VE GRADUATED >"
+        android:background="@drawable/white_btn"
+        android:padding="10dp"
+        android:id="@+id/btn_grad"
+        android:onClick="onGradClick"
+        android:layout_below="@+id/btn_student"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp" />
+
+</RelativeLayout>

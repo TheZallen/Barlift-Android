@@ -63,6 +63,22 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.MainActivity" />
         </activity>
+        <activity
+            android:name=".activity.NudgeActivity"
+            android:label="@string/title_activity_nudge"
+            android:parentActivityName=".activity.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.MainActivity" />
+        </activity>
+        <activity
+            android:name=".activity.FriendActivity"
+            android:label="@string/title_activity_friend"
+            android:parentActivityName=".activity.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.MainActivity" />
+        </activity>
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -103,12 +119,20 @@
         </receiver>
 
         <activity
-            android:name=".activity.FriendActivity"
-            android:label="@string/title_activity_friend"
-            android:parentActivityName=".activity.MainActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.MainActivity" />
+            android:name=".activity.OnBoardActivity"
+            android:label="@string/title_activity_on_board" >
+        </activity>
+        <activity
+            android:name=".activity.OnBoard2Activity"
+            android:label="@string/title_activity_on_board2" >
+        </activity>
+        <activity
+            android:name=".activity.OnBoard3Activity"
+            android:label="@string/title_activity_on_board3" >
+        </activity>
+        <activity
+            android:name=".activity.EditActivity"
+            android:label="@string/title_activity_edit" >
         </activity>
     </application>
 
