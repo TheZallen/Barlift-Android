@@ -3,6 +3,7 @@ package com.barliftapp.barlift.util;
 import android.app.Application;
 import android.util.Log;
 
+import com.mixpanel.android.mpmetrics.MixpanelAPI;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
@@ -12,6 +13,7 @@ import com.parse.SaveCallback;
 public class BarliftApplication extends Application{
 
     static final String TAG = "Barlift";
+    public static final String MIXPANEL_TOKEN = "c8ecf107a7f4ff594d74841c9147c330";
 
     @Override
     public void onCreate() {

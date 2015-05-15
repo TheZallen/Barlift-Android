@@ -28,10 +28,12 @@ import com.afollestad.materialdialogs.Theme;
 import com.barliftapp.barlift.fragment.DealFragment;
 import com.barliftapp.barlift.fragment.FirstFragment;
 import com.barliftapp.barlift.fragment.SecondFragment;
+import com.barliftapp.barlift.util.BarliftApplication;
 import com.barliftapp.barlift.util.CircleTransform;
 import com.barliftapp.barlift.R;
 import com.facebook.Session;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.mixpanel.android.mpmetrics.MixpanelAPI;
 import com.parse.FunctionCallback;
 import com.parse.GetCallback;
 import com.parse.ParseCloud;
@@ -42,6 +44,9 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.squareup.picasso.Picasso;
 import com.viewpagerindicator.CirclePageIndicator;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -78,6 +83,9 @@ public class DealActivity extends ActionBarActivity {
     private String barLng = "";
     private boolean isGoing = false;
 
+    ParseUser currentUser;
+    MixpanelAPI mMixpanel;
+
     private Toolbar toolbar;                              // Declaring the Toolbar Object
 
     @Override
@@ -95,6 +103,9 @@ public class DealActivity extends ActionBarActivity {
         barAddressView = (TextView) findViewById(R.id.tv_address);
         interestedView = (TextView) findViewById(R.id.tv_interested);
         dealImageView = (ImageView) findViewById(R.id.iv_dealback);
+
+        mMixpanel = MixpanelAPI.getInstance(this, BarliftApplication.MIXPANEL_TOKEN);
+        currentUser = ParseUser.getCurrentUser();
 
         Intent intent = getIntent();
         String dealId = intent.getStringExtra("dealId");
@@ -153,16 +164,20 @@ public class DealActivity extends ActionBarActivity {
 
     private void startDealPager(ParseObject deal){
         // Locate the ViewPager in viewpager_main.xml
-        viewPager = (ViewPager) findViewById(R.id.deal_pager);
-        ArrayList<Object> temp = new ArrayList<>();
-        temp.add(deal.getString("name").replace("\\n", "\n"));
-        temp.addAll(deal.getList("add_deals"));
-        viewPager.setAdapter(new MyPagerAdapter(getSupportFragmentManager(), temp));
 
-        // ViewPager Indicator
-        mIndicator = (CirclePageIndicator) findViewById(R.id.deal_indicator);
-        mIndicator.setSnap(true);
-        mIndicator.setViewPager(viewPager);
+            viewPager = (ViewPager) findViewById(R.id.deal_pager);
+            ArrayList<Object> temp = new ArrayList<>();
+            temp.add(deal.getString("name").replace("\\n", "\n"));
+        if (deal.getList("add_deals") != null) {
+            temp.addAll(deal.getList("add_deals"));
+        }
+            viewPager.setAdapter(new MyPagerAdapter(getSupportFragmentManager(), temp));
+
+            // ViewPager Indicator
+            mIndicator = (CirclePageIndicator) findViewById(R.id.deal_indicator);
+            mIndicator.setSnap(true);
+            mIndicator.setViewPager(viewPager);
+
     }
 
     private void getNumberNudges(final ParseObject deal) {
@@ -284,6 +299,16 @@ public class DealActivity extends ActionBarActivity {
     }
 
     public void onDealShareClick(View v){
+        JSONObject props = new JSONObject();
+        try {
+            props.put("Fb_id", currentUser.getString("fb_id"));
+            props.put("University", currentUser.get("university_name"));
+            props.put("DealID", dealId);
+            props.put("Time", new Date());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        mMixpanel.track("Deal Share Click", props);
         Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
         sharingIntent.setType("text/plain");
         String shareBody = dealTitle + " at " + barName + ". Let's go!";
@@ -370,6 +395,12 @@ public class DealActivity extends ActionBarActivity {
         public int getCount() {
             return deals.size();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        mMixpanel.flush();
+        super.onDestroy();
     }
 
 //    private void loadNudgePics() {

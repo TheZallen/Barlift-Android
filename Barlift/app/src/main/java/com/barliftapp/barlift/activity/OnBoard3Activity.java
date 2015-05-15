@@ -20,10 +20,17 @@ import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.barliftapp.barlift.R;
+import com.barliftapp.barlift.util.BarliftApplication;
+import com.mixpanel.android.mpmetrics.MixpanelAPI;
 import com.parse.ConfigCallback;
 import com.parse.ParseConfig;
 import com.parse.ParseException;
 import com.parse.ParseUser;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Date;
 
 public class OnBoard3Activity extends ActionBarActivity {
 
@@ -31,6 +38,7 @@ public class OnBoard3Activity extends ActionBarActivity {
     ParseUser currentUser;
     String[] mAffinities;
     RadioGroup radiogroup;
+    MixpanelAPI mMixpanel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +56,8 @@ public class OnBoard3Activity extends ActionBarActivity {
             }
         });
         videoHolder.start();
+
+        mMixpanel = MixpanelAPI.getInstance(this, BarliftApplication.MIXPANEL_TOKEN);
 
 //        Intent intent = getIntent();
 //        boolean isStudent = intent.getBooleanExtra("isStudent", true);
@@ -81,9 +91,9 @@ public class OnBoard3Activity extends ActionBarActivity {
                     Log.e("TAG", "Failed to fetch. Using Cached Config.");
                     config = ParseConfig.getCurrentConfig();
                 }
-                if (currentUser.getString("gender").equals("female")){
+                if (currentUser.getString("gender").equals("female")) {
                     mAffinities = config.getList("sororities").toArray(new String[config.getList("sororities").size()]);
-                }else{
+                } else {
                     mAffinities = config.getList("fraternities").toArray(new String[config.getList("fraternities").size()]);
                 }
 
@@ -103,7 +113,18 @@ public class OnBoard3Activity extends ActionBarActivity {
 
     public void onNextClick(View v) {
         if (radiogroup.getCheckedRadioButtonId() != -1) {
+            JSONObject props = new JSONObject();
+            try {
+                props.put("Fb_id", currentUser.getString("fb_id"));
+                props.put("University", currentUser.get("university_name"));
+                props.put("is_student", currentUser.getBoolean("is_student"));
+                props.put("Time", new Date());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            mMixpanel.track("Finished sign up", props);
             currentUser.put("affiliation", mAffinities[radiogroup.getCheckedRadioButtonId()]);
+            currentUser.put("newVersion", true);
             currentUser.saveInBackground();
             Intent main = new Intent(this, MainActivity.class);
             main.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -121,6 +142,12 @@ public class OnBoard3Activity extends ActionBarActivity {
     public void onResume(){
         super.onResume();
         videoHolder.resume();
+    }
+
+    @Override
+    protected void onDestroy() {
+        mMixpanel.flush();
+        super.onDestroy();
     }
 
     @Override

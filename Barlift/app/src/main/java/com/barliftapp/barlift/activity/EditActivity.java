@@ -2,6 +2,7 @@ package com.barliftapp.barlift.activity;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.net.Uri;
 import android.preference.PreferenceActivity;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -25,7 +26,7 @@ public class EditActivity extends ActionBarActivity {
 
     private Toolbar toolbar;
     private String[] mPrefs;
-    private String[] mDays = {"EVERYDAY","M","TU","W","TH","F","SAT","SUN"};
+    private String[] mDays = {"Everyday","M","TU","W","TH","F","SAT","SUN"};
     ParseUser currentUser;
 
     @Override
@@ -114,6 +115,11 @@ public class EditActivity extends ActionBarActivity {
                 })
                 .positiveText("Save")
                 .show();
+    }
+
+    public void onTermsClick(View v){
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.barliftapp.com/#/terms"));
+        startActivity(browserIntent);
     }
 
     @Override

@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.Theme;
+import com.barliftapp.barlift.util.BarliftApplication;
 import com.barliftapp.barlift.util.BlurTransform;
 import com.barliftapp.barlift.util.CircleTransform;
 import com.barliftapp.barlift.adapter.DealAdapter;
@@ -31,6 +32,7 @@ import com.facebook.Request;
 import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.model.GraphUser;
+import com.mixpanel.android.mpmetrics.MixpanelAPI;
 import com.parse.ConfigCallback;
 import com.parse.FindCallback;
 import com.parse.ParseConfig;
@@ -84,6 +86,9 @@ public class MainActivity extends ActionBarActivity {
     RecyclerView.Adapter mAdapter;                        // Declaring Adapter For Recycler View
     RecyclerView.LayoutManager mLayoutManager;            // Declaring Layout Manager as a linear layout manager
     DrawerLayout Drawer;                                  // Declaring DrawerLayout
+    ParseUser currentUser;
+
+    MixpanelAPI mMixpanel;
 
     ActionBarDrawerToggle mDrawerToggle;                  // Declaring Action Bar Drawer Toggle
 
@@ -91,9 +96,11 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         setUpNavigationDrawer();
+
+        mMixpanel = MixpanelAPI.getInstance(this, BarliftApplication.MIXPANEL_TOKEN);
 
         // Fetch Facebook user info if the session is active
         Session session = ParseFacebookUtils.getSession();
@@ -101,6 +108,8 @@ public class MainActivity extends ActionBarActivity {
             makeMeRequest();
             getFriends();
         }
+
+        currentUser = ParseUser.getCurrentUser();
 
         refreshDeals();
 
@@ -172,6 +181,16 @@ public class MainActivity extends ActionBarActivity {
                     listview.setAdapter(adapter);
                     listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         public void onItemClick(AdapterView<?> parent, View v, final int position, long id) {
+                            JSONObject props = new JSONObject();
+                            try {
+                                props.put("Fb_id", currentUser.getString("fb_id"));
+                                props.put("University", currentUser.get("university_name"));
+                                props.put("DealID", dealList.get(position).getObjectId());
+                                props.put("Time", new Date());
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            mMixpanel.track("Deal Click to Detail", props);
                             Intent dealIntent = new Intent(MainActivity.this, DealActivity.class);
                             dealIntent.putExtra("dealId", dealList.get(position).getObjectId());
                             startActivity(dealIntent);
@@ -435,6 +454,12 @@ public class MainActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onDestroy() {
+        mMixpanel.flush();
+        super.onDestroy();
     }
 
 }

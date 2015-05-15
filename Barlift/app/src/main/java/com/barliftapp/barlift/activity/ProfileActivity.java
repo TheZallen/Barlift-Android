@@ -177,7 +177,7 @@ public class ProfileActivity extends ActionBarActivity {
             }
             goingOutDaysView.setText(dayText.substring(0, dayText.length() - 2));
         }else{
-            goingOutDaysView.setText("Do they even go out?");
+            goingOutDaysView.setText("Nudge them");
         }
 
 

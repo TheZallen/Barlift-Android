@@ -19,12 +19,14 @@ import android.widget.VideoView;
 
 import com.barliftapp.barlift.fragment.FirstFragment;
 import com.barliftapp.barlift.R;
+import com.barliftapp.barlift.util.BarliftApplication;
 import com.barliftapp.barlift.util.ReachabilityTest;
 import com.barliftapp.barlift.fragment.SecondFragment;
 import com.facebook.FacebookRequestError;
 import com.facebook.Request;
 import com.facebook.Response;
 import com.facebook.model.GraphUser;
+import com.mixpanel.android.mpmetrics.MixpanelAPI;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
@@ -36,6 +38,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 
@@ -48,6 +51,7 @@ public class LoginActivity extends FragmentActivity {
     CirclePageIndicator mIndicator;
     private Dialog progressDialog;
     VideoView videoHolder;
+    MixpanelAPI mMixpanel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,10 +65,10 @@ public class LoginActivity extends FragmentActivity {
                 showMainActivity();
             }else{
                 makeMeRequest();
-                currentUser.put("newVersion", true);
-                currentUser.saveInBackground();
             }
         }
+
+        mMixpanel = MixpanelAPI.getInstance(this, BarliftApplication.MIXPANEL_TOKEN);
 
         videoHolder = (VideoView) findViewById(R.id.videoview);
         videoHolder.setVideoURI(Uri.parse("android.resource://com.barliftapp.barlift/" + R.raw.wine));
@@ -88,6 +92,13 @@ public class LoginActivity extends FragmentActivity {
     }
 
     public void onLoginClick(View v) {
+        JSONObject props = new JSONObject();
+        try {
+            props.put("Time", new Date());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        mMixpanel.track("Login Pressed", props);
         new ReachabilityTest(this, "google.com", 80, new ReachabilityTest.Callback() {
             @Override
             public void onReachabilityTestPassed() {
@@ -124,8 +135,6 @@ public class LoginActivity extends FragmentActivity {
                         showMainActivity();
                     } else {
                         makeMeRequest();
-                        user.put("newVersion", true);
-                        user.saveInBackground();
                     }
                 }
             }
@@ -203,6 +212,12 @@ public class LoginActivity extends FragmentActivity {
     public void onPause(){
         super.onPause();
         videoHolder.pause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        mMixpanel.flush();
+        super.onDestroy();
     }
 
     @Override
