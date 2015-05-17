@@ -62,8 +62,10 @@ public class LoginActivity extends FragmentActivity {
         if ((currentUser != null) && ParseFacebookUtils.isLinked(currentUser)) {
             // Go to the main activity
             if (currentUser.getBoolean("newVersion")){
+                Log.d("TAG", "position 1");
                 showMainActivity();
             }else{
+                Log.d("TAG", "position 2");
                 makeMeRequest();
             }
         }
@@ -133,6 +135,7 @@ public class LoginActivity extends FragmentActivity {
                     Log.d(TAG, "User logged in through Facebook!");
                     if (user.getBoolean("newVersion")) {
                         showMainActivity();
+                        Log.d("TAG", "position 4");
                     } else {
                         makeMeRequest();
                     }

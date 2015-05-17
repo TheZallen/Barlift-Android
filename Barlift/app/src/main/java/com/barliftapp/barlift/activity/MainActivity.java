@@ -442,8 +442,8 @@ public class MainActivity extends ActionBarActivity {
                     .itemsCallbackSingleChoice(x, new MaterialDialog.ListCallbackSingleChoice() {
                         @Override
                         public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                            ParseUser.getCurrentUser().put("community_name", mCommunities[which]);
-                            ParseUser.getCurrentUser().saveInBackground();
+                                ParseUser.getCurrentUser().put("community_name", mCommunities[which]);
+                                ParseUser.getCurrentUser().saveInBackground();
                                 refreshDeals();
                                 return true;
                             }
