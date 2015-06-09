@@ -115,9 +115,7 @@ public class DealAdapter extends BaseAdapter implements StickyListHeadersAdapter
         String headerText = "";
         if (c.get(Calendar.DAY_OF_MONTH) == current.get(Calendar.DAY_OF_MONTH)) {
             headerText = "TODAY";
-        } else if (c.get(Calendar.DAY_OF_MONTH) == current.get(Calendar.DAY_OF_MONTH)+1){
-            headerText = "TOMORROW";
-        } else {
+        }  else {
 //            headerText = format.format(c.get(Calendar.DAY_OF_WEEK));
             headerText = c.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.US).toUpperCase();
         }

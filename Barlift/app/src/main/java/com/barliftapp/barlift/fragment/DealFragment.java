@@ -21,7 +21,7 @@ public class DealFragment extends Fragment {
         View v = inflater.inflate(R.layout.pager_deal, container, false);
 
         TextView tvTitle = (TextView) v.findViewById(R.id.deal_title);
-        tvTitle.setText(getArguments().getString("title"));
+        tvTitle.setText(getArguments().getString("title").replace("\\n", "\n"));
 
         return v;
     }

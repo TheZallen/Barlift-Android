@@ -31,6 +31,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Date;
+import java.util.List;
 
 public class OnBoard3Activity extends ActionBarActivity {
 
@@ -91,10 +92,17 @@ public class OnBoard3Activity extends ActionBarActivity {
                     Log.e("TAG", "Failed to fetch. Using Cached Config.");
                     config = ParseConfig.getCurrentConfig();
                 }
-                if (currentUser.getString("gender").equals("female")) {
-                    mAffinities = config.getList("sororities").toArray(new String[config.getList("sororities").size()]);
-                } else {
-                    mAffinities = config.getList("fraternities").toArray(new String[config.getList("fraternities").size()]);
+                if (currentUser.getString("gender") != null) {
+                    Log.d("TAG", "gender");
+                    if (currentUser.getString("gender").equals("female")) {
+                        mAffinities = config.getList("sororities").toArray(new String[config.getList("sororities").size()]);
+                    }else if (currentUser.getString("gender").equals("male")){
+                        mAffinities = config.getList("fraternities").toArray(new String[config.getList("fraternities").size()]);
+                    }else{
+                        mAffinities = config.getList("affiliations").toArray(new String[config.getList("affiliations").size()]);
+                    }
+                }else{
+                    mAffinities = config.getList("affiliations").toArray(new String[config.getList("affiliations").size()]);
                 }
 
                 for (int i = 0; i < mAffinities.length; i++) {
